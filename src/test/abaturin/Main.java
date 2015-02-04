@@ -61,11 +61,11 @@ public class Main {
 
             public void startElement(String uri, String localName,String qName,
                                      Attributes attributes) throws SAXException {
-                if (qName == "page") {
+                if (qName.equals("page")) {
                     pageName = null;
                     text = null;
                     ns = null;
-                } else if (qName == "title" || qName == "text" || qName == "ns") {
+                } else if (qName.equals("title") || qName.equals("text") || qName.equals("ns")) {
                     curCharValue = new StringBuffer(1024);
                 }
             }
@@ -79,13 +79,13 @@ public class Main {
             public void endElement(String uri, String localName,
                                    String qName) throws SAXException {
 
-                if (qName == "title") {
+                if (qName.equals("title")) {
                     pageName = curCharValue.toString();
-                } else if (qName == "text") {
+                } else if (qName.equals("text")) {
                     text = curCharValue.toString();
-                } else if (qName == "ns") {
+                } else if (qName.equals("ns")) {
                     ns = curCharValue.toString();
-                } else if (qName == "page") {
+                } else if (qName.equals("page")) {
                     if (ns.equals("0")) {
                         pageProcessor.processPage(text);
                     }
@@ -141,8 +141,8 @@ public class Main {
         Element node = doc.createElement("node");
         node.setAttribute("id", nodeId.toString());
         node.setAttribute("visible", "true");
-        node.setAttribute("lat", new Float(poi.getLatitude()).toString());
-        node.setAttribute("lon", new Float(poi.getLongitude()).toString());
+        node.setAttribute("lat", Float.toString(poi.getLatitude()));
+        node.setAttribute("lon", Float.toString(poi.getLongitude()));
         nodeId++;
         return node;
     }

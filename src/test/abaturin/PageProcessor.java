@@ -19,8 +19,8 @@ public class PageProcessor {
     {
         System.out.println("Page ");
         int index = 0;
-        int start = 0;
-        int end = 0;
+        int start;
+        int end;
         do {
             index = text.indexOf("{{", index);
             if (index != -1) {
