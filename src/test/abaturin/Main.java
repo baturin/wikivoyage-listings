@@ -8,6 +8,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import net.osmand.IProgress;
+import net.osmand.osm.io.IOsmStorageFilter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
@@ -16,22 +18,33 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
+
+import net.osmand.data.preparation.IndexCreator;
 
 public class Main {
     public static void main(String[] args) {
         String inputFilename = "/home/alexey/wikivoyage/ruwikivoyage-20141229-pages-articles-multistream.xml";
-        String outputFilename = "/home/alexey/wikivoyage/pois.xml";
+        String outputXmlFilename = "/home/alexey/wikivoyage/pois.xml";
+        String workingDir = "/home/alexey/wikivoyage";
 
         PageProcessor pageProcessor = new PageProcessor();
 
         try {
             parseWikivoyageDump(inputFilename, pageProcessor);
             WikivoyagePOI[] pois = pageProcessor.getPOIs();
-            writePOIsToXML(pois, outputFilename);
+            writePOIsToXML(pois, outputXmlFilename);
+            createObf(outputXmlFilename, workingDir);
         } catch (Exception e) {
             System.err.println("Failure");
             e.printStackTrace();
         }
+    }
+
+    private static void createObf(String outputFilename, String workingDir) throws IOException, SAXException, SQLException, InterruptedException {
+        IndexCreator creator = new IndexCreator(new File(workingDir));
+        creator.setIndexPOI(true);
+        creator.generateIndexes(new File(outputFilename), IProgress.EMPTY_PROGRESS, null, null, null, null);
     }
 
     private static void parseWikivoyageDump(String inputFilename, final PageProcessor pageProcessor)
