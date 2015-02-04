@@ -9,14 +9,17 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import net.osmand.IProgress;
+import org.apache.tools.bzip2.CBZip2InputStream;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
@@ -24,6 +27,10 @@ import java.sql.SQLException;
 import net.osmand.data.preparation.IndexCreator;
 
 public class Main {
+
+    static final String RU_DUMP_URL = "https://dumps.wikimedia.org/ruwikivoyage/latest/ruwikivoyage-latest-pages-articles.xml.bz2";
+    static final String WORKING_DIR = "tmp";
+
     public static void main(String[] args) {
         try {
             if (args.length < 1) {
@@ -42,20 +49,29 @@ public class Main {
                 String outputXmlFilename = args[2];
                 String mapFilename = args[3];
 
-                String workingDir = "tmp";
-                String tempMapFilename = "pois.obf";
+                createWorkingDir();
+                generateFiles(inputFilename, outputXmlFilename, mapFilename);
+            } else if (command.equals("generate-latest")) {
+                if (args.length != 3) {
+                    printHelp();
+                    System.exit(1);
+                }
 
-                new File(workingDir).mkdirs();
-                new File(workingDir + "/" + tempMapFilename).delete();
+                String outputXmlFilename = args[1];
+                String mapFilename = args[2];
 
-                PageProcessor pageProcessor = new PageProcessor();
+                createWorkingDir();
 
-                parseWikivoyageDump(inputFilename, pageProcessor);
-                WikivoyagePOI[] pois = pageProcessor.getPOIs();
-                writePOIsToXML(pois, outputXmlFilename);
-                createObf(outputXmlFilename, workingDir, tempMapFilename);
-                Files.move(Paths.get(workingDir + "/" + tempMapFilename), Paths.get(mapFilename));
+                String dumpFilename = WORKING_DIR + "/" + "dump.xml.bz2";
 
+                System.out.println("Downloading dump...");
+                URL website = new URL(RU_DUMP_URL);
+                ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+                FileOutputStream fos = new FileOutputStream(dumpFilename);
+                fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+
+                System.out.println("Generating files...");
+                generateFiles(dumpFilename, outputXmlFilename, mapFilename);
             } else if (command.equals("help")) {
                 printHelp();
                 System.exit(0);
@@ -69,10 +85,30 @@ public class Main {
         }
     }
 
+    private static void createWorkingDir()
+    {
+        new File(WORKING_DIR).mkdirs();
+    }
+
+    private static void generateFiles(String inputFilename, String outputXmlFilename, String mapFilename) throws ParserConfigurationException, SAXException, IOException, TransformerException, SQLException, InterruptedException {
+        String tempMapFilename = "pois.obf";
+
+        new File(WORKING_DIR + "/" + tempMapFilename).delete();
+
+        PageProcessor pageProcessor = new PageProcessor();
+
+        parseWikivoyageDump(inputFilename, pageProcessor);
+        WikivoyagePOI[] pois = pageProcessor.getPOIs();
+        writePOIsToXML(pois, outputXmlFilename);
+        createObf(outputXmlFilename, WORKING_DIR, tempMapFilename);
+        Files.move(Paths.get(WORKING_DIR + "/" + tempMapFilename), Paths.get(mapFilename));
+    }
+
     private static void printHelp() {
         System.out.println("Available commands: ");
         System.out.println("- help");
         System.out.println("- generate <wikivoyage-dump> <output-xml> <output-obf>");
+        System.out.println("- generate-latest <output-xml> <output-obf>");
     }
 
     private static void createObf(String outputFilename, String workingDir, String mapFile) throws IOException, SAXException, SQLException, InterruptedException {
@@ -128,7 +164,22 @@ public class Main {
 
             }
         };
-        saxParser.parse(inputFilename, handler);
+
+        InputStream in;
+
+        if (inputFilename.endsWith(".bz2")) {
+            FileInputStream fin = new FileInputStream(inputFilename);
+            BufferedInputStream bufin = new BufferedInputStream(fin);
+
+            // skip first 2 bytes for CBZip2InputStream
+            bufin.read();
+            bufin.read();
+
+            in = new CBZip2InputStream(bufin);
+        } else {
+            in = new FileInputStream(new File(inputFilename));
+        }
+        saxParser.parse(in, handler);
     }
 
     private static void writePOIsToXML(WikivoyagePOI[] pois, String outputFilename) throws ParserConfigurationException, TransformerException {
