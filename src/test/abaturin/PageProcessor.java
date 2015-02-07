@@ -1,6 +1,15 @@
 package test.abaturin;
 
-import java.util.ArrayList;
+import de.fau.cs.osr.ptk.common.ast.AstStringNode;
+import org.sweble.wikitext.parser.ParserConfig;
+import org.sweble.wikitext.parser.WikitextPreprocessor;
+import org.sweble.wikitext.parser.nodes.WtNode;
+import org.sweble.wikitext.parser.nodes.WtTemplate;
+import org.sweble.wikitext.parser.nodes.WtTemplateArgument;
+import org.sweble.wikitext.parser.utils.SimpleParserConfig;
+import org.sweble.wikitext.parser.utils.StringConversionException;
+
+import java.util.*;
 
 public class PageProcessor {
     ArrayList<WikivoyagePOI> pois = null;
@@ -15,69 +24,84 @@ public class PageProcessor {
         return pois.toArray(new WikivoyagePOI[pois.size()]);
     }
 
-    public void processPage(String text)
+    public void processPage(String text) {
+        try {
+            ParserConfig config = new SimpleParserConfig();
+            WikitextPreprocessor p = new WikitextPreprocessor(config);
+            WtNode node = p.parseArticle(text, "");
+            processNode(node);
+        } catch (Exception e) {
+            System.err.println("Failure");
+            e.printStackTrace();
+        }
+    }
+
+    public void processNode(WtNode node) throws StringConversionException
     {
-        System.out.println("Page ");
-        int index = 0;
-        int start;
-        int end;
-        do {
-            index = text.indexOf("{{", index);
-            if (index != -1) {
-                start = index;
-                end = text.indexOf("}}", start + 1);
-                index = end;
-                if (end != -1) {
-                    String template = text.substring(start + 2, end);
-                    String [] templateParts = template.split("\\|");
-                    if (templateParts.length > 0) {
-                        String templateName = templateParts[0];
+        for (WtNode childNode: node) {
+            if (childNode instanceof WtTemplate) {
+                WtTemplate templateNode = (WtTemplate) childNode;
+                String templateName = convertWtNodeToString(templateNode.getName());
 
-                        if (templateName.equals("listing")) {
-                            Float longitude = null;
-                            Float latitude = null;
-                            String title = null;
-                            String type = "unknown";
+                if (templateName.equals("listing")) {
+                    HashMap<String, String> args = getTemplateArgumentsDict(templateNode);
+                    if (args.containsKey("name") && args.containsKey("lat") && args.containsKey("long") && args.containsKey("type")) {
+                        try {
+                            Float longitude = Float.valueOf(args.get("long"));
+                            Float latitude = Float.valueOf((args.get("lat")));
                             String description = "";
-
-                            for (int i = 1; i < templateParts.length; i++) {
-                                String[] templatePropertyParts = templateParts[i].split("=", 2);
-                                if (templatePropertyParts.length == 2) {
-
-                                    String name = templatePropertyParts[0].trim();
-                                    String value = templatePropertyParts[1].trim();
-
-                                    if (name.equals("name")) {
-                                        title = value;
-                                    } else if (name.equals("type")) {
-                                        type = value;
-                                    } else if (name.equals("lat")) {
-                                        try {
-                                            latitude = Float.valueOf(value);
-                                        } catch (NumberFormatException e) {
-                                            // just ignore
-                                        }
-                                    } else if (name.equals("long")) {
-                                        try {
-                                            longitude = Float.valueOf(value);
-                                        } catch (NumberFormatException e) {
-                                            // just ignore
-                                        }
-                                    } else if (name.equals("description")) {
-                                        description = value;
-                                    }
-                                }
+                            if (args.containsKey("description")) {
+                                description = args.get("description");
                             }
 
-                            if (title != null && latitude != null && longitude != null) {
-                                pois.add(new WikivoyagePOI(type, title, description, latitude, longitude));
-                            }
+                            pois.add(new WikivoyagePOI(
+                                    args.get("type"), args.get("name"),
+                                    description,
+                                    latitude, longitude
+                            ));
+                        } catch (NumberFormatException e) {
+                            // coordinates are not correctly formatted;
+                            // no sense to put such POI into output, simply skip it
                         }
 
                     }
-
                 }
+            } else {
+                processNode(childNode);
             }
-        } while (index != -1);
+        }
+    }
+
+    private HashMap<String, String> getTemplateArgumentsDict(WtTemplate templateNode) {
+        HashMap<String, String> templateArgumentsDict = new LinkedHashMap<String, String>();
+
+        for (WtNode templateArgumentsChildNode : templateNode.getArgs()) {
+            if (templateArgumentsChildNode instanceof WtTemplateArgument) {
+                WtTemplateArgument templateArgument = (WtTemplateArgument) templateArgumentsChildNode;
+
+                String name = convertWtNodeToString(templateArgument.getName()).trim();
+                String value = convertWtNodeToString(templateArgument.getValue()).trim();
+                templateArgumentsDict.put(name, value);
+            }
+        }
+
+        return templateArgumentsDict;
+    }
+
+    /**
+     * Simple text conversion of WtNode object to string.
+     * It ignores templates and presents their contents as plain text, with no conversion.
+     */
+    public String convertWtNodeToString(WtNode node)
+    {
+        if (node instanceof AstStringNode) {
+            return ((AstStringNode) node).getContent();
+        } else {
+            String s = "";
+            for (WtNode childNode: node) {
+                s += convertWtNodeToString(childNode);
+            }
+            return s;
+        }
     }
 }
