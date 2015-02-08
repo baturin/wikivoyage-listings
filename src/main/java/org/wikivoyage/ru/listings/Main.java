@@ -1,4 +1,4 @@
-package test.abaturin;
+package org.wikivoyage.ru.listings;
 
 import javax.xml.parsers.*;
 import javax.xml.transform.OutputKeys;

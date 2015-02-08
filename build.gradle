@@ -1,0 +1,29 @@
+apply plugin: 'java'
+
+dependencies {
+    compile fileTree(dir: 'lib', include: ['*.jar'])
+    compile fileTree(dir: 'lib-gl', include: ['*.jar'])
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'org.wikivoyage.ru.listings.Main'
+    }
+}
+
+task distZip(type: Zip) {
+    from jar.outputs.files
+    from('lib/') {
+        include '**/*.jar'
+        into('lib')
+    }
+    from('lib-gl/') {
+        include '**/*.jar'
+        into('lib-gl')
+    }
+    from('.') {
+        include 'wikivoyage-listings.sh'
+        into('.')
+    }
+}
+

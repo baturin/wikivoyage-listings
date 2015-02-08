@@ -1,4 +1,4 @@
-package test.abaturin;
+package org.wikivoyage.ru.listings;
 
 import de.fau.cs.osr.ptk.common.ast.AstStringNode;
 import org.sweble.wikitext.parser.ParserConfig;

@@ -1,3 +1,6 @@
-out
-untitled.iml
+.gradle
 .idea
+build
+out
+tmp
+wikivoyage-listings.iml

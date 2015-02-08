@@ -1,4 +1,4 @@
-package test.abaturin;
+package org.wikivoyage.ru.listings;
 
 public class WikivoyagePOI {
     private float latitude;
