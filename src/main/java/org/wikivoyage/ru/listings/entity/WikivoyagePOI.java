@@ -1,4 +1,4 @@
-package org.wikivoyage.ru.listings;
+package org.wikivoyage.ru.listings.entity;
 
 public class WikivoyagePOI {
     private float latitude;

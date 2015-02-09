@@ -51,7 +51,7 @@ public class CommandLine {
     public void printHelp()
     {
         System.out.println("Input configuration:");
-        System.out.println("-input-url <url>: download Wikivouage dump from specified URL");
+        System.out.println("-input-url <url>: download Wikivoyage dump from specified URL");
         System.out.println("-input-latest (en|ru): download latest Wikivoyage dump for specified language");
         System.out.println("-input-file <filename>: use Wikivoyage dump from file");
         System.out.println("The utility accepts XML dump, packed with bzip2 or not.");

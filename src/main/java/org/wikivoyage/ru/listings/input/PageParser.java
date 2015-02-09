@@ -1,4 +1,4 @@
-package org.wikivoyage.ru.listings;
+package org.wikivoyage.ru.listings.input;
 
 import de.fau.cs.osr.ptk.common.ast.AstStringNode;
 import org.sweble.wikitext.parser.ParserConfig;
@@ -8,13 +8,17 @@ import org.sweble.wikitext.parser.nodes.WtTemplate;
 import org.sweble.wikitext.parser.nodes.WtTemplateArgument;
 import org.sweble.wikitext.parser.utils.SimpleParserConfig;
 import org.sweble.wikitext.parser.utils.StringConversionException;
+import org.wikivoyage.ru.listings.entity.WikivoyagePOI;
 
 import java.util.*;
 
-public class PageProcessor {
+/**
+ * Parser of a single Wikivoyage page
+ */
+public class PageParser {
     ArrayList<WikivoyagePOI> pois = null;
 
-    public PageProcessor()
+    public PageParser()
     {
         pois = new ArrayList<WikivoyagePOI>();
     }
