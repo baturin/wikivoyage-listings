@@ -8,6 +8,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import com.beust.jcommander.JCommander;
 import net.osmand.IProgress;
 import org.apache.tools.bzip2.CBZip2InputStream;
 import org.w3c.dom.Document;
@@ -32,52 +33,30 @@ public class Main {
     static final String WORKING_DIR = "tmp";
 
     public static void main(String[] args) {
+        CommandLine cl = new CommandLine();
+        cl.parse(args);
+
         try {
-            if (args.length < 1) {
-                printHelp();
-                System.exit(1);
-            }
-
-            String command = args[0];
-            if (command.equals("generate")) {
-                if (args.length != 4) {
-                    printHelp();
-                    System.exit(1);
-                }
-
-                String inputFilename = args[1];
-                String outputXmlFilename = args[2];
-                String mapFilename = args[3];
-
-                createWorkingDir();
-                generateFiles(inputFilename, outputXmlFilename, mapFilename);
-            } else if (command.equals("generate-latest")) {
-                if (args.length != 3) {
-                    printHelp();
-                    System.exit(1);
-                }
-
-                String outputXmlFilename = args[1];
-                String mapFilename = args[2];
-
-                createWorkingDir();
-
-                String dumpFilename = WORKING_DIR + "/" + "dump.xml.bz2";
-
-                System.out.println("Downloading dump...");
-                URL website = new URL(RU_DUMP_URL);
-                ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-                FileOutputStream fos = new FileOutputStream(dumpFilename);
-                fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-
-                System.out.println("Generating files...");
-                generateFiles(dumpFilename, outputXmlFilename, mapFilename);
-            } else if (command.equals("help")) {
-                printHelp();
-                System.exit(0);
+            if (cl.help) {
+                cl.printHelp();
             } else {
-                printHelp();
-                System.exit(1);
+                String inputFilename;
+                createWorkingDir();
+                if (cl.inputFile != null) {
+                    inputFilename = cl.inputFile;
+                } else {
+                    inputFilename = WORKING_DIR + "/" + "dump.xml.bz2";
+                    String dumpUrl;
+                    if (cl.inputUrl != null) {
+                        dumpUrl = cl.inputUrl;
+                    } else {
+                        dumpUrl = RU_DUMP_URL;
+                    }
+
+                    downloadDump(dumpUrl, inputFilename);
+                }
+
+                generateFiles(inputFilename, cl.outputXml, cl.outputObf);
             }
         } catch (Exception e) {
             System.err.println("Failure");
@@ -85,13 +64,25 @@ public class Main {
         }
     }
 
+    private static void downloadDump(String dumpUrl, String dumpFilename) throws IOException {
+        System.out.println("Downloading dump...");
+        URL website = new URL(dumpUrl);
+        ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+        FileOutputStream fos = new FileOutputStream(dumpFilename);
+        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+    }
+
     private static void createWorkingDir()
     {
         new File(WORKING_DIR).mkdirs();
     }
 
-    private static void generateFiles(String inputFilename, String outputXmlFilename, String mapFilename) throws ParserConfigurationException, SAXException, IOException, TransformerException, SQLException, InterruptedException {
+    private static void generateFiles(String inputFilename, String outputXmlFilename, String outputObf) throws ParserConfigurationException, SAXException, IOException, TransformerException, SQLException, InterruptedException {
         String tempMapFilename = "pois.obf";
+
+        if (outputXmlFilename == null) {
+            outputXmlFilename = WORKING_DIR + "/pois.xml";
+        }
 
         new File(WORKING_DIR + "/" + tempMapFilename).delete();
 
@@ -100,15 +91,11 @@ public class Main {
         parseWikivoyageDump(inputFilename, pageProcessor);
         WikivoyagePOI[] pois = pageProcessor.getPOIs();
         writePOIsToXML(pois, outputXmlFilename);
-        createObf(outputXmlFilename, WORKING_DIR, tempMapFilename);
-        Files.move(Paths.get(WORKING_DIR + "/" + tempMapFilename), Paths.get(mapFilename));
-    }
 
-    private static void printHelp() {
-        System.out.println("Available commands: ");
-        System.out.println("- help");
-        System.out.println("- generate <wikivoyage-dump> <output-xml> <output-obf>");
-        System.out.println("- generate-latest <output-xml> <output-obf>");
+        if (outputObf != null) {
+            createObf(outputXmlFilename, WORKING_DIR, tempMapFilename);
+            Files.move(Paths.get(WORKING_DIR + "/" + tempMapFilename), Paths.get(outputObf));
+        }
     }
 
     private static void createObf(String outputFilename, String workingDir, String mapFile) throws IOException, SAXException, SQLException, InterruptedException {
