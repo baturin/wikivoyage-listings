@@ -16,18 +16,34 @@ import java.util.*;
  * Parser of a single Wikivoyage page
  */
 public class PageParser {
+    /**
+     * List of parsed POIs
+     */
     ArrayList<WikivoyagePOI> pois = null;
+
+    /**
+     * Set of allowed templates used in Wikivoyage pages for listings
+     */
+    HashSet<String> listingTemplates;
 
     public PageParser()
     {
         pois = new ArrayList<WikivoyagePOI>();
+        initListingTemplates();
     }
 
+    /**
+     * Get whole list of parsed POIs
+     */
     public WikivoyagePOI[] getPOIs()
     {
         return pois.toArray(new WikivoyagePOI[pois.size()]);
     }
 
+    /**
+     * Parse single Wikivoyage page, look for listings, put them into list of POIs
+     * @param text Wikivoyage page as string
+     */
     public void processPage(String text) {
         try {
             ParserConfig config = new SimpleParserConfig();
@@ -40,26 +56,39 @@ public class PageParser {
         }
     }
 
-    public void processNode(WtNode node) throws StringConversionException
+    private void processNode(WtNode node) throws StringConversionException
     {
         for (WtNode childNode: node) {
             if (childNode instanceof WtTemplate) {
                 WtTemplate templateNode = (WtTemplate) childNode;
-                String templateName = convertWtNodeToString(templateNode.getName());
+                String templateName = convertWtNodeToString(templateNode.getName()).trim();
 
-                if (templateName.equals("listing")) {
+                if (listingTemplates.contains(templateName)) {
                     HashMap<String, String> args = getTemplateArgumentsDict(templateNode);
-                    if (args.containsKey("name") && args.containsKey("lat") && args.containsKey("long") && args.containsKey("type")) {
+                    if (args.containsKey("name") && args.containsKey("lat") && args.containsKey("long")) {
                         try {
                             Float longitude = Float.valueOf(args.get("long"));
                             Float latitude = Float.valueOf((args.get("lat")));
                             String description = "";
+                            String poiType;
                             if (args.containsKey("description")) {
                                 description = args.get("description");
+                            } else if (args.containsKey("content")) {
+                                description = args.get("content");
+                            }
+
+                            if (templateName.equals("listing")) {
+                                if (args.containsKey("type")) {
+                                    poiType = args.get("type");
+                                } else {
+                                    poiType = "other";
+                                }
+                            } else {
+                                poiType = templateName;
                             }
 
                             pois.add(new WikivoyagePOI(
-                                    args.get("type"), args.get("name"),
+                                    poiType, args.get("name"),
                                     description,
                                     latitude, longitude
                             ));
@@ -76,6 +105,9 @@ public class PageParser {
         }
     }
 
+    /**
+     * Get arguments of template as key-value dictionary (hash map)
+     */
     private HashMap<String, String> getTemplateArgumentsDict(WtTemplate templateNode) {
         HashMap<String, String> templateArgumentsDict = new LinkedHashMap<String, String>();
 
@@ -107,5 +139,16 @@ public class PageParser {
             }
             return s;
         }
+    }
+
+    private void initListingTemplates() {
+        listingTemplates = new HashSet<String>();
+        listingTemplates.add("listing");
+        listingTemplates.add("see");
+        listingTemplates.add("do");
+        listingTemplates.add("buy");
+        listingTemplates.add("eat");
+        listingTemplates.add("drink");
+        listingTemplates.add("sleep");
     }
 }
