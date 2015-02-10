@@ -18,7 +18,7 @@ import java.io.File;
 public class OsmXml {
     private static Integer nodeId = 0;
 
-    public static void writePOIsToXML(WikivoyagePOI[] pois, String outputFilename) throws ParserConfigurationException, TransformerException {
+    public static void writePOIsToXML(WikivoyagePOI[] pois, String outputFilename, boolean userDefined) throws ParserConfigurationException, TransformerException {
         for (WikivoyagePOI poi: pois) {
             System.out.println(poi.humanReadable());
         }
@@ -36,7 +36,11 @@ public class OsmXml {
         for (WikivoyagePOI poi: pois) {
             Element node = createPoiNode(doc, poi);
             rootElement.appendChild(node);
-            addKVNode(doc, node, "wikivoyage", poi.getType());
+            if (!userDefined) {
+                addKVNode(doc, node, "wikivoyage", poi.getType());
+            } else {
+                addKVNode(doc, node, "user_defined", "user_defined");
+            }
             addKVNode(doc, node, "name", poi.getTitle());
             addKVNode(doc, node, "description", poi.getDescription());
         }

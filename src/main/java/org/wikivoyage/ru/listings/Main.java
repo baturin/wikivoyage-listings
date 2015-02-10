@@ -45,7 +45,7 @@ public class Main {
                     DumpDownloader.downloadDump(dumpUrl, inputFilename);
                 }
 
-                generateFiles(inputFilename, cl.outputXml, cl.outputObf);
+                generateFiles(inputFilename, cl.outputXml, cl.outputObf, cl.poiUserDefined);
             }
         } catch (Exception e) {
             System.err.println("Failure");
@@ -58,7 +58,7 @@ public class Main {
         new File(WORKING_DIR).mkdirs();
     }
 
-    private static void generateFiles(String inputFilename, String outputXmlFilename, String outputObf) throws ParserConfigurationException, SAXException, IOException, TransformerException, SQLException, InterruptedException {
+    private static void generateFiles(String inputFilename, String outputXmlFilename, String outputObf, boolean userDefined) throws ParserConfigurationException, SAXException, IOException, TransformerException, SQLException, InterruptedException {
         String tempMapFilename = "pois.obf";
 
         if (outputXmlFilename == null) {
@@ -71,7 +71,7 @@ public class Main {
 
         DumpParser.parseWikivoyageDump(inputFilename, pageParser);
         WikivoyagePOI[] pois = pageParser.getPOIs();
-        OsmXml.writePOIsToXML(pois, outputXmlFilename);
+        OsmXml.writePOIsToXML(pois, outputXmlFilename, userDefined);
 
         if (outputObf != null) {
             OBF.createObf(outputXmlFilename, WORKING_DIR, tempMapFilename);
