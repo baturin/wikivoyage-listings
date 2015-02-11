@@ -18,7 +18,6 @@ import java.sql.SQLException;
 
 public class Main {
 
-    static final String RU_DUMP_URL = "https://dumps.wikimedia.org/ruwikivoyage/latest/ruwikivoyage-latest-pages-articles.xml.bz2";
     static final String WORKING_DIR = "tmp";
 
     public static void main(String[] args) {
@@ -35,17 +34,16 @@ public class Main {
                     inputFilename = cl.inputFile;
                 } else {
                     inputFilename = WORKING_DIR + "/" + "dump.xml.bz2";
-                    String dumpUrl;
+                    DumpDownloader downloader = new DumpDownloader();
                     if (cl.inputUrl != null) {
-                        dumpUrl = cl.inputUrl;
+                        downloader.downloadDumpFromUrl(cl.inputUrl, inputFilename);
                     } else {
-                        dumpUrl = RU_DUMP_URL;
+                        downloader.downloadLanguageDump(cl.inputLatest, inputFilename);
                     }
-
-                    DumpDownloader.downloadDump(dumpUrl, inputFilename);
                 }
 
                 generateFiles(inputFilename, cl.outputXml, cl.outputObf, cl.poiUserDefined);
+                System.out.println("Finished");
             }
         } catch (Exception e) {
             System.err.println("Failure");
@@ -69,11 +67,14 @@ public class Main {
 
         PageParser pageParser = new PageParser();
 
+        System.out.println("Parsing dump...");
         DumpParser.parseWikivoyageDump(inputFilename, pageParser);
         WikivoyagePOI[] pois = pageParser.getPOIs();
+        System.out.println("Saving XML...");
         OsmXml.writePOIsToXML(pois, outputXmlFilename, userDefined);
 
         if (outputObf != null) {
+            System.out.println("Saving OBF...");
             OBF.createObf(outputXmlFilename, WORKING_DIR, tempMapFilename);
             Files.move(Paths.get(WORKING_DIR + "/" + tempMapFilename), Paths.get(outputObf));
         }
