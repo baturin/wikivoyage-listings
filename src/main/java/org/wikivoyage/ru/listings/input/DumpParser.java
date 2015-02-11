@@ -1,6 +1,6 @@
 package org.wikivoyage.ru.listings.input;
 
-import org.apache.tools.bzip2.CBZip2InputStream;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -64,14 +64,14 @@ public class DumpParser {
         InputStream in;
 
         if (inputFilename.endsWith(".bz2")) {
-            FileInputStream fin = new FileInputStream(inputFilename);
-            BufferedInputStream bufin = new BufferedInputStream(fin);
-
-            // skip first 2 bytes for CBZip2InputStream
-            bufin.read();
-            bufin.read();
-
-            in = new CBZip2InputStream(bufin);
+            in = new BufferedInputStream(
+                    new BZip2CompressorInputStream(
+                            new BufferedInputStream(
+                                    new FileInputStream(inputFilename)
+                            ),
+                            true // support for multistream bzip2
+                    )
+            );
         } else {
             in = new FileInputStream(new File(inputFilename));
         }
