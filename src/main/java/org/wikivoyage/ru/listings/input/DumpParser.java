@@ -10,28 +10,33 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Parser of a whole Wikivoyage database dump
  */
 public class DumpParser {
+    private static final Log log = LogFactory.getLog(DumpParser.class);
+
     public static void parseWikivoyageDump(String inputFilename, final PageParser pageParser)
             throws ParserConfigurationException, SAXException, IOException
     {
-        SAXParserFactory factory = SAXParserFactory.newInstance();
-        SAXParser saxParser = factory.newSAXParser();
+        SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+        SAXParser wikivoyageDumpSaxParser = saxParserFactory.newSAXParser();
 
         DefaultHandler handler = new DefaultHandler(){
-            String pageName = null;
-            String text = null;
-            String ns = null;
+            String pageTitle = null;
+            String pageText = null;
+            String pageNs = null;
             private StringBuffer curCharValue = new StringBuffer(1024);
 
             public void startElement(String uri, String localName,String qName,
                                      Attributes attributes) throws SAXException {
                 if (qName.equals("page")) {
-                    pageName = null;
-                    text = null;
-                    ns = null;
+                    pageTitle = null;
+                    pageText = null;
+                    pageNs = null;
                 } else if (qName.equals("title") || qName.equals("text") || qName.equals("ns")) {
                     curCharValue = new StringBuffer(1024);
                 }
@@ -47,14 +52,15 @@ public class DumpParser {
                                    String qName) throws SAXException {
 
                 if (qName.equals("title")) {
-                    pageName = curCharValue.toString();
+                    pageTitle = curCharValue.toString();
                 } else if (qName.equals("text")) {
-                    text = curCharValue.toString();
+                    pageText = curCharValue.toString();
                 } else if (qName.equals("ns")) {
-                    ns = curCharValue.toString();
+                    pageNs = curCharValue.toString();
                 } else if (qName.equals("page")) {
-                    if (ns.equals("0")) {
-                        pageParser.processPage(text);
+                    if (pageNs.equals("0")) {
+                        log.debug("Process page '" + pageTitle + "'");
+                        pageParser.processPage(pageText);
                     }
                 }
 
@@ -75,6 +81,6 @@ public class DumpParser {
         } else {
             in = new FileInputStream(new File(inputFilename));
         }
-        saxParser.parse(in, handler);
+        wikivoyageDumpSaxParser.parse(in, handler);
     }
 }

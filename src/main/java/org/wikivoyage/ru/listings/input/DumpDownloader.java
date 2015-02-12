@@ -6,10 +6,14 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.HashMap;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class DumpDownloader {
+    private static final Log log = LogFactory.getLog(DumpDownloader.class);
+
     public void downloadDumpFromUrl(String dumpUrl, String dumpFilename) throws IOException {
-        System.out.println("Downloading dump...");
+        log.info("Download dump from '" + dumpUrl + "'");
         URL website = new URL(dumpUrl);
         ReadableByteChannel rbc = Channels.newChannel(website.openStream());
         FileOutputStream fos = new FileOutputStream(dumpFilename);

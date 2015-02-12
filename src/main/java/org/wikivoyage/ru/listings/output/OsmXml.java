@@ -19,11 +19,6 @@ public class OsmXml {
     private static Integer nodeId = 0;
 
     public static void writePOIsToXML(WikivoyagePOI[] pois, String outputFilename, boolean userDefined) throws ParserConfigurationException, TransformerException {
-        for (WikivoyagePOI poi: pois) {
-            System.out.println(poi.humanReadable());
-        }
-        System.out.println(pois.length);
-
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
         Document doc = docBuilder.newDocument();

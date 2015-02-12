@@ -16,7 +16,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public class Main {
+    private static final Log log = LogFactory.getLog(Main.class);
 
     static final String WORKING_DIR = "tmp";
 
@@ -32,6 +36,7 @@ public class Main {
                 createWorkingDir();
                 if (cl.inputFile != null) {
                     inputFilename = cl.inputFile;
+                    log.info("Take POIs from '" + inputFilename + "'");
                 } else {
                     inputFilename = WORKING_DIR + "/" + "dump.xml.bz2";
                     DumpDownloader downloader = new DumpDownloader();
@@ -43,7 +48,7 @@ public class Main {
                 }
 
                 generateFiles(inputFilename, cl.outputXml, cl.outputObf, cl.poiUserDefined);
-                System.out.println("Finished");
+                log.info("Finished");
             }
         } catch (Exception e) {
             System.err.println("Failure");
@@ -67,14 +72,15 @@ public class Main {
 
         PageParser pageParser = new PageParser();
 
-        System.out.println("Parsing dump...");
+        log.info("Parse dump");
         DumpParser.parseWikivoyageDump(inputFilename, pageParser);
         WikivoyagePOI[] pois = pageParser.getPOIs();
-        System.out.println("Saving XML...");
+        log.info("Total " + pois.length + " POIs were found");
+        log.info("Save XML to '" + outputXmlFilename + "'");
         OsmXml.writePOIsToXML(pois, outputXmlFilename, userDefined);
 
         if (outputObf != null) {
-            System.out.println("Saving OBF...");
+            log.info("Save OBF to '" + outputObf + "'");
             OBF.createObf(outputXmlFilename, WORKING_DIR, tempMapFilename);
             Files.move(Paths.get(WORKING_DIR + "/" + tempMapFilename), Paths.get(outputObf));
         }
