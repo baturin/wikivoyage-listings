@@ -17,7 +17,7 @@ public class CommandLine {
     public String outputXml;
     @Parameter(names="-poi-user-defined")
     public boolean poiUserDefined;
-    @Parameter(names="-help")
+    @Parameter(names={"-help", "--help", "-h", "-?"})
     public boolean help;
 
     public void validate() throws ParameterException {
@@ -50,27 +50,36 @@ public class CommandLine {
 
     public void printHelp()
     {
-        System.out.println("Input configuration:");
+        System.out.println("wikivoyage-listings tool takes Wikivoyage (https://wikivoyage.org/) dumps, ");
+        System.out.println("parses listings and generates XML and OBF files. OBF can be used with OsmAnd.");
+        System.out.println();
+        System.out.println("Usage:");
+        System.out.println();
+        System.out.println("*** Input configuration ***");
+        System.out.println("Specify a source of Wikivoyage dump:");
         System.out.println("-input-url <url>: download Wikivoyage dump from specified URL");
         System.out.println("-input-latest (en|ru): download latest Wikivoyage dump for specified language");
         System.out.println("-input-file <filename>: use Wikivoyage dump from file");
         System.out.println("The utility accepts XML dump, packed with bzip2 or not.");
         System.out.println();
-        System.out.println("Output configuration:");
+        System.out.println("*** Output configuration ***");
+        System.out.println("Specify output files:");
         System.out.println("-output-obf <filename>: write OBF file to <filename>");
         System.out.println("-output-xml <filename>: write OSM XML file to <filename>");
         System.out.println();
-        System.out.println("Additional options:");
+        System.out.println("*** Additional options ***");
         System.out.println("-poi-user-defined: set all POI types to \"user defined\" to use OBF with OsmAnd 1.9.");
     }
 
     public void parse(String [] args)
     {
-        new JCommander(this, args);
         try {
+            new JCommander(this, args);
             validate();
         } catch (ParameterException e) {
             System.out.println(e.getMessage());
+            System.out.println();
+            printHelp();
             System.exit(1);
         }
     }
