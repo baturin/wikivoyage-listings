@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration debug="false"
+    xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+    <!-- Print INFO messages from org.wikivoyage to stdout -->
+    <appender name="consoleAppender" class="org.apache.log4j.ConsoleAppender">
+        <param name="Threshold" value="INFO" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+
+    <!-- Print DEBUG and INFO messages from all packages to a file-->
+    <appender name="fileAppender" class="org.apache.log4j.FileAppender">
+        <param name="append" value="true"/>
+        <param name="file" value="debug.log"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
+        </layout>
+    </appender>
+
+    <logger name='org.wikivoyage' additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="consoleAppender"/>
+        <appender-ref ref="fileAppender"/>
+    </logger>
+    <root>
+        <level value="DEBUG"/>
+        <appender-ref ref="fileAppender"/>
+    </root>
+</log4j:configuration>

@@ -16,6 +16,10 @@ task distZip(type: Zip) {
         include '**/*.jar'
         into('lib')
     }
+    from('config/') {
+        include '**/*.*'
+        into('config')
+    }
     from('.') {
         include 'wikivoyage-listings.sh'
         into('.')
