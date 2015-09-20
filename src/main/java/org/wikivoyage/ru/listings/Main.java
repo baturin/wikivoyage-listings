@@ -23,6 +23,7 @@ public class Main {
     private static final Log log = LogFactory.getLog(Main.class);
 
     static final String WORKING_DIR = "tmp";
+    static final String DUMPS_DIR = "dumps";
 
     public static void main(String[] args) {
         CommandLine cl = new CommandLine();
@@ -31,6 +32,31 @@ public class Main {
         try {
             if (cl.help) {
                 cl.printHelp();
+            } else if (cl.dailyUpdate) {
+                createWorkingDir();
+                createDumpsDir();
+
+                DumpDownloader downloader = new DumpDownloader();
+                for (String dumpId: downloader.listDumps("ru")) {
+                    try {
+                        String outputXml = DUMPS_DIR + "/ru-" + dumpId + ".xml";
+                        String outputObf = DUMPS_DIR + "/ru-" + dumpId + ".obf";
+                        if (!fileExists(outputXml) && !fileExists(outputObf)) {
+                            String dumpUrl = downloader.dumpUrl("ru", dumpId);
+                            String inputFilename = WORKING_DIR + "/" + "dump.xml.bz2";
+                            log.info("Create POIs for '" + dumpId + "'");
+
+                            removeFile(inputFilename);
+                            downloader.downloadDumpFromUrl(dumpUrl, inputFilename);
+                            generateFiles(inputFilename, outputXml, outputObf, false);
+                            removeFile(inputFilename);
+                        }
+                    } catch (Exception e) {
+                        log.info("Failed to create dump " + dumpId);
+                        log.debug("Exception: ", e);
+                    }
+                }
+                System.exit(0);
             } else {
                 String inputFilename;
                 createWorkingDir();
@@ -56,9 +82,25 @@ public class Main {
         }
     }
 
+    private static void createDumpsDir()
+    {
+        new File(DUMPS_DIR).mkdirs();
+    }
+
     private static void createWorkingDir()
     {
         new File(WORKING_DIR).mkdirs();
+    }
+
+    private static void removeFile(String filename)
+    {
+        new File(filename).delete();
+    }
+
+    private static boolean fileExists(String filename)
+    {
+        File f = new File(filename);
+        return f.exists() && !f.isDirectory();
     }
 
     private static void generateFiles(String inputFilename, String outputXmlFilename, String outputObf, boolean userDefined) throws ParserConfigurationException, SAXException, IOException, TransformerException, SQLException, InterruptedException {

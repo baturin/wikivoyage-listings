@@ -5,6 +5,8 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 
 public class CommandLine {
+    @Parameter(names="-daily-update")
+    public boolean dailyUpdate;
     @Parameter(names="-input-file")
     public String inputFile;
     @Parameter(names="-input-url")
@@ -21,7 +23,7 @@ public class CommandLine {
     public boolean help;
 
     public void validate() throws ParameterException {
-        if (help) {
+        if (help || dailyUpdate) {
             return;
         }
 
