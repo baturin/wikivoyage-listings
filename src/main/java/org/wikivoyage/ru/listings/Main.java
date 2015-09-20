@@ -22,8 +22,7 @@ import org.apache.commons.logging.LogFactory;
 public class Main {
     private static final Log log = LogFactory.getLog(Main.class);
 
-    static final String WORKING_DIR = "tmp";
-    static final String DUMPS_DIR = "dumps";
+    private static final FileNames fileNames = new FileNames();
 
     public static void main(String[] args) {
         CommandLine cl = new CommandLine();
@@ -34,22 +33,33 @@ public class Main {
                 cl.printHelp();
             } else if (cl.dailyUpdate) {
                 createWorkingDir();
-                createDumpsDir();
+                createListingsDir();
+                createDumpsCacheDir();
 
+                String language = "ru";
                 DumpDownloader downloader = new DumpDownloader();
-                for (String dumpId: downloader.listDumps("ru")) {
+                for (String dumpId: downloader.listDumps(language)) {
                     try {
-                        String outputXml = DUMPS_DIR + "/ru-" + dumpId + ".xml";
-                        String outputObf = DUMPS_DIR + "/ru-" + dumpId + ".obf";
-                        if (!fileExists(outputXml) && !fileExists(outputObf)) {
-                            String dumpUrl = downloader.dumpUrl("ru", dumpId);
-                            String inputFilename = WORKING_DIR + "/" + "dump.xml.bz2";
+                        String outputXml = fileNames.listingXmlPath(language, dumpId);
+                        String outputObf = fileNames.listingObfPath(language, dumpId);
+                        String outputXmlUserDefined = fileNames.listingXmlUserDefinedPath(language, dumpId);
+                        String outputObfUserDefined = fileNames.listingObfUserDefinedPath(language, dumpId);
+
+                        if (
+                            !fileExists(outputXml) ||
+                            !fileExists(outputObf) ||
+                            !fileExists(outputXmlUserDefined) ||
+                            !fileExists(outputObfUserDefined)
+                        ) {
                             log.info("Create POIs for '" + dumpId + "'");
 
-                            removeFile(inputFilename);
-                            downloader.downloadDumpFromUrl(dumpUrl, inputFilename);
-                            generateFiles(inputFilename, outputXml, outputObf, false);
-                            removeFile(inputFilename);
+                            String dumpUrl = downloader.dumpUrl(language, dumpId);
+                            String dumpPath = fileNames.dumpCacheFilename(language, dumpId);
+                            if (!fileExists(dumpPath)) {
+                                downloader.downloadDumpFromUrl(dumpUrl, dumpPath);
+                            }
+                            generateFiles(dumpPath, outputXml, outputObf, false);
+                            generateFiles(dumpPath, outputXmlUserDefined, outputObfUserDefined, true);
                         }
                     } catch (Exception e) {
                         log.info("Failed to create dump " + dumpId);
@@ -64,7 +74,7 @@ public class Main {
                     inputFilename = cl.inputFile;
                     log.info("Take POIs from '" + inputFilename + "'");
                 } else {
-                    inputFilename = WORKING_DIR + "/" + "dump.xml.bz2";
+                    inputFilename = fileNames.workingDirPath("dump.xml.bz2");
                     DumpDownloader downloader = new DumpDownloader();
                     if (cl.inputUrl != null) {
                         downloader.downloadDumpFromUrl(cl.inputUrl, inputFilename);
@@ -82,14 +92,19 @@ public class Main {
         }
     }
 
-    private static void createDumpsDir()
+    private static void createListingsDir()
     {
-        new File(DUMPS_DIR).mkdirs();
+        new File(fileNames.listingsDir()).mkdirs();
+    }
+
+    private static void createDumpsCacheDir()
+    {
+        new File(fileNames.dumpsCacheDir()).mkdirs();
     }
 
     private static void createWorkingDir()
     {
-        new File(WORKING_DIR).mkdirs();
+        new File(fileNames.workingDir()).mkdirs();
     }
 
     private static void removeFile(String filename)
@@ -107,10 +122,10 @@ public class Main {
         String tempMapFilename = "pois.obf";
 
         if (outputXmlFilename == null) {
-            outputXmlFilename = WORKING_DIR + "/pois.xml";
+            outputXmlFilename = fileNames.workingDirPath("pois.xml");
         }
 
-        new File(WORKING_DIR + "/" + tempMapFilename).delete();
+        removeFile(fileNames.workingDirPath(tempMapFilename));
 
         PageParser pageParser = new PageParser();
 
@@ -123,8 +138,8 @@ public class Main {
 
         if (outputObf != null) {
             log.info("Save OBF to '" + outputObf + "'");
-            OBF.createObf(outputXmlFilename, WORKING_DIR, tempMapFilename);
-            Files.move(Paths.get(WORKING_DIR + "/" + tempMapFilename), Paths.get(outputObf));
+            OBF.createObf(outputXmlFilename, fileNames.workingDir(), tempMapFilename);
+            Files.move(Paths.get(fileNames.workingDirPath(tempMapFilename)), Paths.get(outputObf));
         }
     }
 }
