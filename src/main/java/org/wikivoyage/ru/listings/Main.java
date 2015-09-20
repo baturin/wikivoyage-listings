@@ -3,6 +3,7 @@ package org.wikivoyage.ru.listings;
 import javax.xml.parsers.*;
 import javax.xml.transform.TransformerException;
 
+import org.apache.commons.compress.utils.IOUtils;
 import org.wikivoyage.ru.listings.entity.WikivoyagePOI;
 import org.wikivoyage.ru.listings.input.DumpDownloader;
 import org.wikivoyage.ru.listings.input.DumpParser;
@@ -10,6 +11,8 @@ import org.wikivoyage.ru.listings.input.PageParser;
 import org.wikivoyage.ru.listings.output.OBF;
 import org.wikivoyage.ru.listings.output.OsmXml;
 import org.xml.sax.SAXException;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
+
 
 import java.io.*;
 import java.nio.file.Files;
@@ -40,16 +43,20 @@ public class Main {
                 for (String language: Languages.getLanguages()) {
                     for (String dumpId: downloader.listDumps(language)) {
                         try {
-                            String outputXml = fileNames.listingXmlPath(language, dumpId);
-                            String outputObf = fileNames.listingObfPath(language, dumpId);
-                            String outputXmlUserDefined = fileNames.listingXmlUserDefinedPath(language, dumpId);
-                            String outputObfUserDefined = fileNames.listingObfUserDefinedPath(language, dumpId);
+                            String outputXml = fileNames.listingXmlPath(language, dumpId, false);
+                            String outputObf = fileNames.listingObfPath(language, dumpId, false);
+                            String outputXmlUserDefined = fileNames.listingXmlUserDefinedPath(language, dumpId, false);
+                            String outputObfUserDefined = fileNames.listingObfUserDefinedPath(language, dumpId, false);
+                            String outputXmlArchive = fileNames.listingXmlPath(language, dumpId, true);
+                            String outputObfArchive = fileNames.listingObfPath(language, dumpId, true);
+                            String outputXmlUserDefinedArchive = fileNames.listingXmlUserDefinedPath(language, dumpId, true);
+                            String outputObfUserDefinedArchive = fileNames.listingObfUserDefinedPath(language, dumpId, true);
 
                             if (
-                                !fileExists(outputXml) ||
-                                !fileExists(outputObf) ||
-                                !fileExists(outputXmlUserDefined) ||
-                                !fileExists(outputObfUserDefined)
+                                !fileExists(outputXmlArchive) ||
+                                !fileExists(outputObfArchive) ||
+                                !fileExists(outputXmlUserDefinedArchive) ||
+                                !fileExists(outputObfUserDefinedArchive)
                             ) {
                                 log.info("Create POIs for '" + dumpId + "'");
 
@@ -60,11 +67,16 @@ public class Main {
                                 }
                                 generateFiles(dumpPath, outputXml, outputObf, false);
                                 generateFiles(dumpPath, outputXmlUserDefined, outputObfUserDefined, true);
+                                archive(outputXml, outputXmlArchive);
+                                archive(outputXmlUserDefined, outputXmlUserDefinedArchive);
+                                archive(outputObf, outputObfArchive);
+                                archive(outputObfUserDefined, outputObfUserDefinedArchive);
                             }
                         } catch (Exception e) {
                             log.info("Failed to create dump " + dumpId);
                             log.debug("Exception: ", e);
                         }
+                        break;
                     }
                 }
                 System.exit(0);
@@ -111,6 +123,20 @@ public class Main {
     private static void removeFile(String filename)
     {
         new File(filename).delete();
+    }
+
+    private static void archive(String inputFilename, String outputFilename) throws IOException {
+        InputStream in = new FileInputStream(inputFilename);
+        OutputStream out = new FileOutputStream(outputFilename);
+        BZip2CompressorOutputStream os = new BZip2CompressorOutputStream(out);
+        try {
+            IOUtils.copy(in, os);
+        } finally {
+            os.close();
+            in.close();
+            out.close();
+        }
+        removeFile(inputFilename);
     }
 
     private static boolean fileExists(String filename)
