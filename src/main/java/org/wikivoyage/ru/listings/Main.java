@@ -36,34 +36,35 @@ public class Main {
                 createListingsDir();
                 createDumpsCacheDir();
 
-                String language = "ru";
                 DumpDownloader downloader = new DumpDownloader();
-                for (String dumpId: downloader.listDumps(language)) {
-                    try {
-                        String outputXml = fileNames.listingXmlPath(language, dumpId);
-                        String outputObf = fileNames.listingObfPath(language, dumpId);
-                        String outputXmlUserDefined = fileNames.listingXmlUserDefinedPath(language, dumpId);
-                        String outputObfUserDefined = fileNames.listingObfUserDefinedPath(language, dumpId);
+                for (String language: Languages.getLanguages()) {
+                    for (String dumpId: downloader.listDumps(language)) {
+                        try {
+                            String outputXml = fileNames.listingXmlPath(language, dumpId);
+                            String outputObf = fileNames.listingObfPath(language, dumpId);
+                            String outputXmlUserDefined = fileNames.listingXmlUserDefinedPath(language, dumpId);
+                            String outputObfUserDefined = fileNames.listingObfUserDefinedPath(language, dumpId);
 
-                        if (
-                            !fileExists(outputXml) ||
-                            !fileExists(outputObf) ||
-                            !fileExists(outputXmlUserDefined) ||
-                            !fileExists(outputObfUserDefined)
-                        ) {
-                            log.info("Create POIs for '" + dumpId + "'");
+                            if (
+                                !fileExists(outputXml) ||
+                                !fileExists(outputObf) ||
+                                !fileExists(outputXmlUserDefined) ||
+                                !fileExists(outputObfUserDefined)
+                            ) {
+                                log.info("Create POIs for '" + dumpId + "'");
 
-                            String dumpUrl = downloader.dumpUrl(language, dumpId);
-                            String dumpPath = fileNames.dumpCacheFilename(language, dumpId);
-                            if (!fileExists(dumpPath)) {
-                                downloader.downloadDumpFromUrl(dumpUrl, dumpPath);
+                                String dumpUrl = downloader.dumpUrl(language, dumpId);
+                                String dumpPath = fileNames.dumpCacheFilename(language, dumpId);
+                                if (!fileExists(dumpPath)) {
+                                    downloader.downloadDumpFromUrl(dumpUrl, dumpPath);
+                                }
+                                generateFiles(dumpPath, outputXml, outputObf, false);
+                                generateFiles(dumpPath, outputXmlUserDefined, outputObfUserDefined, true);
                             }
-                            generateFiles(dumpPath, outputXml, outputObf, false);
-                            generateFiles(dumpPath, outputXmlUserDefined, outputObfUserDefined, true);
+                        } catch (Exception e) {
+                            log.info("Failed to create dump " + dumpId);
+                            log.debug("Exception: ", e);
                         }
-                    } catch (Exception e) {
-                        log.info("Failed to create dump " + dumpId);
-                        log.debug("Exception: ", e);
                     }
                 }
                 System.exit(0);

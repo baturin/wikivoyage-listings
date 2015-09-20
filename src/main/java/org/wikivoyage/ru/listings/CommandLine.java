@@ -29,7 +29,7 @@ public class CommandLine {
 
         if (inputFile == null && inputUrl == null && inputLatest == null) {
             throw new ParameterException(
-                    "Input source is not specified. Specify one with options '-input-file', '-input-url', '-input-latest'"
+                "Input source is not specified. Specify one with options '-input-file', '-input-url', '-input-latest'"
             );
         }
 
@@ -39,13 +39,13 @@ public class CommandLine {
         if (inputLatest != null) inputCount++;
         if (inputCount > 1) {
             throw new ParameterException(
-                    "More than one input source ('-input-file', '-input-url', '-input-latest') is specified. Specify only one of them."
+                "More than one input source ('-input-file', '-input-url', '-input-latest') is specified. Specify only one of them."
             );
         }
 
         if (outputObf == null && outputXml == null) {
             throw new ParameterException(
-                    "Output files are not specified. Specify them with options '-output-obf', '-output-xml'"
+                "Output files are not specified. Specify them with options '-output-obf', '-output-xml'"
             );
         }
     }

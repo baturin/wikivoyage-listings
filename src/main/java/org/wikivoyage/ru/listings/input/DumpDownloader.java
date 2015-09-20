@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 
 public class DumpDownloader {
     private static final Log log = LogFactory.getLog(DumpDownloader.class);
+    private static final String BASE_URL = "https://dumps.wikimedia.org/";
 
     public void downloadDumpFromUrl(String dumpUrl, String dumpFilename) throws IOException {
         log.info("Download dump from '" + dumpUrl + "'");
@@ -29,17 +30,14 @@ public class DumpDownloader {
 
     public void downloadLanguageDump(String language, String dumpFilename) throws IOException
     {
-        HashMap<String, String> dumpUrls = new HashMap<String, String>();
-        dumpUrls.put("ru", "https://dumps.wikimedia.org/ruwikivoyage/latest/ruwikivoyage-latest-pages-articles.xml.bz2");
-        dumpUrls.put("en", "https://dumps.wikimedia.org/enwikivoyage/latest/enwikivoyage-latest-pages-articles.xml.bz2");
-
-        downloadDumpFromUrl(dumpUrls.get(language), dumpFilename);
+        String dumpUrl = latestDumpUrl(language);
+        downloadDumpFromUrl(dumpUrl, dumpFilename);
     }
 
     public List<String> listDumps(String language) throws IOException
     {
         List<String> availableDumps = new LinkedList<String>();
-        String indexUrl = "https://dumps.wikimedia.org/" + language + "wikivoyage/";
+        String indexUrl = BASE_URL + language + "wikivoyage/";
         InputStream in = new URL(indexUrl).openStream();
 
         try {
@@ -59,8 +57,16 @@ public class DumpDownloader {
     public String dumpUrl(String language, String dumpId)
     {
         return (
-            "https://dumps.wikimedia.org/" + language + "wikivoyage/" +
-                    dumpId + "/" + language + "wikivoyage-" + dumpId + "-pages-articles.xml.bz2"
+            BASE_URL + language + "wikivoyage/" +
+                dumpId + "/" + language + "wikivoyage-" + dumpId + "-pages-articles.xml.bz2"
+        );
+    }
+
+    public String latestDumpUrl(String language)
+    {
+        return (
+            BASE_URL + language + "wikivoyage/latest/" +
+                language + "wikivoyage-latest-pages-articles.xml.bz2"
         );
     }
 }
