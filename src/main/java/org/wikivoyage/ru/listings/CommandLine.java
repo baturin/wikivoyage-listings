@@ -7,6 +7,8 @@ import com.beust.jcommander.ParameterException;
 public class CommandLine {
     @Parameter(names="-daily-update")
     public boolean dailyUpdate;
+    @Parameter(names="-latest-count")
+    public Integer latestCount;
     @Parameter(names="-input-file")
     public String inputFile;
     @Parameter(names="-input-url")

@@ -18,6 +18,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -41,7 +43,18 @@ public class Main {
 
                 DumpDownloader downloader = new DumpDownloader();
                 for (String language: Languages.getLanguages()) {
-                    for (String dumpId: downloader.listDumps(language)) {
+                    log.info("Processing language " + language);
+                    List<String> dumpIds = downloader.listDumps(language);
+
+                    if (cl.latestCount != null) {
+                        log.info("Processing the latest " + cl.latestCount + " dumps");
+                        Collections.sort(dumpIds);
+                        Collections.reverse(dumpIds);
+                        dumpIds = dumpIds.subList(0, cl.latestCount);
+                    }
+
+                    for (String dumpId: dumpIds) {
+                        log.info("Processing dump " + dumpId);
                         try {
                             String outputXml = fileNames.listingXmlPath(language, dumpId, false);
                             String outputObf = fileNames.listingObfPath(language, dumpId, false);
@@ -76,7 +89,6 @@ public class Main {
                             log.info("Failed to create dump " + dumpId);
                             log.debug("Exception: ", e);
                         }
-                        break;
                     }
                 }
                 System.exit(0);

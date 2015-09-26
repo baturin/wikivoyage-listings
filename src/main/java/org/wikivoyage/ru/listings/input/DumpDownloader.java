@@ -45,7 +45,9 @@ public class DumpDownloader {
             Pattern p = Pattern.compile("a\\s*href\\s*=\\s*\"(\\d+)/\"");
             Matcher m = p.matcher(indexHtml);
             while (m.find()) {
-                availableDumps.add(m.group(1));
+                String dumpId = m.group(1);
+                availableDumps.add(dumpId);
+                log.debug("Detected dump for language '" + language + "': " + dumpId);
             }
         } finally {
             IOUtils.closeQuietly(in);
