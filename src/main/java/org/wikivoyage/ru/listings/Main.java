@@ -46,10 +46,17 @@ public class Main {
                     log.info("Processing language " + language);
                     List<String> dumpIds = downloader.listDumps(language);
 
+                    if (dumpIds.size() == 0) {
+                        continue;
+                    }
+
+                    Collections.sort(dumpIds);
+                    Collections.reverse(dumpIds);
+
+                    String latestDumpId = dumpIds.get(0);
+
                     if (cl.latestCount != null) {
                         log.info("Processing the latest " + cl.latestCount + " dumps");
-                        Collections.sort(dumpIds);
-                        Collections.reverse(dumpIds);
                         dumpIds = dumpIds.subList(0, cl.latestCount);
                     }
 
@@ -80,6 +87,19 @@ public class Main {
                                 }
                                 generateFiles(dumpPath, outputXml, outputObf, false);
                                 generateFiles(dumpPath, outputXmlUserDefined, outputObfUserDefined, true);
+
+                                if (dumpId.equals(latestDumpId)) {
+                                    log.info("Updating latest files");
+                                    removeFile(fileNames.listingXmlLatestPath(language));
+                                    removeFile(fileNames.listingXmlUserDefinedLatestPath(language));
+                                    removeFile(fileNames.listingObfLatestPath(language));
+                                    removeFile(fileNames.listingObfUserDefinedLatestPath(language));
+                                    copyFile(outputXml, fileNames.listingXmlLatestPath(language));
+                                    copyFile(outputXmlUserDefined,fileNames.listingXmlUserDefinedLatestPath(language));
+                                    copyFile(outputObf, fileNames.listingObfLatestPath(language));
+                                    copyFile(outputObfUserDefined, fileNames.listingObfUserDefinedLatestPath(language));
+                                }
+
                                 archive(outputXml, outputXmlArchive);
                                 archive(outputXmlUserDefined, outputXmlUserDefinedArchive);
                                 archive(outputObf, outputObfArchive);
@@ -149,6 +169,18 @@ public class Main {
             out.close();
         }
         removeFile(inputFilename);
+    }
+
+    private static void copyFile(String fromFilename, String toFilename) throws IOException {
+        InputStream in = new FileInputStream(fromFilename);
+        OutputStream out = new FileOutputStream(toFilename);
+
+        try {
+            IOUtils.copy(in, out);
+        } finally {
+            in.close();
+            out.close();
+        }
     }
 
     private static boolean fileExists(String filename)
