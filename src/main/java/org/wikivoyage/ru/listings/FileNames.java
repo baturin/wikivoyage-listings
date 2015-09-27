@@ -2,29 +2,52 @@ package org.wikivoyage.ru.listings;
 
 public class FileNames
 {
-    public String listingsDir()
+    private String listingDir;
+    private String dumpsCacheDir;
+    private String workingDir;
+
+    public FileNames(String listingDir, String dumpsCacheDir, String workingDir)
     {
-        return "listings";
+        if (listingDir != null) {
+            this.listingDir = listingDir;
+        } else {
+            this.listingDir = "listings";
+        }
+        if (dumpsCacheDir != null) {
+            this.dumpsCacheDir = dumpsCacheDir;
+        } else {
+            this.dumpsCacheDir = "dumps-cache";
+        }
+        if (workingDir != null) {
+            this.workingDir = workingDir;
+        } else {
+            this.workingDir = "tmp";
+        }
     }
 
-    public String dumpsCacheDir()
+    public String getListingsDir()
     {
-        return "dumps-cache";
+        return listingDir;
     }
 
-    public String workingDir()
+    public String getDumpsCacheDir()
     {
-        return "tmp";
+        return dumpsCacheDir;
+    }
+
+    public String getWorkingDir()
+    {
+        return workingDir;
     }
 
     public String workingDirPath(String filename)
     {
-        return workingDir() + "/" + filename;
+        return getWorkingDir() + "/" + filename;
     }
 
     public String dumpsCacheDirPath(String filename)
     {
-        return dumpsCacheDir() + "/" + filename;
+        return getDumpsCacheDir() + "/" + filename;
     }
 
     public String dumpCacheFilename(String language, String dumpId)
@@ -83,7 +106,7 @@ public class FileNames
             archiveSuffix = ".bz2";
         }
         return (
-                listingsDir() + "/wikivoyage-listings-" + language + "-" +
+                getListingsDir() + "/wikivoyage-listings-" + language + "-" +
                         dumpId + userDefinedSuffix + "." + extension + archiveSuffix);
     }
 }

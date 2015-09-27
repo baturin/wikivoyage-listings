@@ -9,6 +9,12 @@ public class CommandLine {
     public boolean dailyUpdate;
     @Parameter(names="-latest-count")
     public Integer latestCount;
+    @Parameter(names="-listings-dir")
+    public String listingsDir;
+    @Parameter(names="-dumps-cache-dir")
+    public String dumpsCacheDir;
+    @Parameter(names="-working-dir")
+    public String workingDir;
     @Parameter(names="-input-file")
     public String inputFile;
     @Parameter(names="-input-url")

@@ -27,11 +27,12 @@ import org.apache.commons.logging.LogFactory;
 public class Main {
     private static final Log log = LogFactory.getLog(Main.class);
 
-    private static final FileNames fileNames = new FileNames();
+    private static FileNames fileNames;
 
     public static void main(String[] args) {
         CommandLine cl = new CommandLine();
         cl.parse(args);
+        fileNames = new FileNames(cl.listingsDir, cl.dumpsCacheDir, cl.workingDir);
 
         try {
             if (cl.help) {
@@ -139,17 +140,17 @@ public class Main {
 
     private static void createListingsDir()
     {
-        new File(fileNames.listingsDir()).mkdirs();
+        new File(fileNames.getListingsDir()).mkdirs();
     }
 
     private static void createDumpsCacheDir()
     {
-        new File(fileNames.dumpsCacheDir()).mkdirs();
+        new File(fileNames.getDumpsCacheDir()).mkdirs();
     }
 
     private static void createWorkingDir()
     {
-        new File(fileNames.workingDir()).mkdirs();
+        new File(fileNames.getWorkingDir()).mkdirs();
     }
 
     private static void removeFile(String filename)
@@ -209,7 +210,7 @@ public class Main {
 
         if (outputObf != null) {
             log.info("Save OBF to '" + outputObf + "'");
-            OBF.createObf(outputXmlFilename, fileNames.workingDir(), tempMapFilename);
+            OBF.createObf(outputXmlFilename, fileNames.getWorkingDir(), tempMapFilename);
             Files.move(Paths.get(fileNames.workingDirPath(tempMapFilename)), Paths.get(outputObf));
         }
     }
