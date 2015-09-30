@@ -8,8 +8,10 @@ import org.wikivoyage.ru.listings.entity.WikivoyagePOI;
 import org.wikivoyage.ru.listings.input.DumpDownloader;
 import org.wikivoyage.ru.listings.input.DumpParser;
 import org.wikivoyage.ru.listings.input.PageParser;
+import org.wikivoyage.ru.listings.output.CSV;
 import org.wikivoyage.ru.listings.output.OBF;
 import org.wikivoyage.ru.listings.output.OsmXml;
+import org.wikivoyage.ru.listings.output.OutputFormat;
 import org.xml.sax.SAXException;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 
@@ -129,7 +131,12 @@ public class Main {
                     }
                 }
 
-                generateFiles(inputFilename, cl.outputXml, cl.outputObf, cl.poiUserDefined);
+                if (cl.outputFormat.equals("csv")) {
+                    OutputFormat format = new CSV();
+                    generateFileForFormat(inputFilename, cl.outputFilename, format);
+                } else {
+                    generateFiles(inputFilename, cl.outputXml, cl.outputObf, cl.poiUserDefined);
+                }
                 log.info("Finished");
             }
         } catch (Exception e) {
@@ -213,5 +220,12 @@ public class Main {
             OBF.createObf(outputXmlFilename, fileNames.getWorkingDir(), tempMapFilename);
             Files.move(Paths.get(fileNames.workingDirPath(tempMapFilename)), Paths.get(outputObf));
         }
+    }
+
+    private static void generateFileForFormat(String inputFilename, String outputFilename, OutputFormat format) throws IOException, SAXException, ParserConfigurationException {
+        PageParser pageParser = new PageParser();
+        DumpParser.parseWikivoyageDump(inputFilename, pageParser);
+        WikivoyagePOI[] pois = pageParser.getPOIs();
+        format.write(pois, outputFilename);
     }
 }

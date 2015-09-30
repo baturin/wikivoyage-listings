@@ -27,6 +27,10 @@ public class CommandLine {
     public String outputXml;
     @Parameter(names="-poi-user-defined")
     public boolean poiUserDefined;
+    @Parameter(names="-output-filename")
+    public String outputFilename;
+    @Parameter(names="-output-format")
+    public String outputFormat;
     @Parameter(names={"-help", "--help", "-h", "-?"})
     public boolean help;
 
@@ -51,7 +55,7 @@ public class CommandLine {
             );
         }
 
-        if (outputObf == null && outputXml == null) {
+        if (outputObf == null && outputXml == null && outputFilename == null && outputFormat == null) {
             throw new ParameterException(
                 "Output files are not specified. Specify them with options '-output-obf', '-output-xml'"
             );
