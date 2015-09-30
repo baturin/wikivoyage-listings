@@ -40,6 +40,11 @@ public class FileNames
         return workingDir;
     }
 
+    public String tempXmlFilename()
+    {
+        return workingDirPath("pois.xml");
+    }
+
     public String workingDirPath(String filename)
     {
         return getWorkingDir() + "/" + filename;

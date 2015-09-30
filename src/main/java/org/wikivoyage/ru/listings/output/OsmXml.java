@@ -14,9 +14,25 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.IOException;
 
-public class OsmXml {
+public class OsmXml implements OutputFormat {
     private static Integer nodeId = 0;
+    private boolean userDefined;
+
+    public OsmXml(boolean userDefined) {
+        this.userDefined = userDefined;
+    }
+
+    @Override
+    public void write(WikivoyagePOI[] pois, String outputFilename) throws WriteOutputException {
+        try {
+            writePOIsToXML(pois, outputFilename, userDefined);
+        } catch (ParserConfigurationException | TransformerException e) {
+            throw new WriteOutputException();
+        }
+    }
+
 
     public static void writePOIsToXML(WikivoyagePOI[] pois, String outputFilename, boolean userDefined) throws ParserConfigurationException, TransformerException {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();

@@ -8,10 +8,7 @@ import org.wikivoyage.ru.listings.entity.WikivoyagePOI;
 import org.wikivoyage.ru.listings.input.DumpDownloader;
 import org.wikivoyage.ru.listings.input.DumpParser;
 import org.wikivoyage.ru.listings.input.PageParser;
-import org.wikivoyage.ru.listings.output.CSV;
-import org.wikivoyage.ru.listings.output.OBF;
-import org.wikivoyage.ru.listings.output.OsmXml;
-import org.wikivoyage.ru.listings.output.OutputFormat;
+import org.wikivoyage.ru.listings.output.*;
 import org.xml.sax.SAXException;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 
@@ -21,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -35,6 +33,13 @@ public class Main {
         CommandLine cl = new CommandLine();
         cl.parse(args);
         fileNames = new FileNames(cl.listingsDir, cl.dumpsCacheDir, cl.workingDir);
+
+        HashMap<String, OutputFormat> formats = new HashMap<>();
+        formats.put("csv", new CSV());
+        formats.put("osmand-xml", new OsmXml(false));
+        formats.put("osmand-xml-user-defined", new OsmXml(true));
+        formats.put("obf", new OBF(false, fileNames.getWorkingDir(), fileNames.tempXmlFilename()));
+        formats.put("obf-user-defined", new OBF(true, fileNames.getWorkingDir(), fileNames.tempXmlFilename()));
 
         try {
             if (cl.help) {
@@ -131,8 +136,8 @@ public class Main {
                     }
                 }
 
-                if (cl.outputFormat.equals("csv")) {
-                    OutputFormat format = new CSV();
+                if (cl.outputFormat != null) {
+                    OutputFormat format = formats.get(cl.outputFormat);
                     generateFileForFormat(inputFilename, cl.outputFilename, format);
                 } else {
                     generateFiles(inputFilename, cl.outputXml, cl.outputObf, cl.poiUserDefined);
@@ -222,7 +227,7 @@ public class Main {
         }
     }
 
-    private static void generateFileForFormat(String inputFilename, String outputFilename, OutputFormat format) throws IOException, SAXException, ParserConfigurationException {
+    private static void generateFileForFormat(String inputFilename, String outputFilename, OutputFormat format) throws WriteOutputException, IOException, SAXException, ParserConfigurationException {
         PageParser pageParser = new PageParser();
         DumpParser.parseWikivoyageDump(inputFilename, pageParser);
         WikivoyagePOI[] pois = pageParser.getPOIs();

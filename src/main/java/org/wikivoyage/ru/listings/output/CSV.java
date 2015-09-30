@@ -8,29 +8,33 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class CSV implements OutputFormat {
-    public void write(WikivoyagePOI[] pois, String outputFilename) throws IOException
+    public void write(WikivoyagePOI[] pois, String outputFilename) throws WriteOutputException
     {
         BufferedWriter writer = null;
         try {
-            FileWriter fwriter = new FileWriter(outputFilename);
-            writer = new BufferedWriter(fwriter);
+            try {
+                FileWriter fwriter = new FileWriter(outputFilename);
+                writer = new BufferedWriter(fwriter);
 
-            for (WikivoyagePOI poi: pois) {
-                writer.write(StringEscapeUtils.escapeCsv(Float.toString(poi.getLatitude())));
-                writer.write(",");
-                writer.write(StringEscapeUtils.escapeCsv(Float.toString(poi.getLongitude())));
-                writer.write(",");
-                writer.write(StringEscapeUtils.escapeCsv(poi.getType()));
-                writer.write(",");
-                writer.write(StringEscapeUtils.escapeCsv(poi.getTitle().replace('\n', ' ')));
-                writer.write(",");
-                writer.write(StringEscapeUtils.escapeCsv(poi.getDescription().replace('\n', ' ')));
-                writer.write("\n");
+                for (WikivoyagePOI poi : pois) {
+                    writer.write(StringEscapeUtils.escapeCsv(Float.toString(poi.getLatitude())));
+                    writer.write(",");
+                    writer.write(StringEscapeUtils.escapeCsv(Float.toString(poi.getLongitude())));
+                    writer.write(",");
+                    writer.write(StringEscapeUtils.escapeCsv(poi.getType()));
+                    writer.write(",");
+                    writer.write(StringEscapeUtils.escapeCsv(poi.getTitle().replace('\n', ' ')));
+                    writer.write(",");
+                    writer.write(StringEscapeUtils.escapeCsv(poi.getDescription().replace('\n', ' ')));
+                    writer.write("\n");
+                }
+            } finally {
+                if (writer != null) {
+                    writer.close();
+                }
             }
-        } finally {
-            if (writer != null) {
-                writer.close();
-            }
+        } catch (IOException e) {
+            throw new WriteOutputException();
         }
     }
 }
