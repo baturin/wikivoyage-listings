@@ -30,16 +30,17 @@ public class Main {
     private static FileNames fileNames;
 
     public static void main(String[] args) {
-        CommandLine cl = new CommandLine();
-        cl.parse(args);
-        fileNames = new FileNames(cl.listingsDir, cl.dumpsCacheDir, cl.workingDir);
-
         HashMap<String, OutputFormat> formats = new HashMap<>();
         formats.put("csv", new CSV());
         formats.put("osmand-xml", new OsmXml(false));
         formats.put("osmand-xml-user-defined", new OsmXml(true));
-        formats.put("obf", new OBF(false, fileNames.getWorkingDir(), fileNames.tempXmlFilename()));
-        formats.put("obf-user-defined", new OBF(true, fileNames.getWorkingDir(), fileNames.tempXmlFilename()));
+        formats.put("obf", new OBF(false, "tmp", "tmp/pois.xml"));
+        formats.put("obf-user-defined", new OBF(true, "tmp", "tmp/pois.xml"));
+
+        CommandLine cl = new CommandLine();
+        String [] formatNames = formats.keySet().toArray(new String [formats.keySet().size()]);
+        cl.parse(args, formatNames);
+        fileNames = new FileNames(cl.listingsDir, cl.dumpsCacheDir, cl.workingDir);
 
         try {
             if (cl.help) {
@@ -139,8 +140,6 @@ public class Main {
                 if (cl.outputFormat != null) {
                     OutputFormat format = formats.get(cl.outputFormat);
                     generateFileForFormat(inputFilename, cl.outputFilename, format);
-                } else {
-                    generateFiles(inputFilename, cl.outputXml, cl.outputObf, cl.poiUserDefined);
                 }
                 log.info("Finished");
             }
@@ -228,9 +227,12 @@ public class Main {
     }
 
     private static void generateFileForFormat(String inputFilename, String outputFilename, OutputFormat format) throws WriteOutputException, IOException, SAXException, ParserConfigurationException {
+        log.info("Parse dump");
         PageParser pageParser = new PageParser();
         DumpParser.parseWikivoyageDump(inputFilename, pageParser);
         WikivoyagePOI[] pois = pageParser.getPOIs();
+        log.info("Total " + pois.length + " POIs were found");
+        log.info("Save to '" + outputFilename + "'");
         format.write(pois, outputFilename);
     }
 }
