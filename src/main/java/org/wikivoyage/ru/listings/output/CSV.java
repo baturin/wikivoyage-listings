@@ -37,4 +37,9 @@ public class CSV implements OutputFormat {
             throw new WriteOutputException();
         }
     }
+
+    public String getDefaultExtension()
+    {
+        return ".csv";
+    }
 }

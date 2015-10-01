@@ -91,4 +91,13 @@ public class OsmXml implements OutputFormat {
         newNode.setAttribute("v", value);
         rootNode.appendChild(newNode);
     }
+
+    public String getDefaultExtension()
+    {
+        if (userDefined) {
+            return ".user-defined.xml";
+        } else {
+            return ".xml";
+        }
+    }
 }

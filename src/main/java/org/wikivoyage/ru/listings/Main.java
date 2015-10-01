@@ -14,8 +14,6 @@ import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream
 
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -46,81 +44,7 @@ public class Main {
             if (cl.help) {
                 cl.printHelp();
             } else if (cl.dailyUpdate) {
-                createWorkingDir();
-                createListingsDir();
-                createDumpsCacheDir();
-
-                DumpDownloader downloader = new DumpDownloader();
-                for (String language: Languages.getLanguages()) {
-                    log.info("Processing language " + language);
-                    List<String> dumpIds = downloader.listDumps(language);
-
-                    if (dumpIds.size() == 0) {
-                        continue;
-                    }
-
-                    Collections.sort(dumpIds);
-                    Collections.reverse(dumpIds);
-
-                    String latestDumpId = dumpIds.get(0);
-
-                    if (cl.latestCount != null) {
-                        log.info("Processing the latest " + cl.latestCount + " dumps");
-                        dumpIds = dumpIds.subList(0, cl.latestCount);
-                    }
-
-                    for (String dumpId: dumpIds) {
-                        log.info("Processing dump " + dumpId);
-                        try {
-                            String outputXml = fileNames.listingXmlPath(language, dumpId, false);
-                            String outputObf = fileNames.listingObfPath(language, dumpId, false);
-                            String outputXmlUserDefined = fileNames.listingXmlUserDefinedPath(language, dumpId, false);
-                            String outputObfUserDefined = fileNames.listingObfUserDefinedPath(language, dumpId, false);
-                            String outputXmlArchive = fileNames.listingXmlPath(language, dumpId, true);
-                            String outputObfArchive = fileNames.listingObfPath(language, dumpId, true);
-                            String outputXmlUserDefinedArchive = fileNames.listingXmlUserDefinedPath(language, dumpId, true);
-                            String outputObfUserDefinedArchive = fileNames.listingObfUserDefinedPath(language, dumpId, true);
-
-                            if (
-                                !fileExists(outputXmlArchive) ||
-                                !fileExists(outputObfArchive) ||
-                                !fileExists(outputXmlUserDefinedArchive) ||
-                                !fileExists(outputObfUserDefinedArchive)
-                            ) {
-                                log.info("Create POIs for '" + dumpId + "'");
-
-                                String dumpUrl = downloader.dumpUrl(language, dumpId);
-                                String dumpPath = fileNames.dumpCacheFilename(language, dumpId);
-                                if (!fileExists(dumpPath)) {
-                                    downloader.downloadDumpFromUrl(dumpUrl, dumpPath);
-                                }
-                                generateFiles(dumpPath, outputXml, outputObf, false);
-                                generateFiles(dumpPath, outputXmlUserDefined, outputObfUserDefined, true);
-
-                                if (dumpId.equals(latestDumpId)) {
-                                    log.info("Updating latest files");
-                                    removeFile(fileNames.listingXmlLatestPath(language));
-                                    removeFile(fileNames.listingXmlUserDefinedLatestPath(language));
-                                    removeFile(fileNames.listingObfLatestPath(language));
-                                    removeFile(fileNames.listingObfUserDefinedLatestPath(language));
-                                    copyFile(outputXml, fileNames.listingXmlLatestPath(language));
-                                    copyFile(outputXmlUserDefined,fileNames.listingXmlUserDefinedLatestPath(language));
-                                    copyFile(outputObf, fileNames.listingObfLatestPath(language));
-                                    copyFile(outputObfUserDefined, fileNames.listingObfUserDefinedLatestPath(language));
-                                }
-
-                                archive(outputXml, outputXmlArchive);
-                                archive(outputXmlUserDefined, outputXmlUserDefinedArchive);
-                                archive(outputObf, outputObfArchive);
-                                archive(outputObfUserDefined, outputObfUserDefinedArchive);
-                            }
-                        } catch (Exception e) {
-                            log.info("Failed to create dump " + dumpId);
-                            log.debug("Exception: ", e);
-                        }
-                    }
-                }
-                System.exit(0);
+                dailyUpdate(cl, formats);
             } else {
                 String inputFilename;
                 createWorkingDir();
@@ -146,6 +70,93 @@ public class Main {
         } catch (Exception e) {
             System.err.println("Failure");
             e.printStackTrace();
+        }
+    }
+
+    private static void dailyUpdate(CommandLine cl, HashMap<String, OutputFormat> formats) throws IOException {
+        createWorkingDir();
+        createListingsDir();
+        createDumpsCacheDir();
+
+        DumpDownloader downloader = new DumpDownloader();
+        for (String language: Languages.getLanguages()) {
+            log.info("Processing language " + language);
+            List<String> dumpIds = downloader.listDumps(language);
+
+            if (dumpIds.size() == 0) {
+                continue;
+            }
+
+            Collections.sort(dumpIds);
+            Collections.reverse(dumpIds);
+
+            String latestDumpId = dumpIds.get(0);
+
+            if (cl.latestCount != null) {
+                log.info("Processing the latest " + cl.latestCount + " dumps");
+                dumpIds = dumpIds.subList(0, cl.latestCount);
+            }
+
+            for (String dumpId: dumpIds) {
+                log.info("Processing dump " + dumpId);
+                try {
+                    processDump(downloader, language, latestDumpId, dumpId, formats);
+                } catch (Exception e) {
+                    log.info("Failed to create dump " + dumpId);
+                    log.debug("Exception: ", e);
+                }
+            }
+        }
+        System.exit(0);
+    }
+
+    private static void processDump(
+        DumpDownloader downloader, String language, String latestDumpId, String dumpId,
+        HashMap<String, OutputFormat> formats
+    ) throws IOException, ParserConfigurationException, SAXException, TransformerException, SQLException, InterruptedException {
+        boolean allFileExists = true;
+        for (OutputFormat format: formats.values()) {
+            String fileName = fileNames.getListingPath(language, dumpId, format.getDefaultExtension(), true);
+            if (!fileExists(fileName)) {
+                allFileExists = false;
+                break;
+            }
+        }
+
+        if (allFileExists) {
+            log.info("All files already exist for '" + language + "-" + dumpId + "'");
+            return;
+        }
+
+        log.info("Create POIs for '" + dumpId + "'");
+
+        String dumpUrl = downloader.dumpUrl(language, dumpId);
+        String dumpPath = fileNames.dumpCacheFilename(language, dumpId);
+        if (!fileExists(dumpPath)) {
+            downloader.downloadDumpFromUrl(dumpUrl, dumpPath);
+        }
+
+        log.info("Parse dump");
+        PageParser pageParser = new PageParser();
+        DumpParser.parseWikivoyageDump(dumpPath, pageParser);
+        WikivoyagePOI[] pois = pageParser.getPOIs();
+
+        for (OutputFormat format: formats.values()) {
+            String fileName = fileNames.getListingPath(language, dumpId, format.getDefaultExtension(), false);
+            try {
+                format.write(pois, fileName);
+                if (dumpId.equals(latestDumpId)) {
+                    String latestFileName = fileNames.getListingPath(
+                            language, "latest", format.getDefaultExtension(), false
+                    );
+                    removeFile(latestFileName);
+                    copyFile(fileName, latestFileName);
+                }
+                String fileNameArchive = fileNames.getListingPath(language, dumpId, format.getDefaultExtension(), true);
+                archive(fileName, fileNameArchive);
+            } catch (WriteOutputException e) {
+                System.out.println("Failed to write file: " + e.getMessage());
+            }
         }
     }
 
@@ -199,31 +210,6 @@ public class Main {
     {
         File f = new File(filename);
         return f.exists() && !f.isDirectory();
-    }
-
-    private static void generateFiles(String inputFilename, String outputXmlFilename, String outputObf, boolean userDefined) throws ParserConfigurationException, SAXException, IOException, TransformerException, SQLException, InterruptedException {
-        String tempMapFilename = "pois.obf";
-
-        if (outputXmlFilename == null) {
-            outputXmlFilename = fileNames.workingDirPath("pois.xml");
-        }
-
-        removeFile(fileNames.workingDirPath(tempMapFilename));
-
-        PageParser pageParser = new PageParser();
-
-        log.info("Parse dump");
-        DumpParser.parseWikivoyageDump(inputFilename, pageParser);
-        WikivoyagePOI[] pois = pageParser.getPOIs();
-        log.info("Total " + pois.length + " POIs were found");
-        log.info("Save XML to '" + outputXmlFilename + "'");
-        OsmXml.writePOIsToXML(pois, outputXmlFilename, userDefined);
-
-        if (outputObf != null) {
-            log.info("Save OBF to '" + outputObf + "'");
-            OBF.createObf(outputXmlFilename, fileNames.getWorkingDir(), tempMapFilename);
-            Files.move(Paths.get(fileNames.workingDirPath(tempMapFilename)), Paths.get(outputObf));
-        }
     }
 
     private static void generateFileForFormat(String inputFilename, String outputFilename, OutputFormat format) throws WriteOutputException, IOException, SAXException, ParserConfigurationException {

@@ -41,4 +41,13 @@ public class OBF implements OutputFormat {
         creator.setIndexPOI(true);
         creator.generateIndexes(new File(outputFilename), IProgress.EMPTY_PROGRESS, null, null, null, null);
     }
+
+    public String getDefaultExtension()
+    {
+        if (userDefined) {
+            return ".user-defined.obf";
+        } else {
+            return ".obf";
+        }
+    }
 }

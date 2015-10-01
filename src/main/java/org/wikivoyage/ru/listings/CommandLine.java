@@ -5,7 +5,6 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class CommandLine {
     // *** Batch files generation commands and options ***
