@@ -34,6 +34,7 @@ public class Main {
         formats.put("osmand-xml-user-defined", new OsmXml(true));
         formats.put("obf", new OBF(false, "tmp", "tmp/pois.xml"));
         formats.put("obf-user-defined", new OBF(true, "tmp", "tmp/pois.xml"));
+        formats.put("sql", new SQL());
 
         CommandLine cl = new CommandLine();
         String [] formatNames = formats.keySet().toArray(new String [formats.keySet().size()]);
