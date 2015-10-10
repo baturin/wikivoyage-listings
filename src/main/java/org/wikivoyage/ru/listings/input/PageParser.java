@@ -124,13 +124,42 @@ public class PageParser {
         return templateArgumentsDict;
     }
 
+    private List<String> getTemplateArgumentValuesList(WtTemplate templateNode) {
+        LinkedList<String> result = new LinkedList<String>();
+
+        for (WtNode templateArgumentsChildNode : templateNode.getArgs()) {
+            if (templateArgumentsChildNode instanceof WtTemplateArgument) {
+                WtTemplateArgument templateArgument = (WtTemplateArgument) templateArgumentsChildNode;
+
+                String value = convertWtNodeToString(templateArgument.getValue()).trim();
+                result.add(value);
+            }
+        }
+
+        return result;
+    }
+
     /**
      * Simple text conversion of WtNode object to string.
      * It ignores templates and presents their contents as plain text, with no conversion.
      */
     public String convertWtNodeToString(WtNode node)
     {
-        if (node instanceof AstStringNode) {
+        if (node instanceof WtTemplate) {
+            WtTemplate templateNode = (WtTemplate) node;
+            String templateName = convertWtNodeToString(templateNode.getName()).trim();
+            if (templateName.equals("Российская трасса")) {
+                String roadTitle = "";
+                for (String arg: getTemplateArgumentValuesList(templateNode)) {
+                    roadTitle += arg;
+                }
+                return roadTitle;
+            } else if (node instanceof AstStringNode) {
+                return ((AstStringNode) node).getContent();
+            } else {
+                return "";
+            }
+        } else if (node instanceof AstStringNode) {
             return ((AstStringNode) node).getContent();
         } else {
             String s = "";
