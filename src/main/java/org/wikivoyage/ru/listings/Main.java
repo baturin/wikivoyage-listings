@@ -3,14 +3,14 @@ package org.wikivoyage.ru.listings;
 import javax.xml.parsers.*;
 import javax.xml.transform.TransformerException;
 
-import org.apache.commons.compress.utils.IOUtils;
 import org.wikivoyage.ru.listings.entity.WikivoyagePOI;
 import org.wikivoyage.ru.listings.input.DumpDownloader;
 import org.wikivoyage.ru.listings.input.DumpParser;
 import org.wikivoyage.ru.listings.input.PageParser;
 import org.wikivoyage.ru.listings.output.*;
+import org.wikivoyage.ru.listings.utils.FileUtils;
+import org.wikivoyage.ru.listings.utils.FileUtilsException;
 import org.xml.sax.SAXException;
-import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 
 
 import java.io.*;
@@ -73,7 +73,7 @@ public class Main {
         }
     }
 
-    private static void dailyUpdate(CommandLine cl, HashMap<String, OutputFormat> formats) throws IOException {
+    private static void dailyUpdate(CommandLine cl, HashMap<String, OutputFormat> formats) throws IOException, FileUtilsException {
         createWorkingDir();
         createListingsDir();
         createDumpsCacheDir();
@@ -113,11 +113,11 @@ public class Main {
     private static void processDump(
         DumpDownloader downloader, String language, String latestDumpId, String dumpId,
         HashMap<String, OutputFormat> formats
-    ) throws IOException, ParserConfigurationException, SAXException, TransformerException, SQLException, InterruptedException {
+    ) throws IOException, FileUtilsException, ParserConfigurationException, SAXException, TransformerException, SQLException, InterruptedException {
         boolean allFileExists = true;
         for (OutputFormat format: formats.values()) {
             String fileName = fileNames.getListingPath(language, dumpId, format.getDefaultExtension(), true);
-            if (!fileExists(fileName)) {
+            if (!FileUtils.fileExists(fileName)) {
                 allFileExists = false;
                 break;
             }
@@ -132,7 +132,7 @@ public class Main {
 
         String dumpUrl = downloader.dumpUrl(language, dumpId);
         String dumpPath = fileNames.dumpCacheFilename(language, dumpId);
-        if (!fileExists(dumpPath)) {
+        if (!FileUtils.fileExists(dumpPath)) {
             downloader.downloadDumpFromUrl(dumpUrl, dumpPath);
         }
 
@@ -149,67 +149,30 @@ public class Main {
                     String latestFileName = fileNames.getListingPath(
                             language, "latest", format.getDefaultExtension(), false
                     );
-                    removeFile(latestFileName);
-                    copyFile(fileName, latestFileName);
+                    FileUtils.removeFile(latestFileName);
+                    FileUtils.copyFile(fileName, latestFileName);
                 }
                 String fileNameArchive = fileNames.getListingPath(language, dumpId, format.getDefaultExtension(), true);
-                archive(fileName, fileNameArchive);
+                FileUtils.archive(fileName, fileNameArchive);
             } catch (WriteOutputException e) {
                 System.out.println("Failed to write file: " + e.getMessage());
             }
         }
     }
 
-    private static void createListingsDir()
+    private static void createListingsDir() throws FileUtilsException
     {
-        new File(fileNames.getListingsDir()).mkdirs();
+        FileUtils.createDirectory(fileNames.getListingsDir());
     }
 
-    private static void createDumpsCacheDir()
+    private static void createDumpsCacheDir() throws FileUtilsException
     {
-        new File(fileNames.getDumpsCacheDir()).mkdirs();
+        FileUtils.createDirectory(fileNames.getDumpsCacheDir());
     }
 
-    private static void createWorkingDir()
+    private static void createWorkingDir() throws FileUtilsException
     {
-        new File(fileNames.getWorkingDir()).mkdirs();
-    }
-
-    private static void removeFile(String filename)
-    {
-        new File(filename).delete();
-    }
-
-    private static void archive(String inputFilename, String outputFilename) throws IOException {
-        InputStream in = new FileInputStream(inputFilename);
-        OutputStream out = new FileOutputStream(outputFilename);
-        BZip2CompressorOutputStream os = new BZip2CompressorOutputStream(out);
-        try {
-            IOUtils.copy(in, os);
-        } finally {
-            os.close();
-            in.close();
-            out.close();
-        }
-        removeFile(inputFilename);
-    }
-
-    private static void copyFile(String fromFilename, String toFilename) throws IOException {
-        InputStream in = new FileInputStream(fromFilename);
-        OutputStream out = new FileOutputStream(toFilename);
-
-        try {
-            IOUtils.copy(in, out);
-        } finally {
-            in.close();
-            out.close();
-        }
-    }
-
-    private static boolean fileExists(String filename)
-    {
-        File f = new File(filename);
-        return f.exists() && !f.isDirectory();
+        FileUtils.createDirectory(fileNames.getWorkingDir());
     }
 
     private static void generateFileForFormat(String inputFilename, String outputFilename, OutputFormat format) throws WriteOutputException, IOException, SAXException, ParserConfigurationException {
