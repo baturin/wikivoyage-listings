@@ -3,9 +3,7 @@ package org.wikivoyage.ru.listings.input;
 import de.fau.cs.osr.ptk.common.ast.AstStringNode;
 import org.sweble.wikitext.parser.ParserConfig;
 import org.sweble.wikitext.parser.WikitextPreprocessor;
-import org.sweble.wikitext.parser.nodes.WtNode;
-import org.sweble.wikitext.parser.nodes.WtTemplate;
-import org.sweble.wikitext.parser.nodes.WtTemplateArgument;
+import org.sweble.wikitext.parser.nodes.*;
 import org.sweble.wikitext.parser.utils.SimpleParserConfig;
 import org.sweble.wikitext.parser.utils.StringConversionException;
 import org.wikivoyage.ru.listings.entity.WikivoyagePOI;
@@ -160,7 +158,7 @@ public class PageParser {
                 return "";
             }
         } else if (node instanceof AstStringNode) {
-            return ((AstStringNode) node).getContent();
+            return ((AstStringNode) node).getContent().replaceAll("\\[\\[([^|\\]]*?\\||)([^|\\]]*?)\\]\\]", "$2");
         } else {
             String s = "";
             for (WtNode childNode: node) {
