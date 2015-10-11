@@ -21,25 +21,28 @@ public class SQL implements OutputFormat{
                 );
                 writer.write(
                     "CREATE TABLE wikivoyage_pois (" +
-                        "title VARCHAR(128), " +
-                        "type VARCHAR(64), " +
-                        "description VARCHAR(4096), " +
-                        "latitude DECIMAL(10, 8), " +
-                        "longitude DECIMAL(10, 8)" +
+                            "title VARCHAR(128), " +
+                            "article VARCHAR(128), " +
+                            "type VARCHAR(64), " +
+                            "description VARCHAR(4096), " +
+                            "latitude DECIMAL(10, 8), " +
+                            "longitude DECIMAL(10, 8)" +
                     ");\n"
                 );
 
                 for (WikivoyagePOI poi : pois) {
                     writer.write(
                         "INSERT INTO wikivoyage_pois (" +
-                            "title, " +
-                            "type, " +
-                            "description, " +
-                            "latitude, " +
-                            "longitude" +
+                                "title, " +
+                                "article, " +
+                                "type, " +
+                                "description, " +
+                                "latitude, " +
+                                "longitude" +
                         ") " +
                         "VALUES (" +
                                 escape(poi.getTitle()) + ", " +
+                                escape(poi.getArticle()) + ", " +
                                 escape(poi.getType()) + ", " +
                                 escape(poi.getDescription())+ ", " +
                                 escape(Float.toString(poi.getLatitude())) + ", " +

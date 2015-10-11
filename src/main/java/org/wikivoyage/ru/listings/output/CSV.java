@@ -21,6 +21,8 @@ public class CSV implements OutputFormat {
                     writer.write(",");
                     writer.write(StringEscapeUtils.escapeCsv(Float.toString(poi.getLongitude())));
                     writer.write(",");
+                    writer.write(StringEscapeUtils.escapeCsv(poi.getArticle()));
+                    writer.write(",");
                     writer.write(StringEscapeUtils.escapeCsv(poi.getType()));
                     writer.write(",");
                     writer.write(StringEscapeUtils.escapeCsv(poi.getTitle().replace('\n', ' ')));

@@ -40,21 +40,22 @@ public class PageParser {
 
     /**
      * Parse single Wikivoyage page, look for listings, put them into list of POIs
+     * @param article Name of Wikivoyage article
      * @param text Wikivoyage page as string
      */
-    public void processPage(String text) {
+    public void processPage(String article, String text) {
         try {
             ParserConfig config = new SimpleParserConfig();
             WikitextPreprocessor p = new WikitextPreprocessor(config);
             WtNode node = p.parseArticle(text, "");
-            processNode(node);
+            processNode(article, node);
         } catch (Exception e) {
             System.err.println("Failure");
             e.printStackTrace();
         }
     }
 
-    private void processNode(WtNode node) throws StringConversionException
+    private void processNode(String article, WtNode node) throws StringConversionException
     {
         for (WtNode childNode: node) {
             if (childNode instanceof WtTemplate) {
@@ -86,6 +87,7 @@ public class PageParser {
                             }
 
                             pois.add(new WikivoyagePOI(
+                                    article,
                                     poiType, args.get("name"),
                                     description,
                                     latitude, longitude
@@ -98,7 +100,7 @@ public class PageParser {
                     }
                 }
             } else {
-                processNode(childNode);
+                processNode(article, childNode);
             }
         }
     }

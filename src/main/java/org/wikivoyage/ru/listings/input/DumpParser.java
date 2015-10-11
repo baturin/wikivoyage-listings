@@ -60,7 +60,7 @@ public class DumpParser {
                 } else if (qName.equals("page")) {
                     if (pageNs.equals("0")) {
                         log.debug("Process page '" + pageTitle + "'");
-                        pageParser.processPage(pageText);
+                        pageParser.processPage(pageTitle, pageText);
                     }
                 }
 
