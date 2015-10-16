@@ -140,7 +140,7 @@ public class CommandLine {
         System.out.println("    All formats with 'user-defined' prefix set POI types to \"user defined\"");
         System.out.println("    to be ready to used with OsmAnd 1.9");
         System.out.println();
-        System.out.println("========== Single file generation ==========");
+        System.out.println("========== Batch files generation ==========");
         System.out.println("Specify: '-daily-update' for batch file generation.");
         System.out.println("*** Options ***");
         System.out.println("-latest-count <num>: maximul number of latest Wikivoyage dumps ");
