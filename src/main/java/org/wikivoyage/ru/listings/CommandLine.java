@@ -143,7 +143,7 @@ public class CommandLine {
         System.out.println("========== Batch files generation ==========");
         System.out.println("Specify: '-daily-update' for batch file generation.");
         System.out.println("*** Options ***");
-        System.out.println("-latest-count <num>: maximul number of latest Wikivoyage dumps ");
+        System.out.println("-latest-count <num>: maximum number of latest Wikivoyage dumps ");
         System.out.println("    to process for each language");
         System.out.println("-listings-dir <directory>: output directory to put listings to");
         System.out.println("-dumps-cache-dir <directory>: directory to download and cache Wikivoyage dumps");
