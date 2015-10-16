@@ -69,11 +69,17 @@ public class PageParser {
                             Float longitude = Float.valueOf(args.get("long"));
                             Float latitude = Float.valueOf((args.get("lat")));
                             String description = "";
+                            String url = "";
                             String poiType;
+                            
                             if (args.containsKey("description")) {
                                 description = args.get("description");
                             } else if (args.containsKey("content")) {
                                 description = args.get("content");
+                            }
+                            
+                            if (args.containsKey("url")) {
+                                description = args.get("url");
                             }
 
                             if (templateName.equals("listing")) {
@@ -85,12 +91,15 @@ public class PageParser {
                             } else {
                                 poiType = templateName;
                             }
+                            
+                            
 
                             pois.add(new WikivoyagePOI(
                                     article,
                                     poiType, args.get("name"),
                                     description,
-                                    latitude, longitude
+                                    latitude, longitude,
+                                    url
                             ));
                         } catch (NumberFormatException e) {
                             // coordinates are not correctly formatted;
