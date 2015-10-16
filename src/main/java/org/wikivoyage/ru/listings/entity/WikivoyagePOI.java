@@ -7,9 +7,10 @@ public class WikivoyagePOI {
     private String title;
     private String description;
     private String type;
+    private String url;
 
     public WikivoyagePOI(
-        String article, String type, String title, String description, float latitude, float longitude
+        String article, String type, String title, String description, float latitude, float longitude, String url
     ) {
         this.type = type;
         this.title = title;
@@ -17,11 +18,12 @@ public class WikivoyagePOI {
         this.latitude = latitude;
         this.longitude = longitude;
         this.article = article;
+        this.url =url;
     }
 
     public String humanReadable()
     {
-        return "type=" + type + "|title=" + title + "|lat=" + latitude + "|long=" + longitude;
+        return "type=" + type + "|title=" + title + "|lat=" + latitude + "|long=" + longitude + "|url=" + url;
     }
 
     public float getLatitude() {
@@ -47,5 +49,10 @@ public class WikivoyagePOI {
     public String getArticle()
     {
         return article;
+    }
+    
+    public String getURL()
+    {
+        return url;
     }
 }
