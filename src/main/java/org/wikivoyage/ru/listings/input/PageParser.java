@@ -78,7 +78,7 @@ public class PageParser {
                         }
 
                         if (args.containsKey("url")) {
-                            description = args.get("url");
+                            url = args.get("url");
                         }
 
                         if (templateName.equals("listing")) {
