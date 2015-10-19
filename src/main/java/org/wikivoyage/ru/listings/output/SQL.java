@@ -66,6 +66,6 @@ public class SQL implements OutputFormat{
 
     @Override
     public String getDefaultExtension() {
-        return "sql";
+        return ".sql";
     }
 }
