@@ -66,8 +66,8 @@ public class PageParser {
                     HashMap<String, String> args = getTemplateArgumentsDict(templateNode);
                     if (args.containsKey("name") && args.containsKey("lat") && args.containsKey("long")) {
                         try {
-                            Float longitude = Float.valueOf(args.get("long"));
-                            Float latitude = Float.valueOf((args.get("lat")));
+                            String longitude = args.get("long");
+                            String latitude = args.get("lat");
                             String description = "";
                             String url = "";
                             String poiType;

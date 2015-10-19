@@ -78,8 +78,8 @@ public class OsmXml implements OutputFormat {
         Element node = doc.createElement("node");
         node.setAttribute("id", nodeId.toString());
         node.setAttribute("visible", "true");
-        node.setAttribute("lat", Float.toString(poi.getLatitude()));
-        node.setAttribute("lon", Float.toString(poi.getLongitude()));
+        node.setAttribute("lat", poi.getLatitude());
+        node.setAttribute("lon", poi.getLongitude());
         nodeId++;
         return node;
     }

@@ -45,8 +45,8 @@ public class SQL implements OutputFormat{
                                 escape(poi.getArticle()) + ", " +
                                 escape(poi.getType()) + ", " +
                                 escape(poi.getDescription())+ ", " +
-                                escape(Float.toString(poi.getLatitude())) + ", " +
-                                escape(Float.toString(poi.getLongitude())) +
+                                escape(poi.getLatitude()) + ", " +
+                                escape(poi.getLongitude()) +
                         ");\n");
                 }
             } finally {

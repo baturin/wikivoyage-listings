@@ -1,8 +1,8 @@
 package org.wikivoyage.ru.listings.entity;
 
 public class WikivoyagePOI {
-    private float latitude;
-    private float longitude;
+    private String latitude;
+    private String longitude;
     private String article;
     private String title;
     private String description;
@@ -10,7 +10,7 @@ public class WikivoyagePOI {
     private String url;
 
     public WikivoyagePOI(
-        String article, String type, String title, String description, float latitude, float longitude, String url
+        String article, String type, String title, String description, String latitude, String longitude, String url
     ) {
         this.type = type;
         this.title = title;
@@ -26,11 +26,11 @@ public class WikivoyagePOI {
         return "type=" + type + "|title=" + title + "|lat=" + latitude + "|long=" + longitude + "|url=" + url;
     }
 
-    public float getLatitude() {
+    public String getLatitude() {
         return latitude;
     }
 
-    public float getLongitude() {
+    public String getLongitude() {
         return longitude;
     }
 
