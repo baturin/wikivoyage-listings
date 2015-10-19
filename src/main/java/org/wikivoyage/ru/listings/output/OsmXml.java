@@ -45,6 +45,12 @@ public class OsmXml implements OutputFormat {
         doc.appendChild(rootElement);
 
         for (WikivoyagePOI poi: pois) {
+            if (poi.getLatitude().equals("") || poi.getLongitude().equals("")) {
+                // POIs with no positional data are useless for OsmAnd - do not add them
+                // to reduce size of output file
+                continue;
+            }
+
             Element node = createPoiNode(doc, poi);
             rootElement.appendChild(node);
             if (!userDefined) {
