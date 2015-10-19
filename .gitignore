@@ -4,3 +4,6 @@ build
 out
 tmp
 wikivoyage-listings.iml
+dumps-cache
+listings
+debug.log
