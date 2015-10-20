@@ -65,45 +65,62 @@ public class PageParser {
                 if (listingTemplates.contains(templateName)) {
                     HashMap<String, String> args = getTemplateArgumentsDict(templateNode);
                     if (args.containsKey("name") && args.containsKey("lat") && args.containsKey("long")) {
-                        String longitude = args.get("long").trim();
-                        String latitude = args.get("lat").trim();
-                        String description = "";
-                        String url = "";
-                        String poiType;
-
-                        if (args.containsKey("description")) {
-                            description = args.get("description");
-                        } else if (args.containsKey("content")) {
-                            description = args.get("content");
+                        
+                        WikivoyagePOI poi = parseArgumentsDict(article, templateName, args);
+                        if(poi != null) {
+                        	pois.add(poi);
                         }
-
-                        if (args.containsKey("url")) {
-                            url = args.get("url");
-                        }
-
-                        if (templateName.equals("listing")) {
-                            if (args.containsKey("type")) {
-                                poiType = args.get("type");
-                            } else {
-                                poiType = "other";
-                            }
-                        } else {
-                            poiType = templateName;
-                        }
-
-                        pois.add(new WikivoyagePOI(
-                                article,
-                                poiType, args.get("name"),
-                                description,
-                                latitude, longitude,
-                                url
-                        ));
                     }
                 }
             } else {
                 processNode(article, childNode);
             }
         }
+    }
+    
+    private WikivoyagePOI parseArgumentsDict(
+    		String article, String templateName, HashMap<String, String> args) {
+
+        // Type
+        String poiType;
+        if (templateName.equals("listing")) {
+            if (args.containsKey("type")) {
+                poiType = args.get("type");
+            } else {
+                poiType = "other";
+            }
+        } else {
+            poiType = templateName;
+        }
+        
+        // Description
+        String description = "";
+        if (args.containsKey("description")) {
+            description = args.get("description");
+        } else if (args.containsKey("content")) {
+            description = args.get("content");
+        }
+
+    	return new WikivoyagePOI(
+                article,
+                poiType,
+                args.get("title"),
+                args.get("alt"),
+                args.get("address"),
+                args.get("directions"),
+                args.get("phone"),
+                args.get("tollFree"),
+                args.get("email"),
+                args.get("fax"),
+                args.get("url"),
+                args.get("hours"),
+                args.get("checkIn"),
+                args.get("checkOut"),
+                args.get("image"),
+                args.get("price"),
+                args.get("latitude"),
+                args.get("longitude"),
+                description);
     }
 
     /**
