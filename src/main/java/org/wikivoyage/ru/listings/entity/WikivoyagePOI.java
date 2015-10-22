@@ -21,11 +21,6 @@ public class WikivoyagePOI {
         this.url =url;
     }
 
-    public String humanReadable()
-    {
-        return "type=" + type + "|title=" + title + "|lat=" + latitude + "|long=" + longitude + "|url=" + url;
-    }
-
     public String getLatitude() {
         return latitude;
     }
@@ -54,5 +49,10 @@ public class WikivoyagePOI {
     public String getURL()
     {
         return url;
+    }
+
+    public boolean isPositionalDataEmpty()
+    {
+        return latitude.equals("") || longitude.equals("");
     }
 }

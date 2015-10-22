@@ -27,10 +27,11 @@ public class OBF implements OutputFormat {
     @Override
     public void write(WikivoyagePOI[] pois, String outputFilename) throws WriteOutputException {
         try {
-            OsmXml.writePOIsToXML(pois, tempXmlFilename, userDefined);
+            OsmXml osmXml = new OsmXml(userDefined);
+            osmXml.write(pois, tempXmlFilename);
             createObf(tempXmlFilename, workingDir, "pois.obf");
             Files.move(Paths.get(workingDir + "/pois.obf"), Paths.get(outputFilename));
-        } catch (IOException | SAXException | SQLException | ParserConfigurationException | InterruptedException | TransformerException e) {
+        } catch (IOException | SAXException | SQLException | InterruptedException e) {
             throw new WriteOutputException();
         }
     }
