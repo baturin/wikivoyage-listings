@@ -36,6 +36,7 @@ public class Main {
         formats.put("obf-user-defined", new OBF(true, "tmp", "tmp/pois.xml"));
         formats.put("sql", new SQL());
         formats.put("gpx", new GPX());
+        formats.put("kml", new KML());
 
         CommandLine cl = new CommandLine();
         String [] formatNames = formats.keySet().toArray(new String [formats.keySet().size()]);
