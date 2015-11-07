@@ -5,8 +5,6 @@ import net.osmand.data.preparation.IndexCreator;
 import org.wikivoyage.ru.listings.entity.WikivoyagePOI;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,7 +23,7 @@ public class OBF implements OutputFormat {
     }
 
     @Override
-    public void write(WikivoyagePOI[] pois, String outputFilename) throws WriteOutputException {
+    public void write(Iterable<WikivoyagePOI> pois, String outputFilename) throws WriteOutputException {
         try {
             OsmXml osmXml = new OsmXml(userDefined);
             osmXml.write(pois, tempXmlFilename);

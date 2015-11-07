@@ -15,27 +15,13 @@ import java.util.*;
  */
 public class PageParser {
     /**
-     * List of parsed POIs
-     */
-    ArrayList<WikivoyagePOI> pois = null;
-
-    /**
      * Set of allowed templates used in Wikivoyage pages for listings
      */
     HashSet<String> listingTemplates;
 
     public PageParser()
     {
-        pois = new ArrayList<WikivoyagePOI>();
         initListingTemplates();
-    }
-
-    /**
-     * Get whole list of parsed POIs
-     */
-    public WikivoyagePOI[] getPOIs()
-    {
-        return pois.toArray(new WikivoyagePOI[pois.size()]);
     }
 
     /**
@@ -43,19 +29,21 @@ public class PageParser {
      * @param article Name of Wikivoyage article
      * @param text Wikivoyage page as string
      */
-    public void processPage(String article, String text) {
+    public List<WikivoyagePOI> parsePage(String article, String text) {
+        LinkedList<WikivoyagePOI> pois = new LinkedList<>();
         try {
             ParserConfig config = new SimpleParserConfig();
             WikitextPreprocessor p = new WikitextPreprocessor(config);
             WtNode node = p.parseArticle(text, "");
-            processNode(article, node);
+            processNode(article, node, pois);
         } catch (Exception e) {
             System.err.println("Failure");
             e.printStackTrace();
         }
+        return pois;
     }
 
-    private void processNode(String article, WtNode node) throws StringConversionException
+    private void processNode(String article, WtNode node, List<WikivoyagePOI> pois) throws StringConversionException
     {
         for (WtNode childNode: node) {
             if (childNode instanceof WtTemplate) {
@@ -101,7 +89,7 @@ public class PageParser {
                     }
                 }
             } else {
-                processNode(article, childNode);
+                processNode(article, childNode, pois);
             }
         }
     }
@@ -110,7 +98,7 @@ public class PageParser {
      * Get arguments of template as key-value dictionary (hash map)
      */
     private HashMap<String, String> getTemplateArgumentsDict(WtTemplate templateNode) {
-        HashMap<String, String> templateArgumentsDict = new LinkedHashMap<String, String>();
+        HashMap<String, String> templateArgumentsDict = new LinkedHashMap<>();
 
         for (WtNode templateArgumentsChildNode : templateNode.getArgs()) {
             if (templateArgumentsChildNode instanceof WtTemplateArgument) {
@@ -126,7 +114,7 @@ public class PageParser {
     }
 
     private List<String> getTemplateArgumentValuesList(WtTemplate templateNode) {
-        LinkedList<String> result = new LinkedList<String>();
+        LinkedList<String> result = new LinkedList<>();
 
         for (WtNode templateArgumentsChildNode : templateNode.getArgs()) {
             if (templateArgumentsChildNode instanceof WtTemplateArgument) {
@@ -172,7 +160,7 @@ public class PageParser {
     }
 
     private void initListingTemplates() {
-        listingTemplates = new HashSet<String>();
+        listingTemplates = new HashSet<>();
         listingTemplates.add("listing");
         listingTemplates.add("see");
         listingTemplates.add("do");

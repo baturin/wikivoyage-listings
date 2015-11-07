@@ -11,7 +11,7 @@ import java.util.LinkedList;
  */
 abstract public class NavigationXMLOutputFormat implements OutputFormat {
     @Override
-    public void write(WikivoyagePOI[] pois, String outputFilename) throws WriteOutputException {
+    public void write(Iterable<WikivoyagePOI> pois, String outputFilename) throws WriteOutputException {
         try {
             LinkedList<WikivoyagePOI> filteredPois = new LinkedList<>();
             for (WikivoyagePOI poi: pois) {

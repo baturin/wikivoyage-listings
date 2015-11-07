@@ -1,20 +1,12 @@
 package org.wikivoyage.ru.listings;
 
-import javax.xml.parsers.*;
-import javax.xml.transform.TransformerException;
-
 import org.wikivoyage.ru.listings.entity.WikivoyagePOI;
-import org.wikivoyage.ru.listings.input.DumpDownloader;
-import org.wikivoyage.ru.listings.input.DumpParser;
-import org.wikivoyage.ru.listings.input.PageParser;
+import org.wikivoyage.ru.listings.input.*;
 import org.wikivoyage.ru.listings.output.*;
 import org.wikivoyage.ru.listings.utils.FileUtils;
 import org.wikivoyage.ru.listings.utils.FileUtilsException;
-import org.xml.sax.SAXException;
-
 
 import java.io.*;
-import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -116,7 +108,7 @@ public class Main {
     private static void processDump(
         DumpDownloader downloader, String language, String latestDumpId, String dumpId,
         HashMap<String, OutputFormat> formats
-    ) throws IOException, FileUtilsException, ParserConfigurationException, SAXException, TransformerException, SQLException, InterruptedException {
+    ) throws IOException, FileUtilsException, InterruptedException {
         boolean allFileExists = true;
         for (OutputFormat format: formats.values()) {
             String fileName = fileNames.getListingPath(language, dumpId, format.getDefaultExtension(), true);
@@ -140,14 +132,12 @@ public class Main {
         }
 
         log.info("Parse dump");
-        PageParser pageParser = new PageParser();
-        DumpParser.parseWikivoyageDump(dumpPath, pageParser);
-        WikivoyagePOI[] pois = pageParser.getPOIs();
+        Iterable<WikivoyagePOI> listingIterable = new DumpListingsIterable(dumpPath);
 
         for (OutputFormat format: formats.values()) {
             String fileName = fileNames.getListingPath(language, dumpId, format.getDefaultExtension(), false);
             try {
-                format.write(pois, fileName);
+                format.write(listingIterable, fileName);
                 if (dumpId.equals(latestDumpId)) {
                     String latestFileName = fileNames.getListingPath(
                             language, "latest", format.getDefaultExtension(), false
@@ -178,13 +168,12 @@ public class Main {
         FileUtils.createDirectory(fileNames.getWorkingDir());
     }
 
-    private static void generateFileForFormat(String inputFilename, String outputFilename, OutputFormat format) throws WriteOutputException, IOException, SAXException, ParserConfigurationException {
+    private static void generateFileForFormat(
+        String inputFilename, String outputFilename, OutputFormat format
+    ) throws WriteOutputException, DumpReadException {
         log.info("Parse dump");
-        PageParser pageParser = new PageParser();
-        DumpParser.parseWikivoyageDump(inputFilename, pageParser);
-        WikivoyagePOI[] pois = pageParser.getPOIs();
-        log.info("Total " + pois.length + " POIs were found");
+        Iterable<WikivoyagePOI> listingIterable = new DumpListingsIterable(inputFilename);
         log.info("Save to '" + outputFilename + "'");
-        format.write(pois, outputFilename);
+        format.write(listingIterable, outputFilename);
     }
 }

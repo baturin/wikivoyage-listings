@@ -10,7 +10,7 @@ public interface OutputFormat {
      * @param outputFilename name of a file to write to
      * @throws WriteOutputException
      */
-    public void write(WikivoyagePOI[] pois, String outputFilename) throws WriteOutputException;
+    public void write(Iterable<WikivoyagePOI> pois, String outputFilename) throws WriteOutputException;
 
     /**
      * Get default extension of this output format.

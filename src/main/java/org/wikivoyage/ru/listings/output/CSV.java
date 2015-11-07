@@ -8,7 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class CSV implements OutputFormat {
-    public void write(WikivoyagePOI[] pois, String outputFilename) throws WriteOutputException
+    public void write(Iterable<WikivoyagePOI> pois, String outputFilename) throws WriteOutputException
     {
         BufferedWriter writer = null;
         try {
@@ -16,7 +16,7 @@ public class CSV implements OutputFormat {
                 FileWriter fwriter = new FileWriter(outputFilename);
                 writer = new BufferedWriter(fwriter);
 
-                for (WikivoyagePOI poi : pois) {
+                for (WikivoyagePOI poi: pois) {
                     writer.write(StringEscapeUtils.escapeCsv(poi.getLatitude()));
                     writer.write(",");
                     writer.write(StringEscapeUtils.escapeCsv(poi.getLongitude()));
