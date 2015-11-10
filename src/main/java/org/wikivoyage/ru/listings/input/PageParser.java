@@ -17,12 +17,12 @@ public class PageParser {
     /**
      * List of parsed POIs
      */
-    ArrayList<WikivoyagePOI> pois = null;
+    private ArrayList<WikivoyagePOI> pois = null;
 
     /**
      * Set of allowed templates used in Wikivoyage pages for listings
      */
-    HashSet<String> listingTemplates;
+    private HashSet<String> listingTemplates;
 
     public PageParser()
     {
