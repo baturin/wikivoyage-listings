@@ -5,9 +5,9 @@ package org.wikivoyage.ru.listings.entity;
  */
 public class WikivoyagePOI {
 	
-	/**
-	 * Wikivoyage article in which the POI was found, for instance "Tokyo/Roppongi".
-	 */
+    /**
+     * Wikivoyage article in which the POI was found, for instance "Tokyo/Roppongi".
+     */
     private String article;
     
     /**
