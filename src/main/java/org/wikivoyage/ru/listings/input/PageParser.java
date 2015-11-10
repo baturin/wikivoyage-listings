@@ -93,7 +93,7 @@ public class PageParser {
     	return new WikivoyagePOI(
                 article,
                 poiType,
-                args.get("title"),
+                args.get("name"),
                 args.get("alt"),
                 args.get("address"),
                 args.get("directions"),
@@ -103,12 +103,12 @@ public class PageParser {
                 args.get("fax"),
                 args.get("url"),
                 args.get("hours"),
-                args.get("checkIn"),
-                args.get("checkOut"),
+                args.get("checkin"),
+                args.get("checkout"),
                 args.get("image"),
                 args.get("price"),
-                args.get("latitude"),
-                args.get("longitude"),
+                args.get("lat"),
+                args.get("long"),
                 description);
     }
 
