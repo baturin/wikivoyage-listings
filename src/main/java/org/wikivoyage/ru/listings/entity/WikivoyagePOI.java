@@ -63,30 +63,6 @@ public class WikivoyagePOI {
         this.description = description;
     }
 
-    public String humanReadable()
-    {
-        return "type=" + type
-        		+ "|article=" + article
-        		+ "|type=" + type
-        		+ "|title=" + title
-        		+ "|alt=" + alt
-        		+ "|address=" + address
-        		+ "|directions=" + directions
-        		+ "|phone=" + phone
-        		+ "|tollFree=" + tollFree
-        		+ "|email=" + email
-        		+ "|fax=" + fax
-        		+ "|url=" + url
-        		+ "|hours=" + hours
-        		+ "|checkIn=" + checkIn
-        		+ "|checkOut=" + checkOut
-        		+ "|image=" + image
-        		+ "|price=" + price
-        		+ "|latitude=" + latitude
-        		+ "|longitude=" + longitude
-        		+ "|description=" + description;
-    }
-
     public String getArticle()
     {
         return article;
@@ -162,5 +138,10 @@ public class WikivoyagePOI {
 
     public String getDescription() {
         return description;
+    }
+
+    public boolean isPositionalDataEmpty()
+    {
+        return latitude.equals("") || longitude.equals("");
     }
 }
