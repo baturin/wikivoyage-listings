@@ -1,18 +1,3 @@
-<<<<<<< HEAD
-.gradle
-.idea
-build
-out
-tmp
-wikivoyage-listings.iml
-dumps-cache
-listings
-*.log
-*.csv
-*.xml
-*.obf
-*.sql
-=======
 /.gradle
 /.idea
 /build
@@ -22,4 +7,3 @@ listings
 /dumps-cache
 /listings
 /debug.log
->>>>>>> 38ba3df5f0092fab5e0f4012cc65d602dd145c4f
