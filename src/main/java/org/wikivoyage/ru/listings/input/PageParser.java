@@ -65,38 +65,39 @@ public class PageParser {
                 if (listingTemplates.contains(templateName)) {
                     HashMap<String, String> args = getTemplateArgumentsDict(templateNode);
                     if (args.containsKey("name") && args.containsKey("lat") && args.containsKey("long")) {
-                        try {
-                            Float longitude = Float.valueOf(args.get("long"));
-                            Float latitude = Float.valueOf((args.get("lat")));
-                            String description = "";
-                            String poiType;
-                            if (args.containsKey("description")) {
-                                description = args.get("description");
-                            } else if (args.containsKey("content")) {
-                                description = args.get("content");
-                            }
+                        String longitude = args.get("long").trim();
+                        String latitude = args.get("lat").trim();
+                        String description = "";
+                        String url = "";
+                        String poiType;
 
-                            if (templateName.equals("listing")) {
-                                if (args.containsKey("type")) {
-                                    poiType = args.get("type");
-                                } else {
-                                    poiType = "other";
-                                }
-                            } else {
-                                poiType = templateName;
-                            }
-
-                            pois.add(new WikivoyagePOI(
-                                    article,
-                                    poiType, args.get("name"),
-                                    description,
-                                    latitude, longitude
-                            ));
-                        } catch (NumberFormatException e) {
-                            // coordinates are not correctly formatted;
-                            // no sense to put such POI into output, simply skip it
+                        if (args.containsKey("description")) {
+                            description = args.get("description");
+                        } else if (args.containsKey("content")) {
+                            description = args.get("content");
                         }
 
+                        if (args.containsKey("url")) {
+                            url = args.get("url");
+                        }
+
+                        if (templateName.equals("listing")) {
+                            if (args.containsKey("type")) {
+                                poiType = args.get("type");
+                            } else {
+                                poiType = "other";
+                            }
+                        } else {
+                            poiType = templateName;
+                        }
+
+                        pois.add(new WikivoyagePOI(
+                                article,
+                                poiType, args.get("name"),
+                                description,
+                                latitude, longitude,
+                                url
+                        ));
                     }
                 }
             } else {

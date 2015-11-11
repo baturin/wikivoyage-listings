@@ -45,6 +45,12 @@ public class OsmXml implements OutputFormat {
         doc.appendChild(rootElement);
 
         for (WikivoyagePOI poi: pois) {
+            if (poi.getLatitude().equals("") || poi.getLongitude().equals("")) {
+                // POIs with no positional data are useless for OsmAnd - do not add them
+                // to reduce size of output file
+                continue;
+            }
+
             Element node = createPoiNode(doc, poi);
             rootElement.appendChild(node);
             if (!userDefined) {
@@ -78,8 +84,8 @@ public class OsmXml implements OutputFormat {
         Element node = doc.createElement("node");
         node.setAttribute("id", nodeId.toString());
         node.setAttribute("visible", "true");
-        node.setAttribute("lat", Float.toString(poi.getLatitude()));
-        node.setAttribute("lon", Float.toString(poi.getLongitude()));
+        node.setAttribute("lat", poi.getLatitude());
+        node.setAttribute("lon", poi.getLongitude());
         nodeId++;
         return node;
     }

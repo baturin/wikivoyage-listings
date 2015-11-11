@@ -17,9 +17,9 @@ public class CSV implements OutputFormat {
                 writer = new BufferedWriter(fwriter);
 
                 for (WikivoyagePOI poi : pois) {
-                    writer.write(StringEscapeUtils.escapeCsv(Float.toString(poi.getLatitude())));
+                    writer.write(StringEscapeUtils.escapeCsv(poi.getLatitude()));
                     writer.write(",");
-                    writer.write(StringEscapeUtils.escapeCsv(Float.toString(poi.getLongitude())));
+                    writer.write(StringEscapeUtils.escapeCsv(poi.getLongitude()));
                     writer.write(",");
                     writer.write(StringEscapeUtils.escapeCsv(poi.getArticle()));
                     writer.write(",");
