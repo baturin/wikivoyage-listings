@@ -1,0 +1,46 @@
+package org.wikivoyage.ru.listings;
+
+import static org.junit.Assert.fail;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.Test;
+import org.wikivoyage.ru.listings.entity.WikivoyagePOI;
+import org.wikivoyage.ru.listings.output.CSV;
+
+public class CsvOutputTests extends OutputTests {
+
+	/**
+	 * Test CSV generation of the sample
+	 */
+	@Test
+	public void Generate() throws Exception {
+
+		List<WikivoyagePOI> pois = new ArrayList<WikivoyagePOI>();
+		pois.add(getSample());
+		String output = File.createTempFile("wikivoyage-listings-unit-tests", ".tmp").getAbsolutePath();
+		
+		new CSV().write(pois, output);
+		
+		compareWithSample(output, "sample-result.csv");
+	}
+	
+	/**
+	 * Compare a generated file with the expected result from the resources folder.
+	 */
+	public void compareWithSample(String file, String sample) throws IOException {
+		byte[] f1 = Files.readAllBytes(Paths.get(file));
+		byte[] f2 = Files.readAllBytes(Paths.get(this.getClass().getResource("/" + sample).getPath()));
+		
+		if ( ! Arrays.equals(f1, f2)) {
+			fail("Files not equal");
+		}
+	}
+
+}

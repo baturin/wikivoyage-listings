@@ -2,6 +2,7 @@ apply plugin: 'java'
 
 dependencies {
     compile fileTree(dir: 'lib', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
 }
 
 jar {
@@ -25,4 +26,3 @@ task distZip(type: Zip) {
         into('.')
     }
 }
-

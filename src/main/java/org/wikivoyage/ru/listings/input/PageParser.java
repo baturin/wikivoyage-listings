@@ -14,28 +14,15 @@ import java.util.*;
  * Parser of a single Wikivoyage page
  */
 public class PageParser {
-    /**
-     * List of parsed POIs
-     */
-    ArrayList<WikivoyagePOI> pois = null;
 
-    /**
+	/**
      * Set of allowed templates used in Wikivoyage pages for listings
      */
-    HashSet<String> listingTemplates;
+    private HashSet<String> listingTemplates;
 
     public PageParser()
     {
-        pois = new ArrayList<WikivoyagePOI>();
         initListingTemplates();
-    }
-
-    /**
-     * Get whole list of parsed POIs
-     */
-    public WikivoyagePOI[] getPOIs()
-    {
-        return pois.toArray(new WikivoyagePOI[pois.size()]);
     }
 
     /**
@@ -43,19 +30,21 @@ public class PageParser {
      * @param article Name of Wikivoyage article
      * @param text Wikivoyage page as string
      */
-    public void processPage(String article, String text) {
+    public List<WikivoyagePOI> parsePage(String article, String text) {
+        LinkedList<WikivoyagePOI> pois = new LinkedList<>();
         try {
             ParserConfig config = new SimpleParserConfig();
             WikitextPreprocessor p = new WikitextPreprocessor(config);
             WtNode node = p.parseArticle(text, "");
-            processNode(article, node);
+            processNode(article, node, pois);
         } catch (Exception e) {
             System.err.println("Failure");
             e.printStackTrace();
         }
+        return pois;
     }
 
-    private void processNode(String article, WtNode node) throws StringConversionException
+    private void processNode(String article, WtNode node, List<WikivoyagePOI> pois) throws StringConversionException
     {
         for (WtNode childNode: node) {
             if (childNode instanceof WtTemplate) {
@@ -65,52 +54,69 @@ public class PageParser {
                 if (listingTemplates.contains(templateName)) {
                     HashMap<String, String> args = getTemplateArgumentsDict(templateNode);
                     if (args.containsKey("name") && args.containsKey("lat") && args.containsKey("long")) {
-                        String longitude = args.get("long").trim();
-                        String latitude = args.get("lat").trim();
-                        String description = "";
-                        String url = "";
-                        String poiType;
-
-                        if (args.containsKey("description")) {
-                            description = args.get("description");
-                        } else if (args.containsKey("content")) {
-                            description = args.get("content");
+                        
+                        WikivoyagePOI poi = parseArgumentsDict(article, templateName, args);
+                        if(poi != null) {
+                        	pois.add(poi);
                         }
-
-                        if (args.containsKey("url")) {
-                            url = args.get("url");
-                        }
-
-                        if (templateName.equals("listing")) {
-                            if (args.containsKey("type")) {
-                                poiType = args.get("type");
-                            } else {
-                                poiType = "other";
-                            }
-                        } else {
-                            poiType = templateName;
-                        }
-
-                        pois.add(new WikivoyagePOI(
-                                article,
-                                poiType, args.get("name"),
-                                description,
-                                latitude, longitude,
-                                url
-                        ));
                     }
                 }
             } else {
-                processNode(article, childNode);
+                processNode(article, childNode, pois);
             }
         }
+    }
+    
+    private WikivoyagePOI parseArgumentsDict(
+    		String article, String templateName, HashMap<String, String> args) {
+
+        // Type
+        String poiType;
+        if (templateName.equals("listing")) {
+            if (args.containsKey("type")) {
+                poiType = args.get("type");
+            } else {
+                poiType = "other";
+            }
+        } else {
+            poiType = templateName;
+        }
+        
+        // Description
+        String description = "";
+        if (args.containsKey("description")) {
+            description = args.get("description");
+        } else if (args.containsKey("content")) {
+            description = args.get("content");
+        }
+
+    	return new WikivoyagePOI(
+                article,
+                poiType,
+                args.get("name"),
+                args.get("alt"),
+                args.get("address"),
+                args.get("directions"),
+                args.get("phone"),
+                args.get("tollFree"),
+                args.get("email"),
+                args.get("fax"),
+                args.get("url"),
+                args.get("hours"),
+                args.get("checkin"),
+                args.get("checkout"),
+                args.get("image"),
+                args.get("price"),
+                args.get("lat"),
+                args.get("long"),
+                description);
     }
 
     /**
      * Get arguments of template as key-value dictionary (hash map)
      */
     private HashMap<String, String> getTemplateArgumentsDict(WtTemplate templateNode) {
-        HashMap<String, String> templateArgumentsDict = new LinkedHashMap<String, String>();
+        HashMap<String, String> templateArgumentsDict = new LinkedHashMap<>();
 
         for (WtNode templateArgumentsChildNode : templateNode.getArgs()) {
             if (templateArgumentsChildNode instanceof WtTemplateArgument) {
@@ -126,7 +132,7 @@ public class PageParser {
     }
 
     private List<String> getTemplateArgumentValuesList(WtTemplate templateNode) {
-        LinkedList<String> result = new LinkedList<String>();
+        LinkedList<String> result = new LinkedList<>();
 
         for (WtNode templateArgumentsChildNode : templateNode.getArgs()) {
             if (templateArgumentsChildNode instanceof WtTemplateArgument) {
@@ -172,7 +178,7 @@ public class PageParser {
     }
 
     private void initListingTemplates() {
-        listingTemplates = new HashSet<String>();
+        listingTemplates = new HashSet<>();
         listingTemplates.add("listing");
         listingTemplates.add("see");
         listingTemplates.add("do");

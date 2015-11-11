@@ -10,7 +10,7 @@ import java.io.IOException;
 public class SQL implements OutputFormat{
 
     @Override
-    public void write(WikivoyagePOI[] pois, String outputFilename) throws WriteOutputException {
+    public void write(Iterable<WikivoyagePOI> pois, String outputFilename) throws WriteOutputException {
         BufferedWriter writer = null;
         try {
             try {
