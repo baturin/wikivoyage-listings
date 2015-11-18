@@ -8,18 +8,22 @@ import org.junit.Test;
 import org.wikivoyage.ru.listings.entity.WikivoyagePOI;
 import org.wikivoyage.ru.listings.input.PageParser;
 
+import language.English;
+import language.French;
+import language.Language;
+
 
 public class InputTests {
 
 	@Test
-	public void process() throws Exception {
-		String wikicode = IOUtils.toString(this.getClass().getResourceAsStream("/sample-article.wikicode"), "UTF-8");
+	public void processEnglish() throws Exception {
+		String wikicode = IOUtils.toString(this.getClass().getResourceAsStream("/sample-article-en.wikicode"), "UTF-8");
 		
-		PageParser pageParser = new PageParser();
+		PageParser pageParser = new PageParser(new English());
 		List<WikivoyagePOI> pois = pageParser.parsePage("Tokyo/Roppongi", wikicode);
 		
 		// Check number of POIs
-		Assert.assertEquals(pois.size(), 71);
+		Assert.assertEquals(71, pois.size());
 		
 		// Check a particular POI in detail
 		WikivoyagePOI poi = pois.get(68);
@@ -43,4 +47,38 @@ public class InputTests {
 		Assert.assertEquals("139.72814", poi.getLongitude());
 		Assert.assertEquals("A part of Roppongi Hills, and not to be confused with the more famous Park Hyatt of ''Lost in Translation'' fame, which is in Shinjuku. Sleek and minimalistic, all black, gray and brown, with expensive design that never hesitates to sacrifice function for form, but the superlative service makes up for it.", poi.getDescription());
 	}
+
+	@Test
+	public void processFrench() throws Exception {
+		String wikicode = IOUtils.toString(this.getClass().getResourceAsStream("/sample-article-fr.wikicode"), "UTF-8");
+		
+		PageParser pageParser = new PageParser(new French());
+		List<WikivoyagePOI> pois = pageParser.parsePage("Thouars", wikicode);
+		
+		// Check number of POIs
+		Assert.assertEquals(28, pois.size());
+		
+		// Check a particular POI in detail
+		WikivoyagePOI poi = pois.get(25);
+		Assert.assertEquals("Thouars", poi.getArticle());
+		Assert.assertEquals("sleep", poi.getType());
+		Assert.assertEquals("Camping municipal", poi.getTitle());
+		Assert.assertEquals("", poi.getAlt());
+		Assert.assertEquals("13 Rue de la Grande Côte de Crevant", poi.getAddress());
+		Assert.assertEquals(null, poi.getDirections());
+		Assert.assertEquals("+33 5 49 66 17 99", poi.getPhone());
+		Assert.assertEquals("", poi.getTollFree());
+		Assert.assertEquals("", poi.getEmail());
+		Assert.assertEquals("", poi.getFax());
+		Assert.assertEquals("http://www.ville-thouars.fr/decouvrir/camping.htm", poi.getUrl());
+		Assert.assertEquals(null, poi.getHours());
+		Assert.assertEquals("", poi.getCheckIn());
+		Assert.assertEquals("", poi.getCheckOut());
+		Assert.assertEquals(null, poi.getImage());
+		// Assert.assertEquals("{{Prix|3.2|€}}", poi.getPrice()); TODO fix per https://github.com/baturin/wikivoyage-listings/issues/11
+		Assert.assertEquals("46.979967", poi.getLatitude());
+		Assert.assertEquals("-0.219622", poi.getLongitude());
+		// Assert.assertEquals("Situé au bord de la rivière, immédiatement en contrebas du Parc Imbert et du vieux centre ville. {{Horaire|||9||12||15|30|19|30}}, seulement l'été.", poi.getDescription()); TODO fix per https://github.com/baturin/wikivoyage-listings/issues/11
+	}
+
 }

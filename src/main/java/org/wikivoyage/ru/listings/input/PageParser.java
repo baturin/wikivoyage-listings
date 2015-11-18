@@ -1,27 +1,38 @@
 package org.wikivoyage.ru.listings.input;
 
-import de.fau.cs.osr.ptk.common.ast.AstStringNode;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.sweble.wikitext.parser.ParserConfig;
 import org.sweble.wikitext.parser.WikitextPreprocessor;
-import org.sweble.wikitext.parser.nodes.*;
+import org.sweble.wikitext.parser.nodes.WtNode;
+import org.sweble.wikitext.parser.nodes.WtTemplate;
+import org.sweble.wikitext.parser.nodes.WtTemplateArgument;
 import org.sweble.wikitext.parser.utils.SimpleParserConfig;
 import org.sweble.wikitext.parser.utils.StringConversionException;
 import org.wikivoyage.ru.listings.entity.WikivoyagePOI;
 
-import java.util.*;
+import de.fau.cs.osr.ptk.common.ast.AstStringNode;
+import language.Language;
 
 /**
  * Parser of a single Wikivoyage page
  */
 public class PageParser {
 
+    private Language language;
+
 	/**
      * Set of allowed templates used in Wikivoyage pages for listings
      */
     private HashSet<String> listingTemplates;
-
-    public PageParser()
+    
+    public PageParser(Language language)
     {
+    	this.language = language;
         initListingTemplates();
     }
 
@@ -53,9 +64,9 @@ public class PageParser {
 
                 if (listingTemplates.contains(templateName)) {
                     HashMap<String, String> args = getTemplateArgumentsDict(templateNode);
-                    if (args.containsKey("name") && args.containsKey("lat") && args.containsKey("long")) {
+                    if (args.containsKey(language.getNameElement())) {
                         
-                        WikivoyagePOI poi = parseArgumentsDict(article, templateName, args);
+                        WikivoyagePOI poi = language.parseArgumentsDict(article, templateName, args);
                         if(poi != null) {
                         	pois.add(poi);
                         }
@@ -65,51 +76,6 @@ public class PageParser {
                 processNode(article, childNode, pois);
             }
         }
-    }
-    
-    private WikivoyagePOI parseArgumentsDict(
-    		String article, String templateName, HashMap<String, String> args) {
-
-        // Type
-        String poiType;
-        if (templateName.equals("listing")) {
-            if (args.containsKey("type")) {
-                poiType = args.get("type");
-            } else {
-                poiType = "other";
-            }
-        } else {
-            poiType = templateName;
-        }
-        
-        // Description
-        String description = "";
-        if (args.containsKey("description")) {
-            description = args.get("description");
-        } else if (args.containsKey("content")) {
-            description = args.get("content");
-        }
-
-    	return new WikivoyagePOI(
-                article,
-                poiType,
-                args.get("name"),
-                args.get("alt"),
-                args.get("address"),
-                args.get("directions"),
-                args.get("phone"),
-                args.get("tollFree"),
-                args.get("email"),
-                args.get("fax"),
-                args.get("url"),
-                args.get("hours"),
-                args.get("checkin"),
-                args.get("checkout"),
-                args.get("image"),
-                args.get("price"),
-                args.get("lat"),
-                args.get("long"),
-                description);
     }
 
     /**
@@ -178,13 +144,6 @@ public class PageParser {
     }
 
     private void initListingTemplates() {
-        listingTemplates = new HashSet<>();
-        listingTemplates.add("listing");
-        listingTemplates.add("see");
-        listingTemplates.add("do");
-        listingTemplates.add("buy");
-        listingTemplates.add("eat");
-        listingTemplates.add("drink");
-        listingTemplates.add("sleep");
+        listingTemplates = language.getListingTemplates();
     }
 }

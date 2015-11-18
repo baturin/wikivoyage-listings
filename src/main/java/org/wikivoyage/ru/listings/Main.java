@@ -6,6 +6,9 @@ import org.wikivoyage.ru.listings.output.*;
 import org.wikivoyage.ru.listings.utils.FileUtils;
 import org.wikivoyage.ru.listings.utils.FileUtilsException;
 
+import language.English;
+import language.Language;
+
 import java.io.*;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,6 +37,7 @@ public class Main {
         String [] formatNames = formats.keySet().toArray(new String [formats.keySet().size()]);
         cl.parse(args, formatNames);
         fileNames = new FileNames(cl.listingsDir, cl.dumpsCacheDir, cl.workingDir);
+        Language language;
 
         try {
             if (cl.help) {
@@ -45,20 +49,23 @@ public class Main {
                 createWorkingDir();
                 if (cl.inputFile != null) {
                     inputFilename = cl.inputFile;
+                    language = new English(); // Language can not be guessed from filename alone, using English.
                     log.info("Take POIs from '" + inputFilename + "'");
                 } else {
                     inputFilename = fileNames.workingDirPath("dump.xml.bz2");
                     DumpDownloader downloader = new DumpDownloader();
                     if (cl.inputUrl != null) {
                         downloader.downloadDumpFromUrl(cl.inputUrl, inputFilename);
+                        language = Language.guessFromUrl(cl.inputUrl);
                     } else {
                         downloader.downloadLanguageDump(cl.inputLatest, inputFilename);
+                        language = Language.create(cl.inputLatest);
                     }
                 }
 
                 if (cl.outputFormat != null) {
                     OutputFormat format = formats.get(cl.outputFormat);
-                    generateFileForFormat(inputFilename, cl.outputFilename, format);
+                    generateFileForFormat(inputFilename, cl.outputFilename, format, language);
                 }
                 log.info("Finished");
             }
@@ -74,7 +81,7 @@ public class Main {
         createDumpsCacheDir();
 
         DumpDownloader downloader = new DumpDownloader();
-        for (String language: Languages.getLanguages()) {
+        for (String language: Language.getLanguageCodes()) {
             log.info("Processing language " + language);
             List<String> dumpIds = downloader.listDumps(language);
 
@@ -132,7 +139,7 @@ public class Main {
         }
 
         log.info("Parse dump");
-        Iterable<WikivoyagePOI> listingIterable = new DumpListingsIterable(dumpPath);
+        Iterable<WikivoyagePOI> listingIterable = new DumpListingsIterable(dumpPath, Language.create(language));
 
         for (OutputFormat format: formats.values()) {
             String fileName = fileNames.getListingPath(language, dumpId, format.getDefaultExtension(), false);
@@ -169,10 +176,10 @@ public class Main {
     }
 
     private static void generateFileForFormat(
-        String inputFilename, String outputFilename, OutputFormat format
+        String inputFilename, String outputFilename, OutputFormat format, Language language
     ) throws WriteOutputException, DumpReadException {
         log.info("Parse dump");
-        Iterable<WikivoyagePOI> listingIterable = new DumpListingsIterable(inputFilename);
+        Iterable<WikivoyagePOI> listingIterable = new DumpListingsIterable(inputFilename, language);
         log.info("Save to '" + outputFilename + "'");
         format.write(listingIterable, outputFilename);
     }
