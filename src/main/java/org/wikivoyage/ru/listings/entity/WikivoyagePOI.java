@@ -142,6 +142,7 @@ public class WikivoyagePOI {
 
     public boolean isPositionalDataEmpty()
     {
-        return latitude.equals("") || longitude.equals("");
+        return latitude == null || longitude == null ||
+        		latitude.equals("") || longitude.equals("");
     }
 }

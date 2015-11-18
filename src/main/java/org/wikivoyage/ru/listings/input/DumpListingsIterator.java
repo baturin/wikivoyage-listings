@@ -1,10 +1,12 @@
 package org.wikivoyage.ru.listings.input;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 import org.wikivoyage.ru.listings.entity.DumpArticle;
 import org.wikivoyage.ru.listings.entity.WikivoyagePOI;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import language.Language;
 
 /**
  * Iterate over listings in Wikivoyage database dump
@@ -15,9 +17,9 @@ public class DumpListingsIterator implements Iterator<WikivoyagePOI>, Iterable<W
     Iterator<WikivoyagePOI> currentArticleListingIterator;
     WikivoyagePOI currentListing;
 
-    public DumpListingsIterator(String filename) {
+    public DumpListingsIterator(String filename, Language language) {
         articlesIterator = new DumpArticlesIterator(filename);
-        pageParser = new PageParser();
+        pageParser = new PageParser(language);
         getNext();
     }
 
