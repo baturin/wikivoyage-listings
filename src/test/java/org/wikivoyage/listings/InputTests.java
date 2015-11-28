@@ -99,9 +99,9 @@ public class InputTests {
 	public void processRussianRoadTemplate() throws Exception {
 		WikivoyagePOI poi = parseResourceSinglePOI("russian-road-template.wikicode");
 		Assert.assertEquals(
-			poi.getDirections(),
 			"На 38 км Ново-Рижского шоссе М9 (19 км от МКАД) " +
-			"свернуть по указателю на пирамиду."
+			"свернуть по указателю на пирамиду.",
+            poi.getDirections()
 		);
 	}
 
@@ -109,10 +109,19 @@ public class InputTests {
 	public void processUnknownTemplate() throws Exception {
         WikivoyagePOI poi = parseResourceSinglePOI("unknown-template.wikicode");
         Assert.assertEquals(
-            poi.getDescription(),
-            "Description with some {{unknown|template}} and another {{unknown|name=template}}"
+            "Description with some {{unknown|template}} and another {{unknown|name=template}}",
+            poi.getDescription()
         );
 	}
+
+	@Test
+    public void processHTMLComments() throws Exception {
+        WikivoyagePOI poi = parseResourceSinglePOI("html-comment.wikicode");
+        Assert.assertEquals(
+            "AMBER HOUSE - at the centre!",
+            poi.getTitle()
+        );
+    }
 
     private WikivoyagePOI parseResourceSinglePOI(String resourceFile) throws Exception
     {

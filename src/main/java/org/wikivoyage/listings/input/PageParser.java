@@ -13,6 +13,7 @@ import org.sweble.wikitext.parser.WikitextPreprocessor;
 import org.sweble.wikitext.parser.nodes.WtNode;
 import org.sweble.wikitext.parser.nodes.WtTemplate;
 import org.sweble.wikitext.parser.nodes.WtTemplateArgument;
+import org.sweble.wikitext.parser.nodes.WtXmlComment;
 import org.sweble.wikitext.parser.utils.SimpleParserConfig;
 import org.sweble.wikitext.parser.utils.StringConversionException;
 import org.sweble.wikitext.parser.utils.WtRtDataPrinter;
@@ -132,6 +133,9 @@ public class PageParser {
 
             log.debug("Template '" + templateName + "' was not parsed");
             return WtRtDataPrinter.print(templateNode);
+        } else if (node instanceof WtXmlComment) {
+            // HTML comments inside listings are ignored
+            return "";
         } else if (node instanceof AstStringNode) {
             return ((AstStringNode) node).getContent().replaceAll("\\[\\[([^|\\]]*?\\||)([^|\\]]*?)\\]\\]", "$2");
         } else {
