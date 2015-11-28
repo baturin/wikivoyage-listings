@@ -4,6 +4,10 @@ plugins {
     id 'org.hidetake.ssh' version '1.1.4'
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     compile fileTree(dir: 'lib', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
