@@ -42,7 +42,13 @@ public class InputTests {
 		Assert.assertEquals("Rack rates marginally cheaper than the Park Hyatt at ¥37,000 and up", poi.getPrice());
 		Assert.assertEquals("35.65968", poi.getLatitude());
 		Assert.assertEquals("139.72814", poi.getLongitude());
-		Assert.assertEquals("A part of Roppongi Hills, and not to be confused with the more famous Park Hyatt of ''Lost in Translation'' fame, which is in Shinjuku. Sleek and minimalistic, all black, gray and brown, with expensive design that never hesitates to sacrifice function for form, but the superlative service makes up for it.", poi.getDescription());
+		Assert.assertEquals(
+            "A part of Roppongi Hills, and not to be confused with the more famous Park Hyatt " +
+            "of ''Lost in Translation'' fame, which is in Shinjuku. Sleek and minimalistic, " +
+            "all black, gray and brown, with expensive design that never hesitates to sacrifice " +
+            "function for form, but the superlative service makes up for it.",
+            poi.getDescription()
+        );
 	}
 
 	@Test
@@ -72,7 +78,11 @@ public class InputTests {
 		Assert.assertEquals("3.2€", poi.getPrice());
 		Assert.assertEquals("46.979967", poi.getLatitude());
 		Assert.assertEquals("-0.219622", poi.getLongitude());
-		Assert.assertEquals("Situé au bord de la rivière, immédiatement en contrebas du Parc Imbert et du vieux centre ville. 9 h - 12 h et 15 h 30 - 19 h 30, seulement l'été.", poi.getDescription());
+		Assert.assertEquals(
+            "Situé au bord de la rivière, immédiatement en contrebas du Parc Imbert et du vieux " +
+            "centre ville. 9 h - 12 h et 15 h 30 - 19 h 30, seulement l'été.",
+            poi.getDescription()
+        );
 	}
 
 	@Test
