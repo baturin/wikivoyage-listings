@@ -6,7 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.jsoup.helper.StringUtil;
 import org.sweble.wikitext.parser.ParserConfig;
 import org.sweble.wikitext.parser.WikitextPreprocessor;
 import org.sweble.wikitext.parser.nodes.WtNode;
@@ -14,6 +13,7 @@ import org.sweble.wikitext.parser.nodes.WtTemplate;
 import org.sweble.wikitext.parser.nodes.WtTemplateArgument;
 import org.sweble.wikitext.parser.utils.SimpleParserConfig;
 import org.sweble.wikitext.parser.utils.StringConversionException;
+import org.sweble.wikitext.parser.utils.WtRtDataPrinter;
 import org.wikivoyage.ru.listings.entity.WikivoyagePOI;
 
 import de.fau.cs.osr.ptk.common.ast.AstStringNode;
@@ -122,7 +122,7 @@ public class PageParser {
                 }
             }
 
-            return "";
+            return WtRtDataPrinter.print(templateNode);
         } else if (node instanceof AstStringNode) {
             return ((AstStringNode) node).getContent().replaceAll("\\[\\[([^|\\]]*?\\||)([^|\\]]*?)\\]\\]", "$2");
         } else {

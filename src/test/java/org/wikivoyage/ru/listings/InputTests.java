@@ -1,5 +1,6 @@
 package org.wikivoyage.ru.listings;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -14,13 +15,9 @@ import language.Language;
 
 
 public class InputTests {
-
 	@Test
 	public void processEnglish() throws Exception {
-		String wikicode = IOUtils.toString(this.getClass().getResourceAsStream("/sample-article-en.wikicode"), "UTF-8");
-
-		PageParser pageParser = new PageParser(new English());
-		List<WikivoyagePOI> pois = pageParser.parsePage("Tokyo/Roppongi", wikicode);
+        List<WikivoyagePOI> pois = parseResourcePOIs("sample-article-en.wikicode", new English(), "Tokyo/Roppongi");
 
 		// Check number of POIs
 		Assert.assertEquals(71, pois.size());
@@ -50,10 +47,7 @@ public class InputTests {
 
 	@Test
 	public void processFrench() throws Exception {
-		String wikicode = IOUtils.toString(this.getClass().getResourceAsStream("/sample-article-fr.wikicode"), "UTF-8");
-
-		PageParser pageParser = new PageParser(new French());
-		List<WikivoyagePOI> pois = pageParser.parsePage("Thouars", wikicode);
+        List<WikivoyagePOI> pois = parseResourcePOIs("sample-article-fr.wikicode", new French(), "Thouars");
 
 		// Check number of POIs
 		Assert.assertEquals(28, pois.size());
@@ -83,13 +77,7 @@ public class InputTests {
 
 	@Test
 	public void processFrenchPrixTemplate() throws Exception {
-		String wikicode = IOUtils.toString(this.getClass().getResourceAsStream("/prix-template.wikicode"), "UTF-8");
-
-		PageParser pageParser = new PageParser(new French());
-		List<WikivoyagePOI> pois = pageParser.parsePage("TestArticle", wikicode);
-
-		Assert.assertEquals(1, pois.size());
-		WikivoyagePOI poi = pois.get(0);
+		WikivoyagePOI poi = parseResourceSinglePOI("prix-template.wikicode", new French());
 		Assert.assertEquals(
 			poi.getPrice(),
 			"1.50€ à 4€. Entrée gratuite pour les enfants jusqu’à 12 ans, gratuit le premier dimanche du mois"
@@ -98,17 +86,56 @@ public class InputTests {
 
 	@Test
 	public void processRussianRoadTemplate() throws Exception {
-		String wikicode = IOUtils.toString(this.getClass().getResourceAsStream("/russian-road-template.wikicode"), "UTF-8");
-
-		PageParser pageParser = new PageParser(new English());
-		List<WikivoyagePOI> pois = pageParser.parsePage("TestArticle", wikicode);
-
-		Assert.assertEquals(1, pois.size());
-		WikivoyagePOI poi = pois.get(0);
+		WikivoyagePOI poi = parseResourceSinglePOI("russian-road-template.wikicode");
 		Assert.assertEquals(
 			poi.getDirections(),
 			"На 38 км Ново-Рижского шоссе М9 (19 км от МКАД) " +
 			"свернуть по указателю на пирамиду."
 		);
 	}
+
+	@Test
+	public void processUnknownTemplate() throws Exception {
+        WikivoyagePOI poi = parseResourceSinglePOI("unknown-template.wikicode");
+        Assert.assertEquals(
+            poi.getDescription(),
+            "Description with some {{unknown|template}} and another {{unknown|name=template}}"
+        );
+	}
+
+    private WikivoyagePOI parseResourceSinglePOI(String resourceFile) throws Exception
+    {
+        List<WikivoyagePOI> pois = parseResourcePOIs(resourceFile);
+        Assert.assertEquals(1, pois.size());
+        return pois.get(0);
+    }
+
+    private WikivoyagePOI parseResourceSinglePOI(String resourceFile, Language language) throws Exception
+    {
+        List<WikivoyagePOI> pois = parseResourcePOIs(resourceFile, language);
+        Assert.assertEquals(1, pois.size());
+        return pois.get(0);
+    }
+
+    private List<WikivoyagePOI> parseResourcePOIs(String resourceFile) throws IOException
+    {
+        return parseResourcePOIs(resourceFile, new English(), "TestArticle");
+    }
+
+    private List<WikivoyagePOI> parseResourcePOIs(String resourceFile, Language language) throws IOException
+    {
+        return parseResourcePOIs(resourceFile, language, "TestArticle");
+    }
+
+    private List<WikivoyagePOI> parseResourcePOIs(
+            String resourceFile, Language language, String articleName
+    ) throws IOException
+    {
+        String wikicode = IOUtils.toString(
+            this.getClass().getResourceAsStream("/" + resourceFile), "UTF-8"
+        );
+
+        PageParser pageParser = new PageParser(language);
+        return pageParser.parsePage(articleName, wikicode);
+    }
 }
