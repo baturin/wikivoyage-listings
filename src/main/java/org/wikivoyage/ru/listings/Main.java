@@ -50,7 +50,13 @@ public class Main {
                 createWorkingDir();
                 if (cl.inputFile != null) {
                     inputFilename = cl.inputFile;
-                    language = new English(); // Language can not be guessed from filename alone, using English.
+                    if (cl.inputLanguage != null) {
+                        language = Language.create(cl.inputLanguage);
+                    } else {
+                        // Language can not be guessed from filename alone,
+                        // and it was not specified in command line. Just use English.
+                        language = new English();
+                    }
                     log.info("Take POIs from '" + inputFilename + "'");
                 } else {
                     inputFilename = fileNames.workingDirPath("dump.xml.bz2");
