@@ -18,13 +18,13 @@ public class InputTests {
 	@Test
 	public void processEnglish() throws Exception {
 		String wikicode = IOUtils.toString(this.getClass().getResourceAsStream("/sample-article-en.wikicode"), "UTF-8");
-		
+
 		PageParser pageParser = new PageParser(new English());
 		List<WikivoyagePOI> pois = pageParser.parsePage("Tokyo/Roppongi", wikicode);
-		
+
 		// Check number of POIs
 		Assert.assertEquals(71, pois.size());
-		
+
 		// Check a particular POI in detail
 		WikivoyagePOI poi = pois.get(68);
 		Assert.assertEquals("Tokyo/Roppongi", poi.getArticle());
@@ -51,13 +51,13 @@ public class InputTests {
 	@Test
 	public void processFrench() throws Exception {
 		String wikicode = IOUtils.toString(this.getClass().getResourceAsStream("/sample-article-fr.wikicode"), "UTF-8");
-		
+
 		PageParser pageParser = new PageParser(new French());
 		List<WikivoyagePOI> pois = pageParser.parsePage("Thouars", wikicode);
-		
+
 		// Check number of POIs
 		Assert.assertEquals(28, pois.size());
-		
+
 		// Check a particular POI in detail
 		WikivoyagePOI poi = pois.get(25);
 		Assert.assertEquals("Thouars", poi.getArticle());
@@ -75,10 +75,40 @@ public class InputTests {
 		Assert.assertEquals("", poi.getCheckIn());
 		Assert.assertEquals("", poi.getCheckOut());
 		Assert.assertEquals(null, poi.getImage());
-		// Assert.assertEquals("{{Prix|3.2|€}}", poi.getPrice()); TODO fix per https://github.com/baturin/wikivoyage-listings/issues/11
+		Assert.assertEquals("3.2€", poi.getPrice());
 		Assert.assertEquals("46.979967", poi.getLatitude());
 		Assert.assertEquals("-0.219622", poi.getLongitude());
 		// Assert.assertEquals("Situé au bord de la rivière, immédiatement en contrebas du Parc Imbert et du vieux centre ville. {{Horaire|||9||12||15|30|19|30}}, seulement l'été.", poi.getDescription()); TODO fix per https://github.com/baturin/wikivoyage-listings/issues/11
 	}
 
+	@Test
+	public void processFrenchPrixTemplate() throws Exception {
+		String wikicode = IOUtils.toString(this.getClass().getResourceAsStream("/prix-template.wikicode"), "UTF-8");
+
+		PageParser pageParser = new PageParser(new French());
+		List<WikivoyagePOI> pois = pageParser.parsePage("TestArticle", wikicode);
+
+		Assert.assertEquals(1, pois.size());
+		WikivoyagePOI poi = pois.get(0);
+		Assert.assertEquals(
+			poi.getPrice(),
+			"1.50€ à 4€. Entrée gratuite pour les enfants jusqu’à 12 ans, gratuit le premier dimanche du mois"
+		);
+	}
+
+	@Test
+	public void processRussianRoadTemplate() throws Exception {
+		String wikicode = IOUtils.toString(this.getClass().getResourceAsStream("/russian-road-template.wikicode"), "UTF-8");
+
+		PageParser pageParser = new PageParser(new English());
+		List<WikivoyagePOI> pois = pageParser.parsePage("TestArticle", wikicode);
+
+		Assert.assertEquals(1, pois.size());
+		WikivoyagePOI poi = pois.get(0);
+		Assert.assertEquals(
+			poi.getDirections(),
+			"На 38 км Ново-Рижского шоссе М9 (19 км от МКАД) " +
+			"свернуть по указателю на пирамиду."
+		);
+	}
 }

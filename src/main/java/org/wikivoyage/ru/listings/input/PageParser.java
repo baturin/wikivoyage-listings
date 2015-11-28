@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.jsoup.helper.StringUtil;
 import org.sweble.wikitext.parser.ParserConfig;
 import org.sweble.wikitext.parser.WikitextPreprocessor;
 import org.sweble.wikitext.parser.nodes.WtNode;
@@ -17,6 +18,10 @@ import org.wikivoyage.ru.listings.entity.WikivoyagePOI;
 
 import de.fau.cs.osr.ptk.common.ast.AstStringNode;
 import language.Language;
+import org.wikivoyage.ru.listings.input.template.FrenchPrixTemplateParser;
+import org.wikivoyage.ru.listings.input.template.RussianRoadTemplateParser;
+import org.wikivoyage.ru.listings.input.template.TemplateParser;
+import org.wikivoyage.ru.listings.utils.StringUtils;
 
 /**
  * Parser of a single Wikivoyage page
@@ -24,6 +29,10 @@ import language.Language;
 public class PageParser {
 
     private Language language;
+    private final TemplateParser [] templateParsers = {
+        new FrenchPrixTemplateParser(),
+        new RussianRoadTemplateParser()
+    };
 
 	/**
      * Set of allowed templates used in Wikivoyage pages for listings
@@ -97,21 +106,6 @@ public class PageParser {
         return templateArgumentsDict;
     }
 
-    private List<String> getTemplateArgumentValuesList(WtTemplate templateNode) {
-        LinkedList<String> result = new LinkedList<>();
-
-        for (WtNode templateArgumentsChildNode : templateNode.getArgs()) {
-            if (templateArgumentsChildNode instanceof WtTemplateArgument) {
-                WtTemplateArgument templateArgument = (WtTemplateArgument) templateArgumentsChildNode;
-
-                String value = convertWtNodeToString(templateArgument.getValue()).trim();
-                result.add(value);
-            }
-        }
-
-        return result;
-    }
-
     /**
      * Simple text conversion of WtNode object to string.
      * It ignores templates and presents their contents as plain text, with no conversion.
@@ -121,17 +115,14 @@ public class PageParser {
         if (node instanceof WtTemplate) {
             WtTemplate templateNode = (WtTemplate) node;
             String templateName = convertWtNodeToString(templateNode.getName()).trim();
-            if (templateName.equals("Российская трасса")) {
-                String roadTitle = "";
-                for (String arg: getTemplateArgumentValuesList(templateNode)) {
-                    roadTitle += arg;
+
+            for (TemplateParser parser: templateParsers) {
+                if (StringUtils.equalsCaseInsensitive(templateName, parser.getTemplateName())) {
+                    return parser.parse(templateNode);
                 }
-                return roadTitle;
-            } else if (node instanceof AstStringNode) {
-                return ((AstStringNode) node).getContent();
-            } else {
-                return "";
             }
+
+            return "";
         } else if (node instanceof AstStringNode) {
             return ((AstStringNode) node).getContent().replaceAll("\\[\\[([^|\\]]*?\\||)([^|\\]]*?)\\]\\]", "$2");
         } else {
