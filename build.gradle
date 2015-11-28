@@ -52,6 +52,7 @@ task deploy << {
             put 'build/distributions/wikivoyage-listings.zip', 'wikivoyage-listings.zip'
             execute 'mkdir wikivoyage-listings'
             execute 'cd wikivoyage-listings && unzip ../wikivoyage-listings.zip'
+            execute 'cp wikivoyage-listings.zip /var/www/wvpoi.batalex.ru/wikivoyage-listings.zip'
         }
     }
 }
