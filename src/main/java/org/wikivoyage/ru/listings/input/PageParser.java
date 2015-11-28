@@ -6,6 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.sweble.wikitext.parser.ParserConfig;
 import org.sweble.wikitext.parser.WikitextPreprocessor;
 import org.sweble.wikitext.parser.nodes.WtNode;
@@ -28,6 +30,7 @@ import org.wikivoyage.ru.listings.utils.StringUtils;
  * Parser of a single Wikivoyage page
  */
 public class PageParser {
+    private static final Log log = LogFactory.getLog(PageParser.class);
 
     private Language language;
     private final TemplateParser [] templateParsers = {
@@ -53,6 +56,8 @@ public class PageParser {
      * @param text Wikivoyage page as string
      */
     public List<WikivoyagePOI> parsePage(String article, String text) {
+        log.debug("Start: parse article '" + article + "'");
+
         LinkedList<WikivoyagePOI> pois = new LinkedList<>();
         try {
             ParserConfig config = new SimpleParserConfig();
@@ -63,6 +68,7 @@ public class PageParser {
             System.err.println("Failure");
             e.printStackTrace();
         }
+        log.debug("End: parse article '" + article + "'");
         return pois;
     }
 
@@ -124,6 +130,7 @@ public class PageParser {
                 }
             }
 
+            log.debug("Template '" + templateName + "' was not parsed");
             return WtRtDataPrinter.print(templateNode);
         } else if (node instanceof AstStringNode) {
             return ((AstStringNode) node).getContent().replaceAll("\\[\\[([^|\\]]*?\\||)([^|\\]]*?)\\]\\]", "$2");
