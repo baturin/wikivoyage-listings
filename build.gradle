@@ -1,4 +1,8 @@
-apply plugin: 'java'
+
+plugins {
+    id 'java'
+    id 'org.hidetake.ssh' version '1.1.4'
+}
 
 dependencies {
     compile fileTree(dir: 'lib', include: ['*.jar'])
@@ -26,3 +30,25 @@ task distZip(type: Zip) {
         into('.')
     }
 }
+
+remotes {
+    webServer {
+        host = '109.120.189.189'
+        user = 'alexey'
+        identity = file('/home/alexey/.ssh/id_rsa')
+        knownHosts = allowAnyHosts
+    }
+}
+
+task deploy << {
+    ssh.run {
+        session(remotes.webServer) {
+            execute 'rm -f wikivoyage-listings.zip'
+            execute 'rm -rf wikivoyage-listings'
+            put 'build/distributions/wikivoyage-listings.zip', 'wikivoyage-listings.zip'
+            execute 'mkdir wikivoyage-listings'
+            execute 'cd wikivoyage-listings && unzip ../wikivoyage-listings.zip'
+        }
+    }
+}
+deploy.dependsOn distZip
