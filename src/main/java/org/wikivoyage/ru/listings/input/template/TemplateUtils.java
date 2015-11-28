@@ -5,6 +5,8 @@ import org.sweble.wikitext.parser.nodes.WtNode;
 import org.sweble.wikitext.parser.nodes.WtTemplate;
 import org.sweble.wikitext.parser.nodes.WtTemplateArgument;
 
+import java.util.LinkedList;
+
 /**
  * Utilities for working with wiki text templates
  */
@@ -28,6 +30,18 @@ public class TemplateUtils {
         }
 
         return textResult;
+    }
+
+    public static String [] convertTemplateToStringArray(WtTemplate templateNode)
+    {
+        LinkedList<String> arguments = new LinkedList<>();
+        for (WtNode childNode: templateNode.getArgs()) {
+            if (childNode instanceof WtTemplateArgument) {
+                WtTemplateArgument argChildNode = (WtTemplateArgument) childNode;
+                arguments.addLast(convertToStringSimple(argChildNode.getValue()));
+            }
+        }
+        return arguments.toArray(new String [arguments.size()]);
     }
 
     /**

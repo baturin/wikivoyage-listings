@@ -18,6 +18,7 @@ import org.wikivoyage.ru.listings.entity.WikivoyagePOI;
 
 import de.fau.cs.osr.ptk.common.ast.AstStringNode;
 import language.Language;
+import org.wikivoyage.ru.listings.input.template.FrenchHoraireTemplateParser;
 import org.wikivoyage.ru.listings.input.template.FrenchPrixTemplateParser;
 import org.wikivoyage.ru.listings.input.template.RussianRoadTemplateParser;
 import org.wikivoyage.ru.listings.input.template.TemplateParser;
@@ -31,7 +32,8 @@ public class PageParser {
     private Language language;
     private final TemplateParser [] templateParsers = {
         new FrenchPrixTemplateParser(),
-        new RussianRoadTemplateParser()
+        new RussianRoadTemplateParser(),
+        new FrenchHoraireTemplateParser()
     };
 
 	/**

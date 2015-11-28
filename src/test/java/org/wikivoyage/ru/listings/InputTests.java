@@ -72,7 +72,7 @@ public class InputTests {
 		Assert.assertEquals("3.2€", poi.getPrice());
 		Assert.assertEquals("46.979967", poi.getLatitude());
 		Assert.assertEquals("-0.219622", poi.getLongitude());
-		// Assert.assertEquals("Situé au bord de la rivière, immédiatement en contrebas du Parc Imbert et du vieux centre ville. {{Horaire|||9||12||15|30|19|30}}, seulement l'été.", poi.getDescription()); TODO fix per https://github.com/baturin/wikivoyage-listings/issues/11
+		Assert.assertEquals("Situé au bord de la rivière, immédiatement en contrebas du Parc Imbert et du vieux centre ville. 9 h - 12 h et 15 h 30 - 19 h 30, seulement l'été.", poi.getDescription());
 	}
 
 	@Test
@@ -83,6 +83,17 @@ public class InputTests {
 			"1.50€ à 4€. Entrée gratuite pour les enfants jusqu’à 12 ans, gratuit le premier dimanche du mois"
 		);
 	}
+
+    @Test
+    public void processFrenchHoraireTemplate() throws Exception {
+        List<WikivoyagePOI> pois = parseResourcePOIs("horaire-template.wikicode", new French());
+        Assert.assertEquals(5, pois.size());
+        Assert.assertEquals("lun. - jeu.: 8 h 30 - 22 h", pois.get(0).getHours());
+        Assert.assertEquals("8 h 30 - 22 h", pois.get(1).getHours());
+        Assert.assertEquals("8 h 30", pois.get(2).getHours());
+        Assert.assertEquals("lun. - jeu.", pois.get(3).getHours());
+        Assert.assertEquals("lun. - jeu.: 8 h 30 - 12 h 30 et 13 h - 15 h 45", pois.get(4).getHours());
+    }
 
 	@Test
 	public void processRussianRoadTemplate() throws Exception {
