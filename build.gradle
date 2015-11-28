@@ -15,7 +15,7 @@ dependencies {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'org.wikivoyage.ru.listings.Main'
+        attributes 'Main-Class': 'org.wikivoyage.listings.Main'
     }
 }
 
