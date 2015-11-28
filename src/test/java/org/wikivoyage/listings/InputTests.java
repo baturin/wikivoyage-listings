@@ -133,6 +133,23 @@ public class InputTests {
         );
     }
 
+    @Test
+    public void ignoreLinks() throws Exception {
+        WikivoyagePOI poi = parseResourceSinglePOI("links-inside-template.wikicode");
+        Assert.assertEquals(
+            "Торговые ряды во Владимире очень странные. Их постоянно перестраивали: " +
+            "в конце XVIII века начали с типовой одноэтажной арочной конструкции " +
+            "в духе Костромы или Галича, " +
+            "потом некоторые арки заделали, добавили двухэтажную пристройку на углу с улицей Гагарина, " +
+            "украсили эту пристройку башней-ротондой с барельефами и, наконец, " +
+            "уже в начале 2000-х полностью переделали северную часть, " +
+            "превратив четырёхугольное здание с внутренним двором в большой торговый центр под одной крышей. " +
+            "Сейчас торговые ряды так густо завешаны рекламой, что разглядеть в них хоть какую-то " +
+            "историческую архитектуру сложно. Внутри тоже ничего не осталось.",
+            poi.getDescription()
+        );
+    }
+
     private WikivoyagePOI parseResourceSinglePOI(String resourceFile) throws Exception
     {
         List<WikivoyagePOI> pois = parseResourcePOIs(resourceFile);
