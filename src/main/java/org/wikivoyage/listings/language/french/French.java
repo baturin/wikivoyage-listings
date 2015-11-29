@@ -1,15 +1,26 @@
-package org.wikivoyage.listings.language;
+package org.wikivoyage.listings.language.french;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.language.french.template.HoraireTemplateToStringConverter;
+import org.wikivoyage.listings.language.french.template.PrixTemplateToStringConverter;
 import org.wikivoyage.listings.input.template.TemplateNode;
+import org.wikivoyage.listings.input.template.TemplateToStringConverter;
+import org.wikivoyage.listings.language.Language;
 
 /**
  * The specificities of the French edition of Wikivoyage.
  */
-public class French extends Language
+public class French implements Language
 {
+    @Override
+    public String getLanguageCode() {
+        return "fr";
+    }
+
     /**
      * All listings that can be found in the French edition of Wikivoyage.
      */
@@ -99,5 +110,13 @@ public class French extends Language
 			template.getArgument("description")
             // TODO: other parameters like wikipédia, wikidata, facebook, wifi, téléphone portable, handicap, mise à jour
         );
+    }
+
+    @Override
+    public List<TemplateToStringConverter> getTemplateConverters() {
+        List<TemplateToStringConverter> converters = new LinkedList<>();
+        converters.add(new HoraireTemplateToStringConverter());
+        converters.add(new PrixTemplateToStringConverter());
+        return converters;
     }
 }

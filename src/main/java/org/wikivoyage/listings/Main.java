@@ -4,11 +4,12 @@ import org.wikivoyage.listings.entity.WikivoyagePOI;
 import org.wikivoyage.listings.input.DumpDownloader;
 import org.wikivoyage.listings.input.DumpListingsIterable;
 import org.wikivoyage.listings.input.DumpReadException;
+import org.wikivoyage.listings.language.Languages;
 import org.wikivoyage.listings.output.*;
 import org.wikivoyage.listings.utils.FileUtils;
 import org.wikivoyage.listings.utils.FileUtilsException;
 
-import org.wikivoyage.listings.language.English;
+import org.wikivoyage.listings.language.english.English;
 import org.wikivoyage.listings.language.Language;
 
 import java.io.*;
@@ -53,7 +54,7 @@ public class Main {
                 if (cl.inputFile != null) {
                     inputFilename = cl.inputFile;
                     if (cl.inputLanguage != null) {
-                        language = Language.create(cl.inputLanguage);
+                        language = Languages.create(cl.inputLanguage);
                     } else {
                         // Language can not be guessed from filename alone,
                         // and it was not specified in command line. Just use English.
@@ -65,10 +66,10 @@ public class Main {
                     DumpDownloader downloader = new DumpDownloader();
                     if (cl.inputUrl != null) {
                         downloader.downloadDumpFromUrl(cl.inputUrl, inputFilename);
-                        language = Language.guessFromUrl(cl.inputUrl);
+                        language = Languages.guessFromUrl(cl.inputUrl);
                     } else {
                         downloader.downloadLanguageDump(cl.inputLatest, inputFilename);
-                        language = Language.create(cl.inputLatest);
+                        language = Languages.create(cl.inputLatest);
                     }
                 }
 
@@ -90,7 +91,7 @@ public class Main {
         createDumpsCacheDir();
 
         DumpDownloader downloader = new DumpDownloader();
-        for (String language: Language.getLanguageCodes()) {
+        for (String language: Languages.getLanguageCodes()) {
             log.info("Processing language " + language);
             List<String> dumpIds = downloader.listDumps(language);
 
@@ -148,7 +149,7 @@ public class Main {
         }
 
         log.info("Parse dump");
-        Iterable<WikivoyagePOI> listingIterable = new DumpListingsIterable(dumpPath, Language.create(language));
+        Iterable<WikivoyagePOI> listingIterable = new DumpListingsIterable(dumpPath, Languages.create(language));
 
         for (OutputFormat format: formats.values()) {
             String fileName = fileNames.getListingPath(language, dumpId, format.getDefaultExtension(), false);

@@ -1,16 +1,24 @@
-package org.wikivoyage.listings.language;
+package org.wikivoyage.listings.language.english;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.wikivoyage.listings.entity.WikivoyagePOI;
 import org.wikivoyage.listings.input.template.TemplateNode;
+import org.wikivoyage.listings.input.template.TemplateToStringConverter;
+import org.wikivoyage.listings.language.Language;
 
 /**
  * The specificities of the English edition of Wikivoyage.
  */
-public class English extends Language
+public class English implements Language
 {
-	
+    @Override
+    public String getLanguageCode() {
+        return "en";
+    }
+
     /**
      * All listings that can be found in the English edition of Wikivoyage.
      */
@@ -81,5 +89,10 @@ public class English extends Language
             template.getArgument("long"),
             description
         );
+    }
+
+    @Override
+    public List<TemplateToStringConverter> getTemplateConverters() {
+        return new LinkedList<>();
     }
 }

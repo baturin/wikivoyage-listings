@@ -9,9 +9,10 @@ import org.junit.Test;
 import org.wikivoyage.listings.entity.WikivoyagePOI;
 import org.wikivoyage.listings.input.PageParser;
 
-import org.wikivoyage.listings.language.English;
-import org.wikivoyage.listings.language.French;
+import org.wikivoyage.listings.language.english.English;
+import org.wikivoyage.listings.language.french.French;
 import org.wikivoyage.listings.language.Language;
+import org.wikivoyage.listings.language.russian.Russian;
 
 
 public class InputTests {
@@ -107,7 +108,7 @@ public class InputTests {
 
 	@Test
 	public void processRussianRoadTemplate() throws Exception {
-		WikivoyagePOI poi = parseResourceSinglePOI("russian-road-template.wikicode");
+		WikivoyagePOI poi = parseResourceSinglePOI("russian-road-template.wikicode", new Russian());
 		Assert.assertEquals(
 			"На 38 км Ново-Рижского шоссе М9 (19 км от МКАД) " +
 			"свернуть по указателю на пирамиду.",

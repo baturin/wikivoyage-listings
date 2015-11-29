@@ -25,15 +25,12 @@ public class TemplateNode {
 
     private static final Log log = LogFactory.getLog(TemplateNode.class);
 
-    private final TemplateToStringConverter[] templateParsers = {
-        new FrenchPrixTemplateToStringConverter(),
-        new RussianRoadTemplateToStringConverter(),
-        new FrenchHoraireTemplateToStringConverter()
-    };
+    private final List<TemplateToStringConverter> templateConverters;
 
-    public TemplateNode(WtTemplate node)
+    public TemplateNode(WtTemplate node, List<TemplateToStringConverter> templateConverters)
     {
         this.node = node;
+        this.templateConverters = templateConverters;
         parseArguments();
         initNamedArgumentsLowercase();
     }
@@ -121,9 +118,9 @@ public class TemplateNode {
     private String convertWtNodeToString(WtNode node)
     {
         if (node instanceof WtTemplate) {
-            TemplateNode templateNode = new TemplateNode((WtTemplate) node);
+            TemplateNode templateNode = new TemplateNode((WtTemplate) node, templateConverters);
 
-            for (TemplateToStringConverter parser: templateParsers) {
+            for (TemplateToStringConverter parser: templateConverters) {
                 if (templateNode.getNameLowercase().equals(parser.getTemplateName())) {
                     return parser.convertToString(templateNode);
                 }

@@ -1,5 +1,7 @@
-package org.wikivoyage.listings.input.template;
+package org.wikivoyage.listings.language.russian.template;
 
+import org.wikivoyage.listings.input.template.TemplateNode;
+import org.wikivoyage.listings.input.template.TemplateToStringConverter;
 import org.wikivoyage.listings.utils.StringUtils;
 
 public class RussianRoadTemplateToStringConverter implements TemplateToStringConverter {
