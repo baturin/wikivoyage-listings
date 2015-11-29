@@ -63,14 +63,24 @@ public class Main {
                     }
                     log.info("Take POIs from '" + inputFilename + "'");
                 } else {
-                    inputFilename = fileNames.workingDirPath("dump.xml.bz2");
                     DumpDownloader downloader = new DumpDownloader();
                     if (cl.inputUrl != null) {
+                        inputFilename = fileNames.workingDirPath("dump.xml.bz2");
                         downloader.downloadDumpFromUrl(cl.inputUrl, inputFilename);
                         language = Languages.guessFromUrl(cl.inputUrl);
                     } else {
-                        downloader.downloadLanguageDump(cl.inputLatest, inputFilename);
+                        createDumpsCacheDir();
                         language = Languages.create(cl.inputLatest);
+                        List<String> dumpIds = downloader.listDumps(language.getLanguageCode());
+                        String latestDumpId = dumpIds.get(0);
+
+                        inputFilename = fileNames.dumpCacheFilename(language.getLanguageCode(), latestDumpId);
+                        if (!FileUtils.fileExists(inputFilename)) {
+                            String dumpUrl = downloader.dumpUrl(language.getLanguageCode(), latestDumpId);
+                            downloader.downloadDumpFromUrl(dumpUrl, inputFilename);
+                        } else {
+                            log.info("Use cached dump");
+                        }
                     }
                 }
 

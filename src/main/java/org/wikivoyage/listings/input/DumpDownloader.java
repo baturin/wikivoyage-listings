@@ -27,12 +27,6 @@ public class DumpDownloader {
         fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
     }
 
-    public void downloadLanguageDump(String language, String dumpFilename) throws IOException
-    {
-        String dumpUrl = latestDumpUrl(language);
-        downloadDumpFromUrl(dumpUrl, dumpFilename);
-    }
-
     public List<String> listDumps(String language) throws IOException
     {
         List<String> availableDumps = new LinkedList<String>();
@@ -60,14 +54,6 @@ public class DumpDownloader {
         return (
             BASE_URL + language + "wikivoyage/" +
                 dumpId + "/" + language + "wikivoyage-" + dumpId + "-pages-articles.xml.bz2"
-        );
-    }
-
-    public String latestDumpUrl(String language)
-    {
-        return (
-            BASE_URL + language + "wikivoyage/latest/" +
-                language + "wikivoyage-latest-pages-articles.xml.bz2"
         );
     }
 }
