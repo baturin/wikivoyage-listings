@@ -68,6 +68,6 @@ public class ValidationReport implements OutputFormat {
 
     @Override
     public String getDefaultExtension() {
-        return "validation-report.html";
+        return ".validation-report.html";
     }
 }
