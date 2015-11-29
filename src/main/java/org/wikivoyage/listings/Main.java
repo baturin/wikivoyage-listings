@@ -37,6 +37,8 @@ public class Main {
         formats.put("gpx", new GPX());
         formats.put("osmand.gpx", new OsmAndGPX());
         formats.put("kml", new KML());
+        formats.put("validation-report", new ValidationReport());
+
 
         CommandLine cl = new CommandLine();
         String [] formatNames = formats.keySet().toArray(new String [formats.keySet().size()]);

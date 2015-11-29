@@ -91,7 +91,7 @@ public class French implements Language
     	return new WikivoyagePOI(
 			article,
 			poiType,
-			template.getArgument("nom"), // TODO language
+			template.getArgument("nom"),
 			template.getArgument("alt"),
 			template.getArgument("adresse"),
 			template.getArgument("directions"),
@@ -107,7 +107,8 @@ public class French implements Language
 			template.getArgument("prix"),
 			template.getArgument("latitude"),
 			template.getArgument("longitude"),
-			template.getArgument("description")
+			template.getArgument("description"),
+            getLanguageCode()
             // TODO: other parameters like wikipédia, wikidata, facebook, wifi, téléphone portable, handicap, mise à jour
         );
     }

@@ -36,11 +36,16 @@ public class WikivoyagePOI {
     private String longitude;
     private String description;
 
+    /**
+     * 2-character language code
+     */
+    private String language;
+
     public WikivoyagePOI(
         String article, String type, String title, String alt, String address, String directions,
         String phone, String tollFree, String email, String fax, String url,
         String hours, String checkIn, String checkOut, String image, String price,
-        String latitude, String longitude, String description
+        String latitude, String longitude, String description, String language
     ) {
         this.article = article;
         this.type = type;
@@ -61,6 +66,7 @@ public class WikivoyagePOI {
         this.latitude = latitude;
         this.longitude = longitude;
         this.description = description;
+        this.language = language;
     }
 
     public String getArticle()
@@ -138,6 +144,10 @@ public class WikivoyagePOI {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getLanguage() {
+        return language;
     }
 
     public boolean isPositionalDataEmpty()

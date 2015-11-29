@@ -28,7 +28,8 @@ public class OutputTests {
 			"The museum ticket includes admission to Tokyo City View. " +
 			"The '''[http://roppongihills.com/jp/macg/ Mori Arts Center Gallery]''' " +
 			"adjacent to the Mori Art Museum requires separate admission (prices vary), " +
-			"not included with the Tokyo City View / Mori Art Museum ticket."
+			"not included with the Tokyo City View / Mori Art Museum ticket.",
+			"fr"
 		);
 	}
 }

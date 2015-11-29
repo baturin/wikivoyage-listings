@@ -71,7 +71,7 @@ public class English implements Language
     	return new WikivoyagePOI(
             article,
             poiType,
-            template.getArgument("name"), // TODO language
+            template.getArgument("name"),
             template.getArgument("alt"),
             template.getArgument("address"),
             template.getArgument("directions"),
@@ -87,7 +87,8 @@ public class English implements Language
             template.getArgument("price"),
             template.getArgument("lat"),
             template.getArgument("long"),
-            description
+            description,
+            getLanguageCode()
         );
     }
 
