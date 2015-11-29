@@ -8,37 +8,39 @@ import org.sweble.wikitext.parser.nodes.WtTemplate;
 import org.sweble.wikitext.parser.nodes.WtTemplateArgument;
 import org.sweble.wikitext.parser.nodes.WtXmlComment;
 import org.sweble.wikitext.parser.utils.WtRtDataPrinter;
-import org.wikivoyage.listings.utils.StringUtils;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Wrapper around org.sweble.wikitext.parser.nodes.WtTemplate for easy work with wikitext template data
  */
 public class TemplateNode {
     private WtTemplate node;
-    private HashMap<String, String> templateArguments;
-    private HashMap<String, String> templateArgumentsLowercase;
+    private HashMap<String, String> namedArguments;
+    private HashMap<String, String> namedArgumentsLowercase;
+    private List<String> positionalArguments;
 
     private static final Log log = LogFactory.getLog(TemplateNode.class);
 
-    private final TemplateParser[] templateParsers = {
-        new FrenchPrixTemplateParser(),
-        new RussianRoadTemplateParser(),
-        new FrenchHoraireTemplateParser()
+    private final TemplateToStringConverter[] templateParsers = {
+        new FrenchPrixTemplateToStringConverter(),
+        new RussianRoadTemplateToStringConverter(),
+        new FrenchHoraireTemplateToStringConverter()
     };
 
     public TemplateNode(WtTemplate node)
     {
         this.node = node;
         parseArguments();
-        initArgumentsLowercase();
+        initNamedArgumentsLowercase();
     }
 
     public String getName()
     {
-        return TemplateUtils.convertToStringSimple(node.getName()).trim();
+        return convertToStringSimple(node.getName()).trim();
     }
 
     public String getNameLowercase()
@@ -48,19 +50,44 @@ public class TemplateNode {
 
     public String getArgument(String name)
     {
-        return templateArgumentsLowercase.get(name.toLowerCase());
+        return namedArgumentsLowercase.get(name.toLowerCase());
     }
 
     public boolean hasArgument(String name)
     {
-        return templateArgumentsLowercase.containsKey(name.toLowerCase());
+        return namedArgumentsLowercase.containsKey(name.toLowerCase());
+    }
+
+    public List<String> getPositionalArguments()
+    {
+        return positionalArguments;
+    }
+
+    public String getPositionalArg(int index, String defaultValue)
+    {
+        if (positionalArguments.size() <= index) {
+            return defaultValue;
+        } else {
+            return positionalArguments.get(index);
+        }
+    }
+
+    public String getPositionalArg(int index)
+    {
+        return positionalArguments.get(index);
+    }
+
+    public boolean isAbsentOrEmptyPositionalArg(int index)
+    {
+        return positionalArguments.size() <= index || positionalArguments.get(index).equals("");
     }
 
     /**
      * Parse template arguments into a dictionary
      */
     private void parseArguments() {
-        templateArguments = new LinkedHashMap<>();
+        namedArguments = new LinkedHashMap<>();
+        positionalArguments = new LinkedList<>();
 
         for (WtNode templateArgumentsChildNode: node.getArgs()) {
             if (templateArgumentsChildNode instanceof WtTemplateArgument) {
@@ -68,7 +95,11 @@ public class TemplateNode {
 
                 String name = convertWtNodeToString(templateArgument.getName()).trim();
                 String value = convertWtNodeToString(templateArgument.getValue()).trim();
-                templateArguments .put(name, value);
+                if (name.equals("")) {
+                    positionalArguments.add(value);
+                } else {
+                    namedArguments.put(name, value);
+                }
             }
         }
     }
@@ -76,11 +107,11 @@ public class TemplateNode {
     /**
      * Initialize template arguments dictionary with lowercase keys
      */
-    private void initArgumentsLowercase() {
-        templateArgumentsLowercase = new LinkedHashMap<>();
+    private void initNamedArgumentsLowercase() {
+        namedArgumentsLowercase = new LinkedHashMap<>();
 
-        for (String key: templateArguments.keySet()) {
-            templateArgumentsLowercase.put(key.toLowerCase(), templateArguments.get(key));
+        for (String key: namedArguments.keySet()) {
+            namedArgumentsLowercase.put(key.toLowerCase(), namedArguments.get(key));
         }
     }
 
@@ -90,17 +121,16 @@ public class TemplateNode {
     private String convertWtNodeToString(WtNode node)
     {
         if (node instanceof WtTemplate) {
-            WtTemplate templateNode = (WtTemplate) node;
-            String templateName = convertWtNodeToString(templateNode.getName()).trim();
+            TemplateNode templateNode = new TemplateNode((WtTemplate) node);
 
-            for (TemplateParser parser: templateParsers) {
-                if (StringUtils.equalsCaseInsensitive(templateName, parser.getTemplateName())) {
-                    return parser.parse(templateNode);
+            for (TemplateToStringConverter parser: templateParsers) {
+                if (templateNode.getNameLowercase().equals(parser.getTemplateName())) {
+                    return parser.convertToString(templateNode);
                 }
             }
 
-            log.debug("Template '" + templateName + "' was not parsed");
-            return WtRtDataPrinter.print(templateNode);
+            log.debug("Template '" + templateNode.getName() + "' was not parsed");
+            return WtRtDataPrinter.print(node);
         } else if (node instanceof WtXmlComment) {
             // HTML comments inside listings are ignored
             return "";
@@ -112,6 +142,25 @@ public class TemplateNode {
                 s += convertWtNodeToString(childNode);
             }
             return s;
+        }
+    }
+
+    /**
+     * Convert simple wiki text node to string
+     */
+    private static String convertToStringSimple(WtNode node)
+    {
+        if (node instanceof AstStringNode) {
+            // Handle simple string node - just get its contents
+            AstStringNode stringNode = (AstStringNode) node;
+            return stringNode.getContent();
+        } else {
+            // Handle compound node, that consists of several others
+            String textResult = "";
+            for (WtNode childNode: node) {
+                textResult += convertToStringSimple(childNode);
+            }
+            return textResult;
         }
     }
 }

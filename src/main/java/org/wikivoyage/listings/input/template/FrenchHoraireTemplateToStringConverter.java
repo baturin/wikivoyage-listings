@@ -1,29 +1,29 @@
 package org.wikivoyage.listings.input.template;
 
-import org.sweble.wikitext.parser.nodes.WtTemplate;
 import org.wikivoyage.listings.utils.StringUtils;
 
 /**
  * Parse French "Horaire" template (working hours), per https://fr.wikivoyage.org/wiki/Mod%C3%A8le:Horaire
  */
-public class FrenchHoraireTemplateParser implements TemplateParser {
+public class FrenchHoraireTemplateToStringConverter implements TemplateToStringConverter {
     @Override
-    public String parse(WtTemplate template) {
-        String [] arguments = TemplateUtils.convertTemplateToStringArray(template);
+    public String convertToString(TemplateNode template) {
         String days = "";
-        if (!isEmpty(arguments, 0)) {
-            days += convertDay(getArg(arguments, 0));
+        if (!template.isAbsentOrEmptyPositionalArg(0)) {
+            days += convertDay(template.getPositionalArg(0));
         }
-        if (!isEmpty(arguments, 1)) {
-            days += " - " + convertDay(getArg(arguments, 1));
+        if (!template.isAbsentOrEmptyPositionalArg(1)) {
+            days += " - " + convertDay(template.getPositionalArg(1));
         }
 
         String timeGaps;
         String timeGap1 = timeGap(
-            getArg(arguments, 2), getArg(arguments, 3), getArg(arguments, 4), getArg(arguments, 5)
+            template.getPositionalArg(2, ""), template.getPositionalArg(3, ""),
+            template.getPositionalArg(4, ""), template.getPositionalArg(5, "")
         );
         String timeGap2 = timeGap(
-            getArg(arguments, 6), getArg(arguments, 7), getArg(arguments, 8), getArg(arguments, 9)
+            template.getPositionalArg(6, ""), template.getPositionalArg(7, ""),
+            template.getPositionalArg(8, ""), template.getPositionalArg(9, "")
         );
         if (timeGap2.equals("")) {
             timeGaps = timeGap1;
@@ -68,24 +68,6 @@ public class FrenchHoraireTemplateParser implements TemplateParser {
             } else {
                 return hours + " h " + minutes;
             }
-        }
-    }
-
-    private boolean isEmpty(String[] arguments, int index)
-    {
-        if (arguments.length > index) {
-            return arguments[index].trim().equals("");
-        } else {
-            return true;
-        }
-    }
-
-    private String getArg(String[] arguments, int index)
-    {
-        if (arguments.length > index) {
-            return arguments[index];
-        } else {
-            return "";
         }
     }
 

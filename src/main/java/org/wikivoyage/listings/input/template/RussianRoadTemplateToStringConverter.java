@@ -1,0 +1,17 @@
+package org.wikivoyage.listings.input.template;
+
+import org.wikivoyage.listings.utils.StringUtils;
+
+public class RussianRoadTemplateToStringConverter implements TemplateToStringConverter {
+    @Override
+    public String convertToString(TemplateNode template)
+    {
+        return StringUtils.joinStrings(template.getPositionalArguments());
+    }
+
+    @Override
+    public String getTemplateName()
+    {
+        return "российская трасса";
+    }
+}
