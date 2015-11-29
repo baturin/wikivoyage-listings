@@ -1,9 +1,7 @@
 package org.wikivoyage.listings.output;
 
 import org.wikivoyage.listings.entity.WikivoyagePOI;
-import org.wikivoyage.listings.validators.LatitudeValidator;
-import org.wikivoyage.listings.validators.LongitudeValidator;
-import org.wikivoyage.listings.validators.Validator;
+import org.wikivoyage.listings.validators.*;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -15,7 +13,9 @@ public class ValidationReport implements OutputFormat {
     public void write(Iterable<WikivoyagePOI> pois, String outputFilename) throws WriteOutputException {
         Validator [] validators = {
             new LatitudeValidator(),
-            new LongitudeValidator()
+            new LongitudeValidator(),
+            new WebsiteURLValidator(),
+            new EmailValidator()
         };
 
         try {

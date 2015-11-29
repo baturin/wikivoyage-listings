@@ -16,6 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 bzip2-20090327.jar - Apache License
 commons-compress-1.9.jar  - Apache license
 commons-logging-1.1.1.jar  - Apache license
+commons-validator-1.5.0.jar  - Apache license
 gnu-trove-osmand.jar - LGPL
 jcommander-1.30.jar - Apache license
 junidecode-0.1.jar - BSD-4-Clause-UC
