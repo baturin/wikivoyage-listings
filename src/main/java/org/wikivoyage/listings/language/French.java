@@ -1,9 +1,9 @@
 package org.wikivoyage.listings.language;
 
-import java.util.HashMap;
 import java.util.HashSet;
 
 import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.input.template.TemplateNode;
 
 /**
  * The specificities of the French edition of Wikivoyage.
@@ -17,19 +17,19 @@ public class French extends Language
     {
     	HashSet<String> listingTemplates = new HashSet<>();
     	
-	    listingTemplates.add("Aller");
-	    listingTemplates.add("Circuler");
-	    listingTemplates.add("Voir");
-	    listingTemplates.add("Faire");
-	    listingTemplates.add("Acheter");
-	    listingTemplates.add("Manger");
-	    listingTemplates.add("Sortir");
-	    listingTemplates.add("Se loger");
-	    listingTemplates.add("Ville");
-	    listingTemplates.add("Destination");
-	    listingTemplates.add("Représentation diplomatique");
-	    listingTemplates.add("Listing");
-	    listingTemplates.add("Autres");
+	    listingTemplates.add("aller");
+	    listingTemplates.add("circuler");
+	    listingTemplates.add("voir");
+	    listingTemplates.add("faire");
+	    listingTemplates.add("acheter");
+	    listingTemplates.add("manger");
+	    listingTemplates.add("sortir");
+	    listingTemplates.add("se loger");
+	    listingTemplates.add("ville");
+	    listingTemplates.add("destination");
+	    listingTemplates.add("représentation diplomatique");
+	    listingTemplates.add("listing");
+	    listingTemplates.add("autres");
 	    
 	    return listingTemplates;
     }
@@ -42,62 +42,62 @@ public class French extends Language
     }
     
     /**
-     * Make a listings' parameters into a WikivoyagePOI object.
+     * Convert listing template into a WikivoyagePOI object.
      */
-    public WikivoyagePOI parseArgumentsDict(
-    		String article, String templateName, HashMap<String, String> args) {
+    public WikivoyagePOI parseListingTemplate(String article, TemplateNode template) {
 
         // Type
         String poiType;
-		switch(templateName) {
-    		case "Voir":
+		switch(template.getNameLowercase()) {
+    		case "voir":
     			poiType = "see";
     			break;
-    		case "Faire":
+    		case "faire":
     			poiType = "do";
     			break;
-    		case "Acheter":
+    		case "acheter":
     			poiType = "buy";
     			break;
-    		case "Manger":
+    		case "manger":
     			poiType = "eat";
     			break;
-    		case "Sortir":
+    		case "sortir":
     			poiType = "drink";
     			break;
-    		case "Se loger":
+    		case "se loger":
     			poiType = "sleep";
     			break;
-    		case "Aller": // Or create new types?
-    		case "Ville":
-    		case "Destination":
-    		case "Représentation diplomatique":
-    		case "Autre":
+    		case "aller": // Or create new types?
+    		case "ville":
+    		case "destination":
+    		case "représentation diplomatique":
+    		case "autre":
     		default:
     			poiType = "listing";
     			break;
 		}
 
     	return new WikivoyagePOI(
-                article,
-                poiType,
-                args.get("nom"), // TODO language
-                args.get("alt"),
-                args.get("adresse"),
-                args.get("directions"),
-                args.get("téléphone"),
-                args.get("numéro gratuit"),
-                args.get("email"),
-                args.get("fax"),
-                args.get("url"),
-                args.get("horaire"),
-                args.get("arrivée"),
-                args.get("départ"),
-                args.get("image"),
-                args.get("prix"),
-                args.get("latitude"),
-                args.get("longitude"),
-                args.get("description"));
-    	// TODO: other parameters like wikipédia, wikidata, facebook, wifi, téléphone portable, handicap, mise à jour
+			article,
+			poiType,
+			template.getArgument("nom"), // TODO language
+			template.getArgument("alt"),
+			template.getArgument("adresse"),
+			template.getArgument("directions"),
+			template.getArgument("téléphone"),
+			template.getArgument("numéro gratuit"),
+			template.getArgument("email"),
+			template.getArgument("fax"),
+			template.getArgument("url"),
+			template.getArgument("horaire"),
+			template.getArgument("arrivée"),
+			template.getArgument("départ"),
+			template.getArgument("image"),
+			template.getArgument("prix"),
+			template.getArgument("latitude"),
+			template.getArgument("longitude"),
+			template.getArgument("description")
+            // TODO: other parameters like wikipédia, wikidata, facebook, wifi, téléphone portable, handicap, mise à jour
+        );
     }
 }

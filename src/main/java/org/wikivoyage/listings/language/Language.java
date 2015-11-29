@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.input.template.TemplateNode;
 
 /**
  * A Language object defines the specificities of a particular language of Wikivoyage.
@@ -28,6 +29,7 @@ public abstract class Language
 
     /**
      * All listings that can be found in this language's Wikivoyage.
+	 * This function should return listing template names in lowercase.
      */
     public abstract HashSet<String> getListingTemplates();
     
@@ -37,10 +39,9 @@ public abstract class Language
     public abstract String getNameElement();
     
     /**
-     * Make a listings' parameters into a WikivoyagePOI object.
+     * Convert listing template into a WikivoyagePOI object.
      */
-    public abstract WikivoyagePOI parseArgumentsDict(
-    		String article, String templateName, HashMap<String, String> args);
+    public abstract WikivoyagePOI parseListingTemplate(String article, TemplateNode template);
 
     /**
      * All available language codes.

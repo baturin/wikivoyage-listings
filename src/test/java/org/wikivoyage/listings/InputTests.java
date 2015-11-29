@@ -31,7 +31,7 @@ public class InputTests {
 		Assert.assertEquals("6-10-3 Roppongi", poi.getAddress());
 		Assert.assertEquals("In Roppongi Hills", poi.getDirections());
 		Assert.assertEquals("+81 3 4333-1234", poi.getPhone());
-		Assert.assertEquals(null, poi.getTollFree());
+		Assert.assertEquals("", poi.getTollFree());
 		Assert.assertEquals("", poi.getEmail()); // TODO decide whether null or "" is desirable, and stick to it
 		Assert.assertEquals("+81 3 4333-8123", poi.getFax());
 		Assert.assertEquals("http://tokyo.grand.hyatt.com/", poi.getUrl());
@@ -147,6 +147,15 @@ public class InputTests {
             "Сейчас торговые ряды так густо завешаны рекламой, что разглядеть в них хоть какую-то " +
             "историческую архитектуру сложно. Внутри тоже ничего не осталось.",
             poi.getDescription()
+        );
+    }
+
+    @Test
+    public void caseInsensitiveListingNames() throws Exception {
+        WikivoyagePOI poi = parseResourceSinglePOI("case-insensitive-templates.wikicode");
+        Assert.assertEquals(
+            "Черниговская областная филармония",
+            poi.getTitle()
         );
     }
 

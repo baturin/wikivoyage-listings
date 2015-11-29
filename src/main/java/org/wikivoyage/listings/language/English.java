@@ -1,9 +1,9 @@
 package org.wikivoyage.listings.language;
 
-import java.util.HashMap;
 import java.util.HashSet;
 
 import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.input.template.TemplateNode;
 
 /**
  * The specificities of the English edition of Wikivoyage.
@@ -37,50 +37,49 @@ public class English extends Language
     }
     
     /**
-     * Make a listings' parameters into a WikivoyagePOI object.
+     * Convert listing template into a WikivoyagePOI object.
      */
-    public WikivoyagePOI parseArgumentsDict(
-    		String article, String templateName, HashMap<String, String> args) {
-
+    public WikivoyagePOI parseListingTemplate(String article, TemplateNode template) {
         // Type
         String poiType;
-        if (templateName.equals("listing")) {
-            if (args.containsKey("type")) {
-                poiType = args.get("type");
+        if (template.getNameLowercase().equals("listing")) {
+            if (template.hasArgument("type")) {
+                poiType = template.getArgument("type");
             } else {
                 poiType = "other";
             }
         } else {
-            poiType = templateName;
+            poiType = template.getNameLowercase();
         }
         
         // Description
         String description = "";
-        if (args.containsKey("description")) {
-            description = args.get("description");
-        } else if (args.containsKey("content")) {
-            description = args.get("content");
+        if (template.hasArgument("description")) {
+            description = template.getArgument("description");
+        } else if (template.hasArgument("content")) {
+            description = template.getArgument("content");
         }
 
     	return new WikivoyagePOI(
-                article,
-                poiType,
-                args.get("name"), // TODO language
-                args.get("alt"),
-                args.get("address"),
-                args.get("directions"),
-                args.get("phone"),
-                args.get("tollFree"),
-                args.get("email"),
-                args.get("fax"),
-                args.get("url"),
-                args.get("hours"),
-                args.get("checkin"),
-                args.get("checkout"),
-                args.get("image"),
-                args.get("price"),
-                args.get("lat"),
-                args.get("long"),
-                description);
+            article,
+            poiType,
+            template.getArgument("name"), // TODO language
+            template.getArgument("alt"),
+            template.getArgument("address"),
+            template.getArgument("directions"),
+            template.getArgument("phone"),
+            template.getArgument("tollFree"),
+            template.getArgument("email"),
+            template.getArgument("fax"),
+            template.getArgument("url"),
+            template.getArgument("hours"),
+            template.getArgument("checkin"),
+            template.getArgument("checkout"),
+            template.getArgument("image"),
+            template.getArgument("price"),
+            template.getArgument("lat"),
+            template.getArgument("long"),
+            description
+        );
     }
 }
