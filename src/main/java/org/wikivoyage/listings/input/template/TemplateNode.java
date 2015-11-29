@@ -8,6 +8,7 @@ import org.sweble.wikitext.parser.nodes.WtTemplate;
 import org.sweble.wikitext.parser.nodes.WtTemplateArgument;
 import org.sweble.wikitext.parser.nodes.WtXmlComment;
 import org.sweble.wikitext.parser.utils.WtRtDataPrinter;
+import org.wikivoyage.listings.utils.UnrecognizeTemplateCounter;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -22,15 +23,17 @@ public class TemplateNode {
     private HashMap<String, String> namedArguments;
     private HashMap<String, String> namedArgumentsLowercase;
     private List<String> positionalArguments;
+    private String languageCode;
 
     private static final Log log = LogFactory.getLog(TemplateNode.class);
 
     private final List<TemplateToStringConverter> templateConverters;
 
-    public TemplateNode(WtTemplate node, List<TemplateToStringConverter> templateConverters)
+    public TemplateNode(String languageCode, WtTemplate node, List<TemplateToStringConverter> templateConverters)
     {
         this.node = node;
         this.templateConverters = templateConverters;
+        this.languageCode = languageCode;
         parseArguments();
         initNamedArgumentsLowercase();
     }
@@ -118,7 +121,7 @@ public class TemplateNode {
     private String convertWtNodeToString(WtNode node)
     {
         if (node instanceof WtTemplate) {
-            TemplateNode templateNode = new TemplateNode((WtTemplate) node, templateConverters);
+            TemplateNode templateNode = new TemplateNode(languageCode, (WtTemplate) node, templateConverters);
 
             for (TemplateToStringConverter parser: templateConverters) {
                 if (templateNode.getNameLowercase().equals(parser.getTemplateName())) {
@@ -127,6 +130,8 @@ public class TemplateNode {
             }
 
             log.debug("Template '" + templateNode.getName() + "' was not parsed");
+            UnrecognizeTemplateCounter.getInstance().addUnrecognizedTemplate(languageCode, templateNode.getName());
+
             return WtRtDataPrinter.print(node);
         } else if (node instanceof WtXmlComment) {
             // HTML comments inside listings are ignored

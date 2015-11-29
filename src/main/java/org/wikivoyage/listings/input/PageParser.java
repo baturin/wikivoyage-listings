@@ -62,7 +62,9 @@ public class PageParser {
     {
         for (WtNode childNode: node) {
             if (childNode instanceof WtTemplate) {
-                TemplateNode template = new TemplateNode((WtTemplate) childNode, language.getTemplateConverters());
+                TemplateNode template = new TemplateNode(
+                    language.getLanguageCode(), (WtTemplate) childNode, language.getTemplateConverters()
+                );
 
                 if (listingTemplates.contains(template.getNameLowercase())) {
                     if (template.hasArgument(language.getNameElement())) {

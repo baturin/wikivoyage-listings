@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wikivoyage.listings.utils.UnrecognizeTemplateCounter;
 
 public class Main {
     private static final Log log = LogFactory.getLog(Main.class);
@@ -77,6 +78,7 @@ public class Main {
                     OutputFormat format = formats.get(cl.outputFormat);
                     generateFileForFormat(inputFilename, cl.outputFilename, format, language);
                 }
+                UnrecognizeTemplateCounter.getInstance().logUnrecognizeTemplatesSummary();
                 log.info("Finished");
             }
         } catch (Exception e) {
