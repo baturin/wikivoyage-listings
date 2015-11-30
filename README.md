@@ -83,3 +83,7 @@ You can also generate this data by yourself if you want. Requirements: Java, Gra
 2. Run `./wikivoyage-listings.sh`, this will show the help
 
 Example: `./wikivoyage-listings.sh -generate -input-latest ru -output-filename ru.csv -output-format csv`
+
+# Data license
+
+All data is under [Creative Commons Attribution-ShareAlike](https://creativecommons.org/licenses/by-sa/3.0/) license. Authors are listed [here](https://en.wikivoyage.org/wiki/Special:RecentChanges), [here](https://ru.wikivoyage.org/wiki/Special:RecentChanges), [here](https://fr.wikivoyage.org/wiki/Special:RecentChanges).
