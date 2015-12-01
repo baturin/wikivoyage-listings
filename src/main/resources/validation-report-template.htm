@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="validationReportApp">
     <head>
         <meta charset="utf-8">
         <link
@@ -19,13 +19,70 @@
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
                 crossorigin="anonymous"
         ></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        <script>
+            angular.module('validationReportApp', [])
+                .controller('ValidationReportController', function() {
+                    this.issues = [
+                        {rows}
+                    ];
+
+                    // Shuffle array, code taken from
+                    // http://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+                    function shuffleArray(array) {
+                        for (var i = array.length - 1; i > 0; i--) {
+                            var j = Math.floor(Math.random() * (i + 1));
+                            var temp = array[i];
+                            array[i] = array[j];
+                            array[j] = temp;
+                        }
+                        return array;
+                    }
+
+                    this.shuffleIssues = function() {
+                        issuesByArticle = {};
+                        for (var i = 0; i < this.issues.length; i++) {
+                            var issue = this.issues[i];
+                            if (!(issue.article in issuesByArticle)) {
+                                issuesByArticle[issue.article] = [];
+                            }
+                            issuesByArticle[issue.article].push(issue);
+                        }
+                        var articleNames = Object.keys(issuesByArticle);
+                        shuffleArray(articleNames);
+                        this.issues = [];
+
+                        for (var i = 0; i < articleNames.length; i++) {
+                            var articleName = articleNames[i];
+                            for (var j = 0; j < issuesByArticle[articleName].length; j++) {
+                                this.issues.push(issuesByArticle[articleName][j]);
+                            }
+                        }
+                    };
+
+                    this.issueUrl = function(issue) {
+                        return (
+                            'https://' + issue.language + '.wikivoyage.org/wiki/' +
+                            encodeURIComponent(issue.article.replace(/ /g,"_"))
+                        );
+                    }
+
+                    this.shuffleIssues();
+                })
+        </script>
         <title>Wikivoyage validation report</title>
     </head>
     <body>
-        <div class="container-fluid">
+        <div class="container-fluid" ng-controller="ValidationReportController as validationReport">
+            Total issues: {{validationReport.issues.length}}
+            <button ng-click="validationReport.shuffleIssues()">Shuffle issues</button>
             <table class="table">
                 <tr><th>Article</th><th>Listing</th><th>Issue</th></tr>
-                {rows}
+                <tr ng-repeat="issue in validationReport.issues">
+                    <td><a href="{{validationReport.issueUrl(issue)}}">{{issue.article}}</a></td>
+                    <td>{{issue.listing}}</td>
+                    <td>{{issue.issue}}</td>
+                </tr>
             </table>
         </div>
     </body>

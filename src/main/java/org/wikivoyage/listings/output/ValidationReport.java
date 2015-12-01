@@ -1,6 +1,7 @@
 package org.wikivoyage.listings.output;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.wikivoyage.listings.entity.WikivoyagePOI;
 import org.wikivoyage.listings.validators.*;
 
@@ -25,10 +26,14 @@ public class ValidationReport implements OutputFormat {
                 for (Validator validator: validators) {
                     String errorMessage = validator.validate(poi);
                     if (errorMessage != null) {
-                        String row = "<tr><td><a href='http://" + poi.getLanguage() + ".wikivoyage.org/wiki/" +
-                                URLEncoder.encode(poi.getArticle().replace(" ", "_"), "UTF-8") + "'>"
-                                + poi.getArticle() + "</a></td><td>" + poi.getTitle() + "</td>" +
-                                "<td>" + errorMessage + "</td></tr>\n";
+                        String row = (
+                            "{" +
+                                "'language': '"  + StringEscapeUtils.escapeJavaScript(poi.getLanguage())  +  "', " +
+                                "'article': '"  + StringEscapeUtils.escapeJavaScript(poi.getArticle())  +  "', " +
+                                "'listing': '" + StringEscapeUtils.escapeJavaScript(poi.getTitle())+ "', " +
+                                "'issue': '" + StringEscapeUtils.escapeJavaScript(errorMessage) + "'" +
+                            "},\n"
+                        );
                         rows.append(row);
                     }
                 }
