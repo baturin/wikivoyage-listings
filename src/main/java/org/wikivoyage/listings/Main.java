@@ -9,9 +9,6 @@ import org.wikivoyage.listings.output.*;
 import org.wikivoyage.listings.utils.FileUtils;
 import org.wikivoyage.listings.utils.FileUtilsException;
 
-import org.wikivoyage.listings.language.english.English;
-import org.wikivoyage.listings.language.Language;
-
 import java.io.*;
 import java.util.Collections;
 import java.util.HashMap;
@@ -44,7 +41,6 @@ public class Main {
         String [] formatNames = formats.keySet().toArray(new String [formats.keySet().size()]);
         cl.parse(args, formatNames);
         fileNames = new FileNames(cl.listingsDir, cl.dumpsCacheDir, cl.workingDir);
-        Language language;
 
         try {
             if (cl.help) {
@@ -56,29 +52,20 @@ public class Main {
                 createWorkingDir();
                 if (cl.inputFile != null) {
                     inputFilename = cl.inputFile;
-                    if (cl.inputLanguage != null) {
-                        language = Languages.create(cl.inputLanguage);
-                    } else {
-                        // Language can not be guessed from filename alone,
-                        // and it was not specified in command line. Just use English.
-                        language = new English();
-                    }
                     log.info("Take POIs from '" + inputFilename + "'");
                 } else {
                     DumpDownloader downloader = new DumpDownloader();
                     if (cl.inputUrl != null) {
                         inputFilename = fileNames.workingDirPath("dump.xml.bz2");
                         downloader.downloadDumpFromUrl(cl.inputUrl, inputFilename);
-                        language = Languages.guessFromUrl(cl.inputUrl);
                     } else {
                         createDumpsCacheDir();
-                        language = Languages.create(cl.inputLatest);
-                        List<String> dumpIds = downloader.listDumps(language.getLanguageCode());
+                        List<String> dumpIds = downloader.listDumps(cl.inputLatest);
                         String latestDumpId = dumpIds.get(0);
 
-                        inputFilename = fileNames.dumpCacheFilename(language.getLanguageCode(), latestDumpId);
+                        inputFilename = fileNames.dumpCacheFilename(cl.inputLatest, latestDumpId);
                         if (!FileUtils.fileExists(inputFilename)) {
-                            String dumpUrl = downloader.dumpUrl(language.getLanguageCode(), latestDumpId);
+                            String dumpUrl = downloader.dumpUrl(cl.inputLatest, latestDumpId);
                             downloader.downloadDumpFromUrl(dumpUrl, inputFilename);
                         } else {
                             log.info("Use cached dump");
@@ -88,7 +75,7 @@ public class Main {
 
                 if (cl.outputFormat != null) {
                     OutputFormat format = formats.get(cl.outputFormat);
-                    generateFileForFormat(inputFilename, cl.outputFilename, format, language);
+                    generateFileForFormat(inputFilename, cl.outputFilename, format);
                 }
                 UnrecognizeTemplateCounter.getInstance().logUnrecognizeTemplatesSummary();
                 log.info("Finished");
@@ -163,7 +150,7 @@ public class Main {
         }
 
         log.info("Parse dump");
-        Iterable<WikivoyagePOI> listingIterable = new DumpListingsIterable(dumpPath, Languages.create(language));
+        Iterable<WikivoyagePOI> listingIterable = new DumpListingsIterable(dumpPath);
 
         for (OutputFormat format: formats.values()) {
             String fileName = fileNames.getListingPath(language, dumpId, format.getDefaultExtension(), false);
@@ -200,10 +187,10 @@ public class Main {
     }
 
     private static void generateFileForFormat(
-        String inputFilename, String outputFilename, OutputFormat format, Language language
+        String inputFilename, String outputFilename, OutputFormat format
     ) throws WriteOutputException, DumpReadException {
         log.info("Parse dump");
-        Iterable<WikivoyagePOI> listingIterable = new DumpListingsIterable(inputFilename, language);
+        Iterable<WikivoyagePOI> listingIterable = new DumpListingsIterable(inputFilename);
         log.info("Save to '" + outputFilename + "'");
         format.write(listingIterable, outputFilename);
     }

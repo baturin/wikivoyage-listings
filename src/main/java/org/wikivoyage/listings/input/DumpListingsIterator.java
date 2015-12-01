@@ -3,22 +3,29 @@ package org.wikivoyage.listings.input;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wikivoyage.listings.entity.DumpArticle;
 import org.wikivoyage.listings.entity.WikivoyagePOI;
 
 import org.wikivoyage.listings.language.Language;
+import org.wikivoyage.listings.language.Languages;
 
 /**
  * Iterate over listings in Wikivoyage database dump
  */
 public class DumpListingsIterator implements Iterator<WikivoyagePOI>, Iterable<WikivoyagePOI> {
-    PageParser pageParser;
-    DumpArticlesIterator articlesIterator;
-    Iterator<WikivoyagePOI> currentArticleListingIterator;
-    WikivoyagePOI currentListing;
+    private static final Log log = LogFactory.getLog(DumpListingsIterator.class);
 
-    public DumpListingsIterator(String filename, Language language) {
+    private PageParser pageParser;
+    private DumpArticlesIterator articlesIterator;
+    private Iterator<WikivoyagePOI> currentArticleListingIterator;
+    private WikivoyagePOI currentListing;
+
+    public DumpListingsIterator(String filename) {
         articlesIterator = new DumpArticlesIterator(filename);
+        log.debug("Detected language code for dump '" + filename + "': " + articlesIterator.getLanguageCode());
+        Language language = Languages.create(articlesIterator.getLanguageCode());
         pageParser = new PageParser(language);
         getNext();
     }

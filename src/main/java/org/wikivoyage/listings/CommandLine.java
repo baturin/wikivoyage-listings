@@ -29,8 +29,6 @@ public class CommandLine {
     public String inputUrl;
     @Parameter(names="-input-latest")
     public String inputLatest;
-    @Parameter(names="-input-lang")
-    public String inputLanguage;
 
     // Output options
     @Parameter(names="-output-filename")
@@ -132,7 +130,6 @@ public class CommandLine {
         System.out.println("-input-url <url>: download Wikivoyage dump from specified URL");
         System.out.println("-input-latest (en|ru|fr): download latest Wikivoyage dump for specified language");
         System.out.println("-input-file <filename>: use Wikivoyage dump from file");
-        System.out.println("-input-lang (en|ru|fr): specify language for dump file (use with -input-file)");
         System.out.println("The utility accepts XML dump, packed with bzip2 or not.");
         System.out.println();
         System.out.println("*** Output configuration ***");

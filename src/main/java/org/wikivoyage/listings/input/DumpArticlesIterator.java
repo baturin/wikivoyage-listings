@@ -19,8 +19,9 @@ import java.util.NoSuchElementException;
  * Iterate over articles in Wikivoyage database dump
  */
 public class DumpArticlesIterator implements Iterator<DumpArticle> {
-    XMLStreamReader reader;
-    DumpArticle currentArticle;
+    private XMLStreamReader reader;
+    private DumpArticle currentArticle;
+    private String languageCode;
 
     public DumpArticlesIterator(String filename) throws DumpReadException
     {
@@ -36,6 +37,9 @@ public class DumpArticlesIterator implements Iterator<DumpArticle> {
         } catch (XMLStreamException e) {
             throw  new DumpReadException("Failed to create XML stream for Wikivoyage dump", e);
         }
+        // first, read language code
+        readLanguageCode();
+        // then, try to read the first article
         getNext();
     }
 
@@ -59,6 +63,72 @@ public class DumpArticlesIterator implements Iterator<DumpArticle> {
     @Override
     public void remove() {
         throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Get language code of the dump. If language code was not detected, return empty string.
+     */
+    public String getLanguageCode()
+    {
+        return languageCode;
+    }
+
+    /**
+     * Read language code from the dump, put it to languageCode variable.
+     *
+     * Important: this function must be called before any of "getNext" function calls,
+     * because data about language always precedes articles .
+     */
+    private void readLanguageCode() throws DumpReadException {
+        boolean inSiteInfo = false;
+        boolean inDbName = false;
+        StringBuilder dbNameBuffer = new StringBuilder(128);
+
+        // by default, consider empty string
+        languageCode = "";
+
+        try {
+            int event = reader.getEventType();
+
+            while (true) {
+                String tagName;
+
+                switch (event) {
+                    case XMLStreamConstants.START_ELEMENT:
+                        tagName = reader.getLocalName();
+                        if (tagName.equals("siteinfo")) {
+                            inSiteInfo = true;
+                        } else if (tagName.equals("dbname") && inSiteInfo) {
+                            inDbName = true;
+                        }
+                        break;
+                    case XMLStreamConstants.CHARACTERS:
+                        if (inDbName) {
+                            dbNameBuffer.append(reader.getText());
+                        }
+                        break;
+                    case XMLStreamConstants.END_ELEMENT:
+                        tagName = reader.getLocalName();
+                        if (tagName.equals("siteinfo")) {
+                            inSiteInfo = false;
+                        } else if (tagName.equals("dbname")) {
+                            languageCode = dbNameBuffer.substring(0, 2);
+                            return;
+                        }
+                        break;
+                }
+
+                if (!reader.hasNext()) {
+                    break;
+                }
+
+                event = reader.next();
+            }
+        } catch (XMLStreamException e) {
+            throw new DumpReadException(
+                "Failed to read language code from Wikivoyage dump: error when reading XML", e
+            );
+        }
     }
 
     /**

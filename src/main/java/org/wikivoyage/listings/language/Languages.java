@@ -40,20 +40,4 @@ public class Languages {
         }
         return codes;
     }
-
-    /**
-     * Try to guess the language from an URL.
-     * Quite unreliable, but should at least work for the standard dump download URLs.
-     */
-    public static Language guessFromUrl(String url) {
-    	// Return the first language whose two letters are in the URL.
-        for (Language lang: languages) {
-            if (url.contains(lang.getLanguageCode())) {
-                return lang;
-            }
-        }
-
-    	// Could not guess, return default.
-    	return defaultLanguage;
-    }
 }

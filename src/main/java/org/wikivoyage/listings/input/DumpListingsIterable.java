@@ -11,17 +11,15 @@ import org.wikivoyage.listings.language.Language;
  */
 public class DumpListingsIterable implements Iterable<WikivoyagePOI> {
     String filename;
-    Language language;
 
-    public DumpListingsIterable(String filename, Language language)
+    public DumpListingsIterable(String filename)
     {
         this.filename = filename;
-        this.language = language;
     }
 
     public Iterator<WikivoyagePOI> iterator() {
         try {
-            return new DumpListingsIterator(this.filename, language);
+            return new DumpListingsIterator(this.filename);
         } catch (Exception e) {
             throw new DumpReadException("Failed to create listings iterator for Wikivoyage dump", e);
         }
