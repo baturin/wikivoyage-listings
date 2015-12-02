@@ -13,4 +13,9 @@ public class WebsiteURLValidator implements Validator {
         }
         return null;
     }
+
+    @Override
+    public String getIssueType() {
+        return "Website URL";
+    }
 }

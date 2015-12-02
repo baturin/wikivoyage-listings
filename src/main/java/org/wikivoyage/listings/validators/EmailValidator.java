@@ -12,4 +12,9 @@ public class EmailValidator implements Validator {
         }
         return null;
     }
+
+    @Override
+    public String getIssueType() {
+        return "E-mail";
+    }
 }

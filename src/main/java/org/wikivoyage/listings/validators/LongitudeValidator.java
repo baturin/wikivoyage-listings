@@ -14,4 +14,9 @@ public class LongitudeValidator implements Validator {
         }
         return null;
     }
+
+    @Override
+    public String getIssueType() {
+        return "Longitude";
+    }
 }

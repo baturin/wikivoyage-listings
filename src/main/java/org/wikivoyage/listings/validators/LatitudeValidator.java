@@ -14,4 +14,9 @@ public class LatitudeValidator implements Validator {
         }
         return null;
     }
+
+    @Override
+    public String getIssueType() {
+        return "Latitude";
+    }
 }

@@ -4,4 +4,5 @@ import org.wikivoyage.listings.entity.WikivoyagePOI;
 
 public interface Validator {
     String validate(WikivoyagePOI poi);
+    String getIssueType();
 }

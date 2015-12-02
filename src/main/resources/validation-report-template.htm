@@ -27,6 +27,21 @@
                         {rows}
                     ];
 
+                    this.issueTypes = [];
+
+                    for (var i = 0; i < this.issues.length; i++) {
+                        var issueType = this.issues[i].issueType;
+                        if (this.issueTypes.indexOf(issueType) == -1) {
+                            this.issueTypes.push(issueType);
+                        }
+                    }
+
+                    this.issueTypeFilter = {};
+
+                    for (var i = 0; i < this.issueTypes.length; i++) {
+                        this.issueTypeFilter[this.issueTypes[i]] = true;
+                    }
+
                     // Shuffle array, code taken from
                     // http://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
                     function shuffleArray(array) {
@@ -67,23 +82,33 @@
                         );
                     }
 
+                    self = this
+                    this.filterType = function(issue) {
+                        return self.issueTypeFilter[issue.issueType];
+                    }
+
                     this.shuffleIssues();
                 })
         </script>
         <title>Wikivoyage validation report</title>
     </head>
     <body>
-        <div class="container-fluid" ng-controller="ValidationReportController as validationReport">
-            Total issues: {{validationReport.issues.length}}
+    <div class="container-fluid" ng-controller="ValidationReportController as validationReport">
+        <div style="padding-bottom: 20px;">
+            Total issues: {{validationReport.issues.length}} |
+            <label class="checkbox-inline" ng-repeat="issueType in validationReport.issueTypes">
+                <input type="checkbox" ng-model="validationReport.issueTypeFilter[issueType]"> {{issueType}}
+            </label> |
             <button ng-click="validationReport.shuffleIssues()">Shuffle issues</button>
-            <table class="table">
-                <tr><th>Article</th><th>Listing</th><th>Issue</th></tr>
-                <tr ng-repeat="issue in validationReport.issues">
-                    <td><a href="{{validationReport.issueUrl(issue)}}">{{issue.article}}</a></td>
-                    <td>{{issue.listing}}</td>
-                    <td>{{issue.issue}}</td>
-                </tr>
-            </table>
         </div>
+        <table class="table">
+            <tr><th>Article</th><th>Listing</th><th>Issue</th></tr>
+            <tr ng-repeat="issue in validationReport.issues | filter:validationReport.filterType">
+                <td><a href="{{validationReport.issueUrl(issue)}}">{{issue.article}}</a></td>
+                <td>{{issue.listing}}</td>
+                <td>{{issue.issue}}</td>
+            </tr>
+        </table>
+    </div>
     </body>
 </html>

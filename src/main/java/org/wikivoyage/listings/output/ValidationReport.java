@@ -8,7 +8,6 @@ import org.wikivoyage.listings.validators.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URLEncoder;
 
 public class ValidationReport implements OutputFormat {
     @Override
@@ -31,7 +30,8 @@ public class ValidationReport implements OutputFormat {
                                 "'language': '"  + StringEscapeUtils.escapeJavaScript(poi.getLanguage())  +  "', " +
                                 "'article': '"  + StringEscapeUtils.escapeJavaScript(poi.getArticle())  +  "', " +
                                 "'listing': '" + StringEscapeUtils.escapeJavaScript(poi.getTitle())+ "', " +
-                                "'issue': '" + StringEscapeUtils.escapeJavaScript(errorMessage) + "'" +
+                                "'issue': '" + StringEscapeUtils.escapeJavaScript(errorMessage) + "', " +
+                                "'issueType': '" + StringEscapeUtils.escapeJavaScript(validator.getIssueType()) + "'" +
                             "},\n"
                         );
                         rows.append(row);
