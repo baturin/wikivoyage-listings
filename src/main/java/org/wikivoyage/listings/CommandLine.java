@@ -18,6 +18,8 @@ public class CommandLine {
     public String dumpsCacheDir;
     @Parameter(names="-working-dir")
     public String workingDir;
+    @Parameter(names="-do-not-use-intermediate-file")
+    public boolean doNotUseIntermediateFile;
 
     // *** Single file generation commands and options ***
     @Parameter(names="-generate")

@@ -1,9 +1,11 @@
 package org.wikivoyage.listings.entity;
 
+import java.io.Serializable;
+
 /**
  * Entity representing Wikivoyage article in dump file
  */
-public class DumpArticle {
+public class DumpArticle implements Serializable {
     String title;
     String text;
 

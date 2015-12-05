@@ -1,9 +1,7 @@
 package org.wikivoyage.listings;
 
 import org.wikivoyage.listings.entity.WikivoyagePOI;
-import org.wikivoyage.listings.input.DumpDownloader;
-import org.wikivoyage.listings.input.DumpListingsIterable;
-import org.wikivoyage.listings.input.DumpReadException;
+import org.wikivoyage.listings.input.*;
 import org.wikivoyage.listings.language.Languages;
 import org.wikivoyage.listings.output.*;
 import org.wikivoyage.listings.utils.FileUtils;
@@ -113,7 +111,7 @@ public class Main {
             for (String dumpId: dumpIds) {
                 log.info("Processing dump " + dumpId);
                 try {
-                    processDump(downloader, language, latestDumpId, dumpId, formats);
+                    processDump(downloader, language, latestDumpId, dumpId, formats, !cl.doNotUseIntermediateFile);
                 } catch (Exception e) {
                     log.info("Failed to create dump " + dumpId);
                     log.debug("Exception: ", e);
@@ -125,8 +123,8 @@ public class Main {
 
     private static void processDump(
         DumpDownloader downloader, String language, String latestDumpId, String dumpId,
-        HashMap<String, OutputFormat> formats
-    ) throws IOException, FileUtilsException, InterruptedException {
+        HashMap<String, OutputFormat> formats, boolean useIntermediateFile
+    ) throws IOException, FileUtilsException, InterruptedException, WriteOutputException {
         boolean allFileExists = true;
         for (OutputFormat format: formats.values()) {
             String fileName = fileNames.getListingPath(language, dumpId, format.getDefaultExtension(), true);
@@ -149,10 +147,22 @@ public class Main {
             downloader.downloadDumpFromUrl(dumpUrl, dumpPath);
         }
 
-        log.info("Parse dump");
         Iterable<WikivoyagePOI> listingIterable = new DumpListingsIterable(dumpPath);
 
+        if (useIntermediateFile) {
+            log.info("Write intermediate file with parsed listings");
+            String javaSerialFile = fileNames.workingDirPath("serialized-pois.bin");
+            FileUtils.removeFile(javaSerialFile);
+            new JavaSerializedObject().write(listingIterable, javaSerialFile);
+            listingIterable = new JavaSerializedIterable(javaSerialFile);
+        }
+
+
         for (OutputFormat format: formats.values()) {
+            log.info(
+                "Write output file for language " + language +
+                ", dump " + dumpId + ", format " + format.getDefaultExtension().substring(1)
+            );
             String fileName = fileNames.getListingPath(language, dumpId, format.getDefaultExtension(), false);
             try {
                 format.write(listingIterable, fileName);

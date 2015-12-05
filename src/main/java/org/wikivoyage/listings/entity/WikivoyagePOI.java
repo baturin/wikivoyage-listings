@@ -1,9 +1,11 @@
 package org.wikivoyage.listings.entity;
 
+import java.io.Serializable;
+
 /**
  * Entity representing a Wikivoyage listing.
  */
-public class WikivoyagePOI {
+public class WikivoyagePOI implements Serializable {
 	
     /**
      * Wikivoyage article in which the POI was found, for instance "Tokyo/Roppongi".
