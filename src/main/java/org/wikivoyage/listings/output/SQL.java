@@ -17,11 +17,12 @@ public class SQL implements OutputFormat{
                 FileWriter fwriter = new FileWriter(outputFilename);
                 writer = new BufferedWriter(fwriter);
                 writer.write(
-                    "DROP TABlE IF EXISTS wikivoyage_pois;\n"
+                    "DROP TABLE IF EXISTS wikivoyage_listings;\n"
                 );
                 writer.write(
-                    "CREATE TABLE wikivoyage_pois (" +
+                    "CREATE TABLE wikivoyage_listings (" +
                             "title VARCHAR(128), " +
+                            "language VARCHAR(2), " +
                             "article VARCHAR(128), " +
                             "type VARCHAR(64), " +
                             "description VARCHAR(4096), " +
@@ -32,8 +33,9 @@ public class SQL implements OutputFormat{
 
                 for (WikivoyagePOI poi : pois) {
                     writer.write(
-                        "INSERT INTO wikivoyage_pois (" +
+                        "INSERT INTO wikivoyage_listings (" +
                                 "title, " +
+                                "language, " +
                                 "article, " +
                                 "type, " +
                                 "description, " +
@@ -42,6 +44,7 @@ public class SQL implements OutputFormat{
                         ") " +
                         "VALUES (" +
                                 escape(poi.getTitle()) + ", " +
+                                escape(poi.getLanguage()) + ", " +
                                 escape(poi.getArticle()) + ", " +
                                 escape(poi.getType()) + ", " +
                                 escape(poi.getDescription())+ ", " +
