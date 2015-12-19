@@ -6,8 +6,20 @@ import org.wikivoyage.listings.entity.WikivoyagePOI;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
-public class SQL implements OutputFormat{
+public class SQL implements OutputFormat {
+    private DecimalFormat positionalDataFormat;
+
+    public SQL()
+    {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.GERMAN);
+        symbols.setDecimalSeparator('.');
+        symbols.setGroupingSeparator('.');
+        positionalDataFormat = new DecimalFormat("#.########", symbols);
+    }
 
     @Override
     public void write(Iterable<WikivoyagePOI> pois, String outputFilename) throws WriteOutputException {
@@ -21,13 +33,14 @@ public class SQL implements OutputFormat{
                 );
                 writer.write(
                     "CREATE TABLE wikivoyage_listings (" +
+                            "id INTEGER PRIMARY KEY, " +
                             "title VARCHAR(128), " +
                             "language VARCHAR(2), " +
                             "article VARCHAR(128), " +
                             "type VARCHAR(64), " +
                             "description VARCHAR(4096), " +
                             "latitude DECIMAL(10, 8), " +
-                            "longitude DECIMAL(10, 8)" +
+                            "longitude DECIMAL(11, 8)" +
                     ");\n"
                 );
 
@@ -48,8 +61,8 @@ public class SQL implements OutputFormat{
                                 escape(poi.getArticle()) + ", " +
                                 escape(poi.getType()) + ", " +
                                 escape(poi.getDescription())+ ", " +
-                                escape(poi.getLatitude()) + ", " +
-                                escape(poi.getLongitude()) +
+                                getPositionalValue(poi.getLatitude(), 90.0) + ", " +
+                                getPositionalValue(poi.getLongitude(), 180.0) +
                         ");\n");
                 }
             } finally {
@@ -59,6 +72,24 @@ public class SQL implements OutputFormat{
             }
         } catch (IOException e) {
             throw new WriteOutputException();
+        }
+    }
+
+    private String getPositionalValue(String rawValue, double boundary)
+    {
+        if (rawValue == null || rawValue.equals("")) {
+            return "NULL";
+        }
+
+        try {
+            Double doubleValue = Double.parseDouble(rawValue);
+            if (doubleValue >= -boundary && doubleValue <= boundary) {
+                return escape(positionalDataFormat.format(doubleValue));
+            } else {
+                return "NULL";
+            }
+        } catch (NumberFormatException e) {
+            return "NULL";
         }
     }
 
