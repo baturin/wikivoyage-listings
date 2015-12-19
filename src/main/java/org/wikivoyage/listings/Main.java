@@ -59,6 +59,8 @@ public class Main {
                     } else {
                         createDumpsCacheDir();
                         List<String> dumpIds = downloader.listDumps(cl.inputLatest);
+                        Collections.sort(dumpIds);
+                        Collections.reverse(dumpIds);
                         String latestDumpId = dumpIds.get(0);
 
                         inputFilename = fileNames.dumpCacheFilename(cl.inputLatest, latestDumpId);
