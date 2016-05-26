@@ -22,6 +22,7 @@ public class WikivoyagePOI implements Serializable {
      */
     private String title;
     private String alt;
+    private String wikidata;
     private String address;
     private String directions;
     private String phone;
@@ -44,7 +45,7 @@ public class WikivoyagePOI implements Serializable {
     private String language;
 
     public WikivoyagePOI(
-        String article, String type, String title, String alt, String address, String directions,
+        String article, String type, String title, String alt, String wikidata, String address, String directions,
         String phone, String tollFree, String email, String fax, String url,
         String hours, String checkIn, String checkOut, String image, String price,
         String latitude, String longitude, String description, String language
@@ -52,6 +53,7 @@ public class WikivoyagePOI implements Serializable {
         this.article = article;
         this.type = type;
         this.title = title;
+        this.wikidata = wikidata;
         this.alt = alt;
         this.address = address;
         this.directions = directions;
@@ -87,6 +89,10 @@ public class WikivoyagePOI implements Serializable {
     public String getAlt() {
 		return alt;
 	}
+    
+    public String getWikidata() {
+    	return wikidata;
+    }
 
 	public String getAddress() {
 		return address;

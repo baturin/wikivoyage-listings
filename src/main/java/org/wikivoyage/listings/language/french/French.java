@@ -93,6 +93,7 @@ public class French implements Language
 			poiType,
 			template.getArgument("nom"),
 			template.getArgument("alt"),
+            template.getArgument("wikidata"),
 			template.getArgument("adresse"),
 			template.getArgument("directions"),
 			template.getArgument("téléphone"),

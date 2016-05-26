@@ -73,6 +73,7 @@ public class English implements Language
             poiType,
             template.getArgument("name"),
             template.getArgument("alt"),
+            template.getArgument("wikidata"),
             template.getArgument("address"),
             template.getArgument("directions"),
             template.getArgument("phone"),

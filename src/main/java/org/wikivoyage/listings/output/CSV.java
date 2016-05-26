@@ -35,6 +35,7 @@ public class CSV implements OutputFormat {
                 		"type" + SEPARATOR +
                 		"title" + SEPARATOR +
                 		"alt" + SEPARATOR +
+                		"wikidata" + SEPARATOR +
                 		"address" + SEPARATOR +
                 		"directions" + SEPARATOR +
                 		"phone" + SEPARATOR +
@@ -57,6 +58,7 @@ public class CSV implements OutputFormat {
                     writer.write(foolproof(poi.getType()) + SEPARATOR);
                     writer.write(foolproof(poi.getTitle()) + SEPARATOR);
                     writer.write(foolproof(poi.getAlt()) + SEPARATOR);
+                    writer.write(foolproof(poi.getWikidata()) + SEPARATOR);
                     writer.write(foolproof(poi.getAddress()) + SEPARATOR);
                     writer.write(foolproof(poi.getDirections()) + SEPARATOR);
                     writer.write(foolproof(poi.getPhone()) + SEPARATOR);
