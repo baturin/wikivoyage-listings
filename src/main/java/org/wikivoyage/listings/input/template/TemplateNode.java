@@ -50,7 +50,8 @@ public class TemplateNode {
 
     public String getArgument(String name)
     {
-        return namedArgumentsLowercase.get(name.toLowerCase());
+    	String value = namedArgumentsLowercase.get(name.toLowerCase());
+        return value != null ? value : "";
     }
 
     public boolean hasArgument(String name)
