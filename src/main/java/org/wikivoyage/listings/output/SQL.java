@@ -29,6 +29,10 @@ public class SQL implements OutputFormat {
                 FileWriter fwriter = new FileWriter(outputFilename);
                 writer = new BufferedWriter(fwriter);
                 writer.write(
+                	"PRAGMA synchronous=OFF;\n" + // These PRAGMAs make loading thousand times faster.
+                    "PRAGMA count_changes=OFF;\n" +
+                    "PRAGMA journal_mode=MEMORY;\n" +
+                    "PRAGMA temp_store=MEMORY;\n" +
                     "DROP TABLE IF EXISTS wikivoyage_listings;\n"
                 );
                 writer.write(
@@ -38,6 +42,8 @@ public class SQL implements OutputFormat {
                             "language VARCHAR(2), " +
                             "article VARCHAR(128), " +
                             "type VARCHAR(64), " +
+                            "wikidata VARCHAR(64), " +
+                            "wikipedia VARCHAR(64), " +
                             "description VARCHAR(4096), " +
                             "latitude DECIMAL(10, 8), " +
                             "longitude DECIMAL(11, 8)" +
@@ -51,6 +57,8 @@ public class SQL implements OutputFormat {
                                 "language, " +
                                 "article, " +
                                 "type, " +
+                                "wikidata, " +
+                                "wikipedia, " +
                                 "description, " +
                                 "latitude, " +
                                 "longitude" +
@@ -60,6 +68,8 @@ public class SQL implements OutputFormat {
                                 escape(poi.getLanguage()) + ", " +
                                 escape(poi.getArticle()) + ", " +
                                 escape(poi.getType()) + ", " +
+                                escape(poi.getWikidata()) + ", " +
+                                escape(poi.getWikipedia()) + ", " +
                                 escape(poi.getDescription())+ ", " +
                                 getPositionalValue(poi.getLatitude(), 90.0) + ", " +
                                 getPositionalValue(poi.getLongitude(), 180.0) +

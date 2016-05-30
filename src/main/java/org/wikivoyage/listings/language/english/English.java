@@ -74,6 +74,7 @@ public class English implements Language
             template.getArgument("name"),
             template.getArgument("alt"),
             template.getArgument("wikidata"),
+            "", // No Wikipedia property on English Wikivoyage
             template.getArgument("address"),
             template.getArgument("directions"),
             template.getArgument("phone"),
@@ -88,6 +89,9 @@ public class English implements Language
             template.getArgument("price"),
             template.getArgument("lat"),
             template.getArgument("long"),
+			"", // No Wi-Fi property on English Wikivoyage
+			"", // No accessibility property on English Wikivoyage
+			template.getArgument("mise à jour"),
             description,
             getLanguageCode()
         );
