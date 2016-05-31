@@ -11,6 +11,7 @@ public class OutputTests {
 			"Mori Art Museum",
 			"森美術館",
 			"Q4410434",
+			"",
 			"Mori Tower, 53F",
 			"At the left of the Mori Tower building, climb the spiral stairs and walk through the elevated hallway",
 			"+81 3 5777-8600",
@@ -25,6 +26,9 @@ public class OutputTests {
 			"Around 1500¥ depending on the exhibition",
 			"35.660901",
 			"139.729424",
+			"",
+			"",
+			"",
 			"This impressive art gallery hosts special exhibitions. " +
 			"The museum ticket includes admission to Tokyo City View. " +
 			"The '''[http://roppongihills.com/jp/macg/ Mori Arts Center Gallery]''' " +

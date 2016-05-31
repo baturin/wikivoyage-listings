@@ -94,6 +94,7 @@ public class French implements Language
 			template.getArgument("nom"),
 			template.getArgument("alt"),
             template.getArgument("wikidata"),
+            template.getArgument("wikipédia"),
 			template.getArgument("adresse"),
 			template.getArgument("directions"),
 			template.getArgument("téléphone"),
@@ -108,6 +109,9 @@ public class French implements Language
 			template.getArgument("prix"),
 			template.getArgument("latitude"),
 			template.getArgument("longitude"),
+			template.getArgument("wifi"),
+			template.getArgument("handicap"),
+			template.getArgument("mise à jour"),
 			template.getArgument("description"),
             getLanguageCode()
             // TODO: other parameters like wikipédia, wikidata, facebook, wifi, téléphone portable, handicap, mise à jour

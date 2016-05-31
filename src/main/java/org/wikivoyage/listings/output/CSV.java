@@ -36,6 +36,7 @@ public class CSV implements OutputFormat {
                 		"title" + SEPARATOR +
                 		"alt" + SEPARATOR +
                 		"wikidata" + SEPARATOR +
+                		"wikipedia" + SEPARATOR +
                 		"address" + SEPARATOR +
                 		"directions" + SEPARATOR +
                 		"phone" + SEPARATOR +
@@ -50,6 +51,9 @@ public class CSV implements OutputFormat {
                 		"price" + SEPARATOR +
                 		"latitude" + SEPARATOR +
                 		"longitude" + SEPARATOR +
+                		"wifi" + SEPARATOR +
+                		"accessibility" + SEPARATOR +
+                		"lastEdit" + SEPARATOR +
                 		"description" + NEW_LINE);
                 
                 // Write each POI.
@@ -59,6 +63,7 @@ public class CSV implements OutputFormat {
                     writer.write(foolproof(poi.getTitle()) + SEPARATOR);
                     writer.write(foolproof(poi.getAlt()) + SEPARATOR);
                     writer.write(foolproof(poi.getWikidata()) + SEPARATOR);
+                    writer.write(foolproof(poi.getWikipedia()) + SEPARATOR);
                     writer.write(foolproof(poi.getAddress()) + SEPARATOR);
                     writer.write(foolproof(poi.getDirections()) + SEPARATOR);
                     writer.write(foolproof(poi.getPhone()) + SEPARATOR);
@@ -73,6 +78,9 @@ public class CSV implements OutputFormat {
                     writer.write(foolproof(poi.getPrice()) + SEPARATOR);
                     writer.write(foolproof(poi.getLatitude()) + SEPARATOR);
                     writer.write(foolproof(poi.getLongitude()) + SEPARATOR);
+                    writer.write(foolproof(poi.getWifi()) + SEPARATOR);
+                    writer.write(foolproof(poi.getAccessibility()) + SEPARATOR);
+                    writer.write(foolproof(poi.getLastEdit()) + SEPARATOR);
                     writer.write(foolproof(poi.getDescription()) + NEW_LINE);
                 }
             } finally {
