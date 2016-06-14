@@ -24,6 +24,7 @@ public class French implements Language
     /**
      * All listings that can be found in the French edition of Wikivoyage.
      */
+    @Override
     public HashSet<String> getListingTemplates()
     {
     	HashSet<String> listingTemplates = new HashSet<>();
@@ -48,6 +49,7 @@ public class French implements Language
     /**
      * The name of the place, which is the only strictly required element.
      */
+    @Override
     public String getNameElement() {
     		return "nom";
     }
@@ -55,6 +57,7 @@ public class French implements Language
     /**
      * Convert listing template into a WikivoyagePOI object.
      */
+    @Override
     public WikivoyagePOI parseListingTemplate(String article, TemplateNode template) {
 
         // Type

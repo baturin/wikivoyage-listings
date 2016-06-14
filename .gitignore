@@ -7,3 +7,8 @@
 /dumps-cache
 /listings
 /debug.log
+/*.csv
+/*.gpx
+/*.sql
+/*.sqlitedb
+/*.jar
