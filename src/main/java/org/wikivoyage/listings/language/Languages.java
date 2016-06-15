@@ -14,6 +14,7 @@ public class Languages {
     private static Language [] languages = {
         new English(),
         new Russian(),
+        new French(),
         new German()
     };
     private static Language defaultLanguage = languages[0];
