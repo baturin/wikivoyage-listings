@@ -4,22 +4,22 @@ import org.wikivoyage.listings.entity.WikivoyagePOI;
 import org.wikivoyage.listings.utils.XMLSimpleNode;
 import org.wikivoyage.listings.utils.XMLSimpleNodeException;
 
-public class OsmXml extends NavigationXMLOutputFormat {
+public class Xml extends NavigationXMLOutputFormat {
     private static Integer nodeId = 0;
     private boolean userDefined;
 
-    public OsmXml(boolean userDefined) {
+    public Xml(boolean userDefined) {
         this.userDefined = userDefined;
     }
 
     public XMLSimpleNode createXml(WikivoyagePOI[] pois) throws XMLSimpleNodeException
     {
-        XMLSimpleNode osmNode = new XMLSimpleNode("osm")
+        XMLSimpleNode genericNode = new XMLSimpleNode("generic")
                 .attrib("version", "0.5")
                 .attrib("generator", "wikivoyage-pois-converter");
 
         for (WikivoyagePOI poi: pois) {
-            XMLSimpleNode poiNode = new XMLSimpleNode(osmNode, "node")
+            XMLSimpleNode poiNode = new XMLSimpleNode(genericNode, "node")
                     .attrib("id", nodeId.toString())
                     .attrib("visible", "true")
                     .attrib("article", poi.getArticle())
@@ -28,7 +28,7 @@ public class OsmXml extends NavigationXMLOutputFormat {
                     .attrib("alt", poi.getAlt())
                     .attrib("wikidata", poi.getWikidata())
                     .attrib("wikipedia", poi.getWikipedia())
-                    .attrib("address", poi.getAddress()))
+                    .attrib("address", poi.getAddress())
                     .attrib("directions", poi.getDirections())
                     .attrib("phone", poi.getPhone())
                     .attrib("tollFree", poi.getTollFree())
@@ -57,7 +57,7 @@ public class OsmXml extends NavigationXMLOutputFormat {
             addTagNode(poiNode, "description", poi.getDescription());
         }
 
-        return osmNode;
+        return genericNode;
     }
 
     private static void addTagNode(XMLSimpleNode node, String name, String value)

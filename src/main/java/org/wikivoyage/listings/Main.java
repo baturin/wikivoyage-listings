@@ -26,6 +26,7 @@ public class Main {
         formats.put("csv", new CSV());
         formats.put("osmand-xml", new OsmXml(false));
         formats.put("osmand-xml-user-defined", new OsmXml(true));
+        formats.put("xml", new Xml(true));
         formats.put("obf", new OBF(false, "tmp", "tmp/pois.xml"));
         formats.put("obf-user-defined", new OBF(true, "tmp", "tmp/pois.xml"));
         formats.put("sql", new SQL());
