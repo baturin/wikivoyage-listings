@@ -8,10 +8,6 @@ public class Xml extends NavigationXMLOutputFormat {
     private static Integer nodeId = 0;
     private boolean userDefined;
 
-    public Xml(boolean userDefined) {
-        this.userDefined = userDefined;
-    }
-
     public XMLSimpleNode createXml(WikivoyagePOI[] pois) throws XMLSimpleNodeException
     {
         XMLSimpleNode genericNode = new XMLSimpleNode("generic")
@@ -48,11 +44,6 @@ public class Xml extends NavigationXMLOutputFormat {
                     .attrib("description", poi.getDescription());
             nodeId++;
 
-            if (!userDefined) {
-                addTagNode(poiNode, "wikivoyage", poi.getType());
-            } else {
-                addTagNode(poiNode, "user_defined", "user_defined");
-            }
             addTagNode(poiNode, "name", poi.getTitle());
             addTagNode(poiNode, "description", poi.getDescription());
         }
@@ -67,10 +58,6 @@ public class Xml extends NavigationXMLOutputFormat {
 
     public String getDefaultExtension()
     {
-        if (userDefined) {
-            return ".user-defined.xml";
-        } else {
-            return ".xml";
-        }
+        return "generic.xml";
     }
 }
