@@ -6,7 +6,6 @@ import org.wikivoyage.listings.utils.XMLSimpleNodeException;
 
 public class Xml extends NavigationXMLOutputFormat {
     private static Integer nodeId = 0;
-    private boolean userDefined;
 
     public XMLSimpleNode createXml(WikivoyagePOI[] pois) throws XMLSimpleNodeException
     {
