@@ -17,7 +17,6 @@ public class Xml extends NavigationXMLOutputFormat {
         for (WikivoyagePOI poi: pois) {
             XMLSimpleNode poiNode = new XMLSimpleNode(genericNode, "node")
                     .attrib("id", nodeId.toString())
-                    .attrib("visible", "true")
                     .attrib("article", poi.getArticle())
                     .attrib("type", poi.getType())
                     .attrib("title", poi.getTitle())
