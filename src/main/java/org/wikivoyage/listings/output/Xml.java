@@ -7,9 +7,9 @@ import org.wikivoyage.listings.utils.XMLSimpleNodeException;
 public class Xml extends NavigationXMLOutputFormat {
     private static Integer nodeId = 0;
 
-    public XMLSimpleNode createXml(WikivoyagePOI[] pois) throws XMLSimpleNodeException
+    public XMLSimpleNode createXml(WikivoyagePOI[] pois, String dumpDate) throws XMLSimpleNodeException
     {
-        XMLSimpleNode genericNode = new XMLSimpleNode("generic")
+        XMLSimpleNode genericNode = new XMLSimpleNode("wikivoyage", dumpDate)
                 .attrib("version", "0.5")
                 .attrib("generator", "wikivoyage-pois-converter");
 
@@ -41,9 +41,6 @@ public class Xml extends NavigationXMLOutputFormat {
                     .attrib("lastEdit", poi.getLastEdit())
                     .attrib("description", poi.getDescription());
             nodeId++;
-
-            addTagNode(poiNode, "name", poi.getTitle());
-            addTagNode(poiNode, "description", poi.getDescription());
         }
 
         return genericNode;

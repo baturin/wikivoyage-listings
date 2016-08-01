@@ -6,9 +6,9 @@ import org.wikivoyage.listings.utils.XMLSimpleNodeException;
 
 public class GPX extends NavigationXMLOutputFormat {
     @Override
-    public XMLSimpleNode createXml(WikivoyagePOI[] pois) throws XMLSimpleNodeException
+    public XMLSimpleNode createXml(WikivoyagePOI[] pois, String dumpDate) throws XMLSimpleNodeException
     {
-        XMLSimpleNode gpxNode = new XMLSimpleNode("gpx")
+        XMLSimpleNode gpxNode = new XMLSimpleNode("gpx", dumpDate)
                 .attrib("version", "1.1")
                 .attrib("creator", "wikivoyage-pois-converter")
                 .attrib("xmlns", "http://www.topografix.com/GPX/1/1")

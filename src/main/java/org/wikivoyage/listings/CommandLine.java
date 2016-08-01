@@ -104,7 +104,8 @@ public class CommandLine {
             }
             if (!Arrays.asList(allowedFormats).contains(outputFormat)) {
                 throw new ParameterException(
-                    "Output format '" + outputFormat + "' is not supported. Specify one of supported formats."
+                    "Output format '" + outputFormat + "' is not supported. Specify one of supported formats: " +
+                    Arrays.toString(allowedFormats)
                 );
             }
         } else {
@@ -114,7 +115,7 @@ public class CommandLine {
         }
     }
 
-    public void printHelp()
+    public void printHelp(String [] allowedFormats)
     {
         System.out.println("wikivoyage-listings tool takes Wikivoyage (https://wikivoyage.org/) dumps, ");
         System.out.println("parses listings and generates files in different formats, ");
@@ -138,7 +139,7 @@ public class CommandLine {
         System.out.println("Specify output files:");
         System.out.println("-output-filename <filename>: write output data to <filename>");
         System.out.println("-output-format <format>: select one of supported formats:");
-        System.out.println("    'osmand-xml', 'osmand-xml-user-defined', 'obf', 'obf-user-defined', 'csv'.");
+        System.out.println("    " + Arrays.toString(allowedFormats) + ".");
         System.out.println("    All formats with 'user-defined' prefix set POI types to \"user defined\"");
         System.out.println("    to be ready to used with OsmAnd 1.9");
         System.out.println();
@@ -160,7 +161,7 @@ public class CommandLine {
         } catch (ParameterException e) {
             System.out.println(e.getMessage());
             System.out.println();
-            printHelp();
+            printHelp(allowedFormats);
             System.exit(1);
         }
     }

@@ -23,10 +23,10 @@ public class OBF implements OutputFormat {
     }
 
     @Override
-    public void write(Iterable<WikivoyagePOI> pois, String outputFilename) throws WriteOutputException {
+    public void write(Iterable<WikivoyagePOI> pois, String outputFilename, String dumpDate) throws WriteOutputException {
         try {
             OsmXml osmXml = new OsmXml(userDefined);
-            osmXml.write(pois, tempXmlFilename);
+            osmXml.write(pois, tempXmlFilename, dumpDate);
             createObf(tempXmlFilename, workingDir, "pois.obf");
             Files.move(Paths.get(workingDir + "/pois.obf"), Paths.get(outputFilename));
         } catch (IOException | SAXException | SQLException | InterruptedException e) {

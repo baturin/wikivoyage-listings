@@ -12,9 +12,9 @@ public class OsmXml extends NavigationXMLOutputFormat {
         this.userDefined = userDefined;
     }
 
-    public XMLSimpleNode createXml(WikivoyagePOI[] pois) throws XMLSimpleNodeException
+    public XMLSimpleNode createXml(WikivoyagePOI[] pois, String dumpDate) throws XMLSimpleNodeException
     {
-        XMLSimpleNode osmNode = new XMLSimpleNode("osm")
+        XMLSimpleNode osmNode = new XMLSimpleNode("osm", dumpDate)
                 .attrib("version", "0.5")
                 .attrib("generator", "wikivoyage-pois-converter");
 

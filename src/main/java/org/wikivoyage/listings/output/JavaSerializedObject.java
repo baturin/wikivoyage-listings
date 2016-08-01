@@ -7,7 +7,7 @@ import java.io.ObjectOutputStream;
 
 public class JavaSerializedObject implements OutputFormat {
     @Override
-    public void write(Iterable<WikivoyagePOI> pois, String outputFilename) throws WriteOutputException {
+    public void write(Iterable<WikivoyagePOI> pois, String outputFilename, String dumpDate) throws WriteOutputException {
         try {
             for (WikivoyagePOI poi: pois) {
                 FileOutputStream fos = new FileOutputStream(outputFilename, true);

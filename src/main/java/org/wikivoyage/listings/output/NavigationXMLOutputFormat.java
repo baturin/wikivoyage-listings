@@ -11,7 +11,7 @@ import java.util.LinkedList;
  */
 abstract public class NavigationXMLOutputFormat implements OutputFormat {
     @Override
-    public void write(Iterable<WikivoyagePOI> pois, String outputFilename) throws WriteOutputException {
+    public void write(Iterable<WikivoyagePOI> pois, String outputFilename, String dumpDate) throws WriteOutputException {
         try {
             LinkedList<WikivoyagePOI> filteredPois = new LinkedList<>();
             for (WikivoyagePOI poi: pois) {
@@ -22,7 +22,7 @@ abstract public class NavigationXMLOutputFormat implements OutputFormat {
                 }
             }
             WikivoyagePOI [] filteredPoisArr = filteredPois.toArray(new WikivoyagePOI[filteredPois.size()]);
-            XMLSimpleNode rootNode = createXml(filteredPoisArr);
+            XMLSimpleNode rootNode = createXml(filteredPoisArr, dumpDate);
 
             rootNode.writeToFile(outputFilename);
         } catch (XMLSimpleNodeException e) {
@@ -37,5 +37,5 @@ abstract public class NavigationXMLOutputFormat implements OutputFormat {
      * @return root XML node of the document
      * @throws XMLSimpleNodeException
      */
-    public abstract XMLSimpleNode createXml(WikivoyagePOI[] pois) throws XMLSimpleNodeException;
+    public abstract XMLSimpleNode createXml(WikivoyagePOI[] pois, String dumpDate) throws XMLSimpleNodeException;
 }

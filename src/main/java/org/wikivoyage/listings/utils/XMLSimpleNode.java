@@ -1,6 +1,7 @@
 package org.wikivoyage.listings.utils;
 
 
+import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -19,8 +20,9 @@ public class XMLSimpleNode {
     public boolean isRoot;
     public Element node;
 
-    public XMLSimpleNode(String tag) throws XMLSimpleNodeException
+    public XMLSimpleNode(String tag, String dumpDate) throws XMLSimpleNodeException
     {
+        // Create the document.
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder;
         try {
@@ -29,6 +31,13 @@ public class XMLSimpleNode {
             throw new XMLSimpleNodeException("Failed to create XML simple node: failed to create document builder", e);
         }
         Document doc = docBuilder.newDocument();
+     
+        // Add a comment node as a header. A line break would be nice, but seems tricky to achieve:
+        // http://stackoverflow.com/questions/24551962/adding-linebreak-in-xml-file-before-root-node 
+        Comment comment = doc.createComment("Created from " + dumpDate + " Wikivoyage data");
+        doc.appendChild(comment);
+        
+        // Create the element.
         node = doc.createElement(tag);
         doc.appendChild(node);
         isRoot = true;
