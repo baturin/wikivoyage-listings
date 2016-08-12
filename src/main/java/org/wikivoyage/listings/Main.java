@@ -43,11 +43,12 @@ public class Main {
 
         try {
             if (cl.help) {
-                cl.printHelp();
+                cl.printHelp((String[])formats.keySet().toArray());
             } else if (cl.dailyUpdate) {
                 dailyUpdate(cl, formats);
             } else {
                 String inputFilename;
+                String dumpDate = ""; // To embed in files to provide freshness information to users (example: "Generated from Wikivoyage 2016/07/20 data").
                 createWorkingDir();
                 if (cl.inputFile != null) {
                     inputFilename = cl.inputFile;
@@ -59,14 +60,14 @@ public class Main {
                         downloader.downloadDumpFromUrl(cl.inputUrl, inputFilename);
                     } else {
                         createDumpsCacheDir();
-                        List<String> dumpIds = downloader.listDumps(cl.inputLatest);
-                        Collections.sort(dumpIds);
-                        Collections.reverse(dumpIds);
-                        String latestDumpId = dumpIds.get(0);
+                        List<String> dumpDates = downloader.listDumps(cl.inputLatest);
+                        Collections.sort(dumpDates);
+                        Collections.reverse(dumpDates);
+                        dumpDate = dumpDates.get(0);
 
-                        inputFilename = fileNames.dumpCacheFilename(cl.inputLatest, latestDumpId);
+                        inputFilename = fileNames.dumpCacheFilename(cl.inputLatest, dumpDate);
                         if (!FileUtils.fileExists(inputFilename)) {
-                            String dumpUrl = downloader.dumpUrl(cl.inputLatest, latestDumpId);
+                            String dumpUrl = downloader.dumpUrl(cl.inputLatest, dumpDate);
                             downloader.downloadDumpFromUrl(dumpUrl, inputFilename);
                         } else {
                             log.info("Use cached dump");
@@ -76,7 +77,7 @@ public class Main {
 
                 if (cl.outputFormat != null) {
                     OutputFormat format = formats.get(cl.outputFormat);
-                    generateFileForFormat(inputFilename, cl.outputFilename, format);
+                    generateFileForFormat(inputFilename, cl.outputFilename, format, dumpDate);
                 }
                 UnrecognizeTemplateCounter.getInstance().logUnrecognizeTemplatesSummary();
                 log.info("Finished");
@@ -95,29 +96,32 @@ public class Main {
         DumpDownloader downloader = new DumpDownloader();
         for (String language: Languages.getLanguageCodes()) {
             log.info("Processing language " + language);
-            List<String> dumpIds = downloader.listDumps(language);
+            List<String> dumpDates = downloader.listDumps(language);
 
-            if (dumpIds.size() == 0) {
+            if (dumpDates.size() == 0) {
                 continue;
             }
 
-            Collections.sort(dumpIds);
-            Collections.reverse(dumpIds);
+            Collections.sort(dumpDates);
+            Collections.reverse(dumpDates);
 
-            String latestDumpId = dumpIds.get(0);
+            String latestDumpDate = dumpDates.get(0);
 
             if (cl.latestCount != null) {
                 log.info("Processing the latest " + cl.latestCount + " dumps");
-                dumpIds = dumpIds.subList(0, cl.latestCount);
+                dumpDates = dumpDates.subList(0, cl.latestCount);
             }
 
-            for (String dumpId: dumpIds) {
-                log.info("Processing dump " + dumpId);
+            for (String dumpDate: dumpDates) {
+                log.info("Processing dump " + dumpDate);
                 try {
-                    processDump(downloader, language, latestDumpId, dumpId, formats, !cl.doNotUseIntermediateFile);
+                    processDump(downloader, language, latestDumpDate, dumpDate, formats, !cl.doNotUseIntermediateFile);
                 } catch (Exception e) {
-                    log.info("Failed to create dump " + dumpId);
+                    log.info("Failed to create dump " + dumpDate);
                     log.debug("Exception: ", e);
+                    StringWriter sw = new StringWriter();
+                    e.printStackTrace(new PrintWriter(sw));
+                    log.debug("Stack trace: " + sw.toString());
                 }
             }
         }
@@ -125,12 +129,12 @@ public class Main {
     }
 
     private static void processDump(
-        DumpDownloader downloader, String language, String latestDumpId, String dumpId,
+        DumpDownloader downloader, String language, String latestDumpDate, String dumpDate,
         HashMap<String, OutputFormat> formats, boolean useIntermediateFile
     ) throws IOException, FileUtilsException, InterruptedException, WriteOutputException {
         boolean allFileExists = true;
         for (OutputFormat format: formats.values()) {
-            String fileName = fileNames.getListingPath(language, dumpId, format.getDefaultExtension(), true);
+            String fileName = fileNames.getListingPath(language, dumpDate, format.getDefaultExtension(), true);
             if (!FileUtils.fileExists(fileName)) {
                 allFileExists = false;
                 break;
@@ -138,14 +142,14 @@ public class Main {
         }
 
         if (allFileExists) {
-            log.info("All files already exist for '" + language + "-" + dumpId + "'");
+            log.info("All files already exist for '" + language + "-" + dumpDate + "'");
             return;
         }
 
-        log.info("Create POIs for '" + dumpId + "'");
+        log.info("Create POIs for '" + dumpDate + "'");
 
-        String dumpUrl = downloader.dumpUrl(language, dumpId);
-        String dumpPath = fileNames.dumpCacheFilename(language, dumpId);
+        String dumpUrl = downloader.dumpUrl(language, dumpDate);
+        String dumpPath = fileNames.dumpCacheFilename(language, dumpDate);
         if (!FileUtils.fileExists(dumpPath)) {
             downloader.downloadDumpFromUrl(dumpUrl, dumpPath);
         }
@@ -156,7 +160,7 @@ public class Main {
             log.info("Write intermediate file with parsed listings");
             String javaSerialFile = fileNames.workingDirPath("serialized-pois.bin");
             FileUtils.removeFile(javaSerialFile);
-            new JavaSerializedObject().write(listingIterable, javaSerialFile);
+            new JavaSerializedObject().write(listingIterable, javaSerialFile, dumpDate);
             listingIterable = new JavaSerializedIterable(javaSerialFile);
         }
 
@@ -164,19 +168,19 @@ public class Main {
         for (OutputFormat format: formats.values()) {
             log.info(
                 "Write output file for language " + language +
-                ", dump " + dumpId + ", format " + format.getDefaultExtension().substring(1)
+                ", dump " + dumpDate + ", format " + format.getDefaultExtension().substring(1)
             );
-            String fileName = fileNames.getListingPath(language, dumpId, format.getDefaultExtension(), false);
+            String fileName = fileNames.getListingPath(language, dumpDate, format.getDefaultExtension(), false);
             try {
-                format.write(listingIterable, fileName);
-                if (dumpId.equals(latestDumpId)) {
+                format.write(listingIterable, fileName, dumpDate);
+                if (dumpDate.equals(latestDumpDate)) {
                     String latestFileName = fileNames.getListingPath(
                             language, "latest", format.getDefaultExtension(), false
                     );
                     FileUtils.removeFile(latestFileName);
                     FileUtils.copyFile(fileName, latestFileName);
                 }
-                String fileNameArchive = fileNames.getListingPath(language, dumpId, format.getDefaultExtension(), true);
+                String fileNameArchive = fileNames.getListingPath(language, dumpDate, format.getDefaultExtension(), true);
                 FileUtils.archive(fileName, fileNameArchive);
             } catch (WriteOutputException e) {
                 System.out.println("Failed to write file: " + e.getMessage());
@@ -200,11 +204,11 @@ public class Main {
     }
 
     private static void generateFileForFormat(
-        String inputFilename, String outputFilename, OutputFormat format
+        String inputFilename, String outputFilename, OutputFormat format, String dumpDate
     ) throws WriteOutputException, DumpReadException {
         log.info("Parse dump");
         Iterable<WikivoyagePOI> listingIterable = new DumpListingsIterable(inputFilename);
         log.info("Save to '" + outputFilename + "'");
-        format.write(listingIterable, outputFilename);
+        format.write(listingIterable, outputFilename, dumpDate);
     }
 }

@@ -8,14 +8,15 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.wikivoyage.listings.entity.WikivoyagePOI;
 import org.wikivoyage.listings.input.PageParser;
-
+import org.wikivoyage.listings.language.Language;
 import org.wikivoyage.listings.language.english.English;
 import org.wikivoyage.listings.language.french.French;
-import org.wikivoyage.listings.language.Language;
+import org.wikivoyage.listings.language.german.German;
 import org.wikivoyage.listings.language.russian.Russian;
 
 
 public class InputTests {
+    
 	@Test
 	public void processEnglish() throws Exception {
         List<WikivoyagePOI> pois = parseResourcePOIs("sample-article-en.wikicode", new English(), "Tokyo/Roppongi");
@@ -28,12 +29,12 @@ public class InputTests {
 		Assert.assertEquals("Tokyo/Roppongi", poi.getArticle());
 		Assert.assertEquals("sleep", poi.getType());
 		Assert.assertEquals("Grand Hyatt Tokyo", poi.getTitle());
-		Assert.assertEquals(null, poi.getAlt());
+		Assert.assertEquals("", poi.getAlt());
 		Assert.assertEquals("6-10-3 Roppongi", poi.getAddress());
 		Assert.assertEquals("In Roppongi Hills", poi.getDirections());
 		Assert.assertEquals("+81 3 4333-1234", poi.getPhone());
 		Assert.assertEquals("", poi.getTollFree());
-		Assert.assertEquals("", poi.getEmail()); // TODO decide whether null or "" is desirable, and stick to it
+		Assert.assertEquals("", poi.getEmail());
 		Assert.assertEquals("+81 3 4333-8123", poi.getFax());
 		Assert.assertEquals("http://tokyo.grand.hyatt.com/", poi.getUrl());
 		Assert.assertEquals("", poi.getHours());
@@ -51,6 +52,36 @@ public class InputTests {
             poi.getDescription()
         );
 	}
+	
+    @Test
+    public void processGerman() throws Exception {
+        List<WikivoyagePOI> pois = parseResourcePOIs("sample-article-de.wikicode", new German(), "Karwendel");
+
+        // Check number of POIs
+        Assert.assertEquals(69, pois.size());
+
+        // Check a particular POI in detail
+        WikivoyagePOI poi = pois.get(60);
+        Assert.assertEquals("Karwendel", poi.getArticle());
+        Assert.assertEquals("sleep", poi.getType());
+        Assert.assertEquals("Hochlandhütte", poi.getTitle());
+        Assert.assertEquals("", poi.getAlt());
+        Assert.assertEquals("Schöttlkarstr. 10, 82481 Mittenwald", poi.getAddress());
+        Assert.assertEquals("", poi.getDirections());
+        Assert.assertEquals("0174 9897863", poi.getPhone());
+        Assert.assertEquals("", poi.getTollFree());
+        Assert.assertEquals("", poi.getEmail());
+        Assert.assertEquals("", poi.getFax());
+        Assert.assertEquals("http://www.hochlandhuette.de/", poi.getUrl());
+        Assert.assertEquals("von Ende Mai bis Mitte Oktober, im Winter wegen Lawinengefahr geschlossen", poi.getHours());
+        Assert.assertEquals("", poi.getCheckIn());
+        Assert.assertEquals("", poi.getCheckOut());
+        Assert.assertEquals("", poi.getImage());
+        Assert.assertEquals("", poi.getPrice());
+        Assert.assertEquals("47.44976", poi.getLatitude());
+        Assert.assertEquals("11.31884", poi.getLongitude());
+        Assert.assertEquals("", poi.getDescription());
+    }
 
 	@Test
 	public void processFrench() throws Exception {
@@ -66,16 +97,16 @@ public class InputTests {
 		Assert.assertEquals("Camping municipal", poi.getTitle());
 		Assert.assertEquals("", poi.getAlt());
 		Assert.assertEquals("13 Rue de la Grande Côte de Crevant", poi.getAddress());
-		Assert.assertEquals(null, poi.getDirections());
+		Assert.assertEquals("", poi.getDirections());
 		Assert.assertEquals("+33 5 49 66 17 99", poi.getPhone());
 		Assert.assertEquals("", poi.getTollFree());
 		Assert.assertEquals("", poi.getEmail());
 		Assert.assertEquals("", poi.getFax());
 		Assert.assertEquals("http://www.ville-thouars.fr/decouvrir/camping.htm", poi.getUrl());
-		Assert.assertEquals(null, poi.getHours());
+		Assert.assertEquals("", poi.getHours());
 		Assert.assertEquals("", poi.getCheckIn());
 		Assert.assertEquals("", poi.getCheckOut());
-		Assert.assertEquals(null, poi.getImage());
+		Assert.assertEquals("", poi.getImage());
 		Assert.assertEquals("3.2€", poi.getPrice());
 		Assert.assertEquals("46.979967", poi.getLatitude());
 		Assert.assertEquals("-0.219622", poi.getLongitude());

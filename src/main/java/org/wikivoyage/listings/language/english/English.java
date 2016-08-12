@@ -22,6 +22,7 @@ public class English implements Language
     /**
      * All listings that can be found in the English edition of Wikivoyage.
      */
+    @Override
     public HashSet<String> getListingTemplates()
     {
     	HashSet<String> listingTemplates = new HashSet<>();
@@ -40,6 +41,7 @@ public class English implements Language
     /**
      * The name of the place, which is the only strictly required element.
      */
+    @Override
     public String getNameElement() {
 		return "name";
     }
@@ -47,6 +49,7 @@ public class English implements Language
     /**
      * Convert listing template into a WikivoyagePOI object.
      */
+    @Override
     public WikivoyagePOI parseListingTemplate(String article, TemplateNode template) {
         // Type
         String poiType;
@@ -78,7 +81,7 @@ public class English implements Language
             template.getArgument("address"),
             template.getArgument("directions"),
             template.getArgument("phone"),
-            template.getArgument("tollFree"),
+            template.getArgument("tollfree"),
             template.getArgument("email"),
             template.getArgument("fax"),
             template.getArgument("url"),
@@ -91,7 +94,7 @@ public class English implements Language
             template.getArgument("long"),
 			"", // No Wi-Fi property on English Wikivoyage
 			"", // No accessibility property on English Wikivoyage
-			template.getArgument("mise à jour"),
+			template.getArgument("lastedit"),
             description,
             getLanguageCode()
         );

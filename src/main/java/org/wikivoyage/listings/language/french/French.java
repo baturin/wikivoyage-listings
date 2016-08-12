@@ -5,11 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.wikivoyage.listings.entity.WikivoyagePOI;
-import org.wikivoyage.listings.language.french.template.HoraireTemplateToStringConverter;
-import org.wikivoyage.listings.language.french.template.PrixTemplateToStringConverter;
 import org.wikivoyage.listings.input.template.TemplateNode;
 import org.wikivoyage.listings.input.template.TemplateToStringConverter;
 import org.wikivoyage.listings.language.Language;
+import org.wikivoyage.listings.language.french.template.HoraireTemplateToStringConverter;
+import org.wikivoyage.listings.language.french.template.PrixTemplateToStringConverter;
 
 /**
  * The specificities of the French edition of Wikivoyage.
@@ -24,6 +24,7 @@ public class French implements Language
     /**
      * All listings that can be found in the French edition of Wikivoyage.
      */
+    @Override
     public HashSet<String> getListingTemplates()
     {
     	HashSet<String> listingTemplates = new HashSet<>();
@@ -48,6 +49,7 @@ public class French implements Language
     /**
      * The name of the place, which is the only strictly required element.
      */
+    @Override
     public String getNameElement() {
     		return "nom";
     }
@@ -55,6 +57,7 @@ public class French implements Language
     /**
      * Convert listing template into a WikivoyagePOI object.
      */
+    @Override
     public WikivoyagePOI parseListingTemplate(String article, TemplateNode template) {
 
         // Type
@@ -114,7 +117,7 @@ public class French implements Language
 			template.getArgument("mise à jour"),
 			template.getArgument("description"),
             getLanguageCode()
-            // TODO: other parameters like wikipédia, wikidata, facebook, wifi, téléphone portable, handicap, mise à jour
+            // TODO: other parameters like facebook, téléphone portable
         );
     }
 

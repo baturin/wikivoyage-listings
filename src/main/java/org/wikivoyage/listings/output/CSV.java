@@ -21,7 +21,7 @@ public class CSV implements OutputFormat {
 	public final static String SEPARATOR = ",";
 	public final static String NEW_LINE = "\n";
 	
-    public void write(Iterable<WikivoyagePOI> pois, String outputFilename) throws WriteOutputException
+    public void write(Iterable<WikivoyagePOI> pois, String outputFilename, String dumpDate) throws WriteOutputException
     {
         BufferedWriter writer = null;
         try {

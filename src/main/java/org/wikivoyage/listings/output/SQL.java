@@ -22,12 +22,13 @@ public class SQL implements OutputFormat {
     }
 
     @Override
-    public void write(Iterable<WikivoyagePOI> pois, String outputFilename) throws WriteOutputException {
+    public void write(Iterable<WikivoyagePOI> pois, String outputFilename, String dumpDate) throws WriteOutputException {
         BufferedWriter writer = null;
         try {
             try {
                 FileWriter fwriter = new FileWriter(outputFilename);
                 writer = new BufferedWriter(fwriter);
+                writer.write("-- Generated from " + dumpDate + " Wikivoyage data.\n");
                 writer.write(
                 	"PRAGMA synchronous=OFF;\n" + // These PRAGMAs make loading thousand times faster.
                     "PRAGMA count_changes=OFF;\n" +

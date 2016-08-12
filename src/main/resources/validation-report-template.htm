@@ -99,7 +99,8 @@
             <label class="checkbox-inline" ng-repeat="issueType in validationReport.issueTypes">
                 <input type="checkbox" ng-model="validationReport.issueTypeFilter[issueType]"> {{issueType}}
             </label> |
-            <button ng-click="validationReport.shuffleIssues()">Shuffle issues</button>
+            <button ng-click="validationReport.shuffleIssues()">Shuffle issues</button> |
+            Generated from {dumpDate} Wikivoyage data
         </div>
         <table class="table">
             <tr><th>Article</th><th>Listing</th><th>Issue</th></tr>

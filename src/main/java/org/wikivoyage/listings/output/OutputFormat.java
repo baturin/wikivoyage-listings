@@ -8,9 +8,10 @@ public interface OutputFormat {
      * Write POIs to a file
      * @param pois list of POIs to write to file
      * @param outputFilename name of a file to write to
+     * @param dumpDate Date of the dump. Can be embedded in files to provide freshness information to users (example: "Generated from Wikivoyage 2016/07/20 data).
      * @throws WriteOutputException
      */
-    public void write(Iterable<WikivoyagePOI> pois, String outputFilename) throws WriteOutputException;
+    public void write(Iterable<WikivoyagePOI> pois, String outputFilename, String dumpDate) throws WriteOutputException;
 
     /**
      * Get default extension of this output format.

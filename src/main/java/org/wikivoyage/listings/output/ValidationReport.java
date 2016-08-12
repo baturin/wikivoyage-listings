@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class ValidationReport implements OutputFormat {
     @Override
-    public void write(Iterable<WikivoyagePOI> pois, String outputFilename) throws WriteOutputException {
+    public void write(Iterable<WikivoyagePOI> pois, String outputFilename, String dumpDate) throws WriteOutputException {
         Validator [] validators = {
             new LatitudeValidator(),
             new LongitudeValidator(),
@@ -48,7 +48,12 @@ public class ValidationReport implements OutputFormat {
             try {
                 FileWriter fwriter = new FileWriter(outputFilename);
                 writer = new BufferedWriter(fwriter);
-                writer.write(template.replace("{rows}", rows.toString()));
+                
+                // Replace variables in template.
+                template = template.replace("{rows}", rows.toString());
+                template = template.replaceAll("{dumpDate}", dumpDate);
+                
+                writer.write(template);
             } finally {
                 if (writer != null) {
                     writer.close();

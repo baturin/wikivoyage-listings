@@ -26,7 +26,7 @@ public class CsvOutputTests extends OutputTests {
 		pois.add(getSample());
 		String output = File.createTempFile("wikivoyage-listings-unit-tests", ".tmp").getAbsolutePath();
 		
-		new CSV().write(pois, output);
+		new CSV().write(pois, output, "20160720");
 		
 		compareWithSample(output, "sample-result.csv");
 	}
