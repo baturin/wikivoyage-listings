@@ -51,7 +51,7 @@ public class ValidationReport implements OutputFormat {
                 
                 // Replace variables in template.
                 template = template.replace("{rows}", rows.toString());
-                template = template.replaceAll("{dumpDate}", dumpDate);
+                template = template.replaceAll("\\{dumpDate\\}", dumpDate);
                 
                 writer.write(template);
             } finally {
