@@ -4,72 +4,87 @@
 <tr>
  <td>CSV</td>
  <td>
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-en-latest.csv">English</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.csv">Russian</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.csv">French</a></td>
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-en.csv?raw=true">English</a>,
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-fr.csv?raw=true">French</a>,
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-de.csv?raw=true">German</a>,
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-ru.csv?raw=true">Russian</a>
+ </td>
 </tr>
 <tr>
  <td>KML</td>
  <td>
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-en-latest.kml">English</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.kml">Russian</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.kml">French</a></td>
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-en.kml?raw=true">English</a>,
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-fr.kml?raw=true">French</a>,
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-de.kml?raw=true">German</a>,
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-ru.kml?raw=true">Russian</a>
+ </td>
 </tr>
 <tr>
  <td>GPX</td>
  <td>
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-en-latest.gpx">English</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.gpx">Russian</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.gpx">French</a></td>
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-en.gpx?raw=true">English</a>,
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-fr.gpx?raw=true">French</a>,
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-de.gpx?raw=true">German</a>,
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-ru.gpx?raw=true">Russian</a>
+ </td>
 </tr>
 <tr>
  <td>GPX (for OsmAnd)</td>
  <td>
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-en-latest.osmand.gpx">English</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.osmand.gpx">Russian</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.osmand.gpx">French</a></td>
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-en.osmand.gpx?raw=true">English</a>,
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-fr.osmand.gpx?raw=true">French</a>,
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-de.osmand.gpx?raw=true">German</a>,
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-ru.osmand.gpx?raw=true">Russian</a>
+ </td>
 </tr>
 <tr>
  <td>XML ("wikivoyage" POI type)</td>
  <td>
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-en-latest.xml">English</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.xml">Russian</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.xml">French</a></td>
+  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.xml">French</a>,
+  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.xml">Russian</a>
+ </td>
 </tr>
 <tr>
  <td>XML (user-defined POI type)</td>
  <td>
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-en-latest.user-defined.xml">English</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.user-defined.xml">Russian</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.user-defined.xml">French</a></td>
+  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.user-defined.xml">French</a>,
+  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.user-defined.xml">Russian</a>
+ </td>
 </tr>
 <tr>
  <td>OBF ("wikivoyage" POI type)</td>
  <td>
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-en-latest.obf">English</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.obf">Russian</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.obf">French</a></td>
+  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.obf">French</a>,
+  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.obf">Russian</a>
+ </td>
 </tr>
 <tr>
  <td>OBF (user-defined POI type)</td>
  <td>
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-en-latest.user-defined.obf">English</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.user-defined.obf">Russian</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.user-defined.obf">French</a></td>
+  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.user-defined.obf">French</a>
+  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.user-defined.obf">Russian</a>
+ </td>
 </tr>
 <tr>
  <td>SQL</td>
  <td>
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-en-latest.sql">English</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.sql">Russian</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.sql">French</a></td>
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-en.sql?raw=true">English</a>,
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-fr.sql?raw=true">French</a>,
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-de.sql?raw=true">German</a>,
+  <a href="https://github.com/wikivoyage/wikivoyage.github.io/blob/master/wikivoyage-listings-ru.sql?raw=true">Russian</a>
+ </td>
 </tr>
 <tr>
  <td>Validation report</td>
  <td>
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-en-latest.validation-report.html">English</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.validation-report.html">Russian</a>,
-  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.validation-report.html">French</a></td>
+  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.validation-report.html">French</a>,
+  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.validation-report.html">Russian</a>
+ </td>
 </tr>
 </table>
 
