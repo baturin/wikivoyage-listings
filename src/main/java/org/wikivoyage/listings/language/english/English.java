@@ -8,6 +8,7 @@ import org.wikivoyage.listings.entity.WikivoyagePOI;
 import org.wikivoyage.listings.input.template.TemplateNode;
 import org.wikivoyage.listings.input.template.TemplateToStringConverter;
 import org.wikivoyage.listings.language.Language;
+import org.wikivoyage.listings.language.english.template.DeadLinkTemplateToStringConverter;
 
 /**
  * The specificities of the English edition of Wikivoyage.
@@ -102,6 +103,8 @@ public class English implements Language
 
     @Override
     public List<TemplateToStringConverter> getTemplateConverters() {
-        return new LinkedList<>();
+        List<TemplateToStringConverter> converters = new LinkedList<>();
+        converters.add(new DeadLinkTemplateToStringConverter());
+        return converters;
     }
 }

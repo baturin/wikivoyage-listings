@@ -191,6 +191,15 @@ public class InputTests {
         );
     }
 
+    @Test
+    public void skipDeadLinks() throws Exception {
+        WikivoyagePOI poi = parseResourceSinglePOI("dead-link.wikicode");
+        Assert.assertEquals(
+            "http://www.isbryderen-elbjorn.dk",
+            poi.getUrl()
+        );
+    }
+
     private WikivoyagePOI parseResourceSinglePOI(String resourceFile) throws Exception
     {
         List<WikivoyagePOI> pois = parseResourcePOIs(resourceFile);
