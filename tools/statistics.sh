@@ -1,4 +1,5 @@
 #!/bin/bash
+# Please execute from wikivoyage-listings folder
 
 # Generate SQLite database and statistics for each language
 for WVLANGUAGE in fr ru en de; do

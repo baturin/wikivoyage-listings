@@ -1,3 +1,3 @@
 #!/bin/sh
 
-java -Xmx300m -cp "wikivoyage-listings.jar:build/libs/wikivoyage-listings.jar:lib/*:config/" org.wikivoyage.listings.Main "$@"
+java -Xmx1024m -cp "wikivoyage-listings.jar:build/libs/wikivoyage-listings.jar:lib/*:config/" org.wikivoyage.listings.Main "$@"
