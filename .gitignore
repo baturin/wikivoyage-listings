@@ -3,6 +3,10 @@
 /build
 /out
 /tmp
+/.classpath
+/.project
+/.settings/
+/bin/
 /wikivoyage-listings.iml
 /dumps-cache
 /listings
