@@ -53,6 +53,6 @@ public class Xml extends NavigationXMLOutputFormat {
 
     public String getDefaultExtension()
     {
-        return "generic.xml";
+        return ".generic.xml";
     }
 }
