@@ -47,7 +47,7 @@ public class SQL implements OutputFormat {
                             "wikipedia VARCHAR(64), " +
                             "description VARCHAR(4096), " +
                             "latitude DECIMAL(10, 8), " +
-                            "longitude DECIMAL(11, 8)" +
+                            "longitude DECIMAL(11, 8), " +
                             "image VARCHAR(255)" +
                     ");\n"
                 );
@@ -63,7 +63,7 @@ public class SQL implements OutputFormat {
                                 "wikipedia, " +
                                 "description, " +
                                 "latitude, " +
-                                "longitude" +
+                                "longitude, " +
                                 "image" +
                         ") " +
                         "VALUES (" +
