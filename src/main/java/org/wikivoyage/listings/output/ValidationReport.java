@@ -9,6 +9,9 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Generate an HTML report showing what syntax errors exist in the Wikivoyage data.
+ */
 public class ValidationReport implements OutputFormat {
     @Override
     public void write(Iterable<WikivoyagePOI> pois, String outputFilename, String dumpDate) throws WriteOutputException {
@@ -16,7 +19,8 @@ public class ValidationReport implements OutputFormat {
             new LatitudeValidator(),
             new LongitudeValidator(),
             new WebsiteURLValidator(),
-            new EmailValidator()
+            new EmailValidator(),
+            new WikidataValidator()
         };
 
         try {

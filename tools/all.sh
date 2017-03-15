@@ -1,5 +1,6 @@
 #!/bin/bash
 # Please configure OUT folder variable then execute from wikivoyage-listings folder
+# Run from project root
 
 OUT=../wikivoyage.github.io
 
@@ -8,9 +9,9 @@ for WVLANGUAGE in fr ru en de; do
   echo "=== LANGUAGE: $WVLANGUAGE ==="
 
   for FORMAT in csv kml gpx osmand.gpx xml validation-report sql; do
-    tools/wikivoyage-listings.sh -generate -input-latest $WVLANGUAGE -output-filename $OUT/wikivoyage-listings-$WVLANGUAGE.$FORMAT -output-format $FORMAT
+    ./wikivoyage-listings.sh -generate -input-latest $WVLANGUAGE -output-filename $OUT/wikivoyage-listings-$WVLANGUAGE.$FORMAT -output-format $FORMAT
   done
-  mv $OUT/$WVLANGUAGE.validation-report $OUT/$WVLANGUAGE.validation-report.html
+  mv $OUT/wikivoyage-listings-$WVLANGUAGE.validation-report $OUT/wikivoyage-listings-$WVLANGUAGE.validation-report.html
 done
 
 cd $OUT

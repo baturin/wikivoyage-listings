@@ -10,30 +10,30 @@ public class WikivoyagePOI implements Serializable {
     /**
      * Wikivoyage article in which the POI was found, for instance "Tokyo/Roppongi".
      */
-    private String article;
+    protected String article;
     
     /**
      * Type of POI
      * Example: "see" or "buy"
      */
-    private String type;
+    protected String type;
     
     /**
      * Name of the POI
      * , for instance "Mori Art Museum".
      */
-    private String title;
+    protected String title;
     
     /**
      * Alternative name of the POI, for instance in the local language
      * Example: "森美術館"
      */
-    private String alt;
+    protected String alt;
     
     /**
      * Wikidata entity that talks about the POI, if such an entity exists in Wikidata
      */
-    private String wikidata;
+    protected String wikidata;
     
     /**
      * Wikipedia article that talks about the POI.
@@ -41,103 +41,103 @@ public class WikivoyagePOI implements Serializable {
      * it is more user-friendly for editors and allows for faster rendition.
      * Example: "Mori Art Museum"
      */
-    private String wikipedia;
+    protected String wikipedia;
     
     /**
      * Address of the POI
      * It is relative to the article's scope, which means it often omits the country and city name, for instance
      * Example: "Mori Tower, 53F"
      */
-    private String address;
+    protected String address;
     
     /**
      * How to reach the POI, for instance from the nearest station.
      */
-    private String directions;
+    protected String directions;
     
     /**
      * Full phone number of the POI
      */
-    private String phone;
+    protected String phone;
     
     /**
      * Full toll-free phone number of the POI
      */
-    private String tollFree;
+    protected String tollFree;
     
     /**
      * Email adress of the POI
      */
-    private String email;
+    protected String email;
     
     /**
      * FAX number of the POI
      */
-    private String fax;
+    protected String fax;
     
     /**
      * URL of the official website of the POI
      */
-    private String url;
+    protected String url;
     
     /**
      * Business hours of the POI
      */
-    private String hours;
+    protected String hours;
     
     /**
      * For sleep POIs, time of check-in
      */
-    private String checkIn;
+    protected String checkIn;
 
     /**
      * For sleep POIs, time of check-out
      */
-    private String checkOut;
+    protected String checkOut;
     
     /**
      * Wikimedia Commons image showing the POI, or something that represents it
      */
-    private String image;
+    protected String image;
     
     /**
      * Price of entrance to the POI, or average price meal for a eat POI
      */
-    private String price;
+    protected String price;
     
     /**
      * Latitude of the POI
      */
-    private String latitude;
+    protected String latitude;
     
     /**
      * Longitude of the POI
      */
-    private String longitude;
+    protected String longitude;
     
     /**
      * Whether Wi-Fi is available at the POI
      */
-    private String wifi;
+    protected String wifi;
     
     /**
      * Whether the POI is accessible to persons with disabilities
      */
-    private String accessibility;
+    protected String accessibility;
     /**
      * Description of the POI
      */
-    private String description;
+    protected String description;
 
     /**
      * Last time the information about this POI has been updated in Wikivoyage
      */
-    private String lastEdit;
+    protected String lastEdit;
     
     /**
      * 2-character language code
      */
-    private String language;
+    protected String language;
 
     public WikivoyagePOI(
         String article, String type, String title, String alt, String wikidata, String wikipedia, String address, String directions,

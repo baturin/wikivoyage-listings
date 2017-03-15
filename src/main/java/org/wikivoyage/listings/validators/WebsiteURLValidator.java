@@ -7,7 +7,7 @@ public class WebsiteURLValidator implements Validator {
     @Override
     public String validate(WikivoyagePOI poi) {
         if (poi.getUrl() != null && !poi.getUrl().equals("")) {
-            if (!UrlValidator.getInstance().isValid(poi.getUrl())) {
+            if (!validWebsiteURL(poi.getUrl())) {
                 return "Invalid URL '" + poi.getUrl() + "'";
             }
         }
@@ -17,5 +17,10 @@ public class WebsiteURLValidator implements Validator {
     @Override
     public String getIssueType() {
         return "Website URL";
+    }
+    
+    private boolean validWebsiteURL(String url) {
+        return UrlValidator.getInstance().isValid(url) &&
+            ( url.startsWith("http://") || url.startsWith("https://"));
     }
 }

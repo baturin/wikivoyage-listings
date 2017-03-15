@@ -42,6 +42,7 @@
  <td>
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-en-latest.xml">English</a>,
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.xml">French</a>,
+  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-de-latest.xml">German</a>,
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.xml">Russian</a>
  </td>
 </tr>
@@ -50,6 +51,7 @@
  <td>
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-en-latest.user-defined.xml">English</a>,
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.user-defined.xml">French</a>,
+  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-de-latest.user-defined.xml">German</a>,
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.user-defined.xml">Russian</a>
  </td>
 </tr>
@@ -58,6 +60,7 @@
  <td>
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-en-latest.obf">English</a>,
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.obf">French</a>,
+  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-de-latest.obf">German</a>,
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.obf">Russian</a>
  </td>
 </tr>
@@ -66,6 +69,7 @@
  <td>
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-en-latest.user-defined.obf">English</a>,
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.user-defined.obf">French</a>
+  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-de-latest.user-defined.obf">German</a>
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.user-defined.obf">Russian</a>
  </td>
 </tr>
@@ -83,6 +87,7 @@
  <td>
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-en-latest.validation-report.html">English</a>,
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-fr-latest.validation-report.html">French</a>,
+  <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-de-latest.validation-report.html">German</a>,
   <a href="http://wvpoi.batalex.ru/download/listings/wikivoyage-listings-ru-latest.validation-report.html">Russian</a>
  </td>
 </tr>
