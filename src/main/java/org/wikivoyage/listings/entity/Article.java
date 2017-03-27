@@ -5,11 +5,21 @@ import java.io.Serializable;
 /**
  * Entity representing Wikivoyage article in dump file
  */
-public class DumpArticle implements Serializable {
+public class Article implements Serializable {
+    
+    private static final long serialVersionUID = 3567768144708772742L;
+    
+    /**
+     * Title of the Wikivoyage article, for instance "Tokyo/Minato".
+     */
     String title;
+    
+    /**
+     * Wikicode text of the Wikivoyage article.
+     */
     String text;
 
-    public DumpArticle(String title, String text)
+    public Article(String title, String text)
     {
         this.title = title;
         this.text = text;

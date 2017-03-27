@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.wikivoyage.listings.output.CSV;
-import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.entity.Listing;
 
 public class CsvOutputTests extends OutputTests {
 
@@ -22,7 +22,7 @@ public class CsvOutputTests extends OutputTests {
 	@Test
 	public void Generate() throws Exception {
 
-		List<WikivoyagePOI> pois = new ArrayList<WikivoyagePOI>();
+		List<Listing> pois = new ArrayList<Listing>();
 		pois.add(getSample());
 		String output = File.createTempFile("wikivoyage-listings-unit-tests", ".tmp").getAbsolutePath();
 		

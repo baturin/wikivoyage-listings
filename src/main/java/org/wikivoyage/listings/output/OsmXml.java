@@ -1,6 +1,6 @@
 package org.wikivoyage.listings.output;
 
-import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.entity.Listing;
 import org.wikivoyage.listings.utils.XMLSimpleNode;
 import org.wikivoyage.listings.utils.XMLSimpleNodeException;
 
@@ -12,13 +12,13 @@ public class OsmXml extends NavigationXMLOutputFormat {
         this.userDefined = userDefined;
     }
 
-    public XMLSimpleNode createXml(WikivoyagePOI[] pois, String dumpDate) throws XMLSimpleNodeException
+    public XMLSimpleNode createXml(Listing[] pois, String dumpDate) throws XMLSimpleNodeException
     {
         XMLSimpleNode osmNode = new XMLSimpleNode("osm", dumpDate)
                 .attrib("version", "0.5")
                 .attrib("generator", "wikivoyage-pois-converter");
 
-        for (WikivoyagePOI poi: pois) {
+        for (Listing poi: pois) {
             XMLSimpleNode poiNode = new XMLSimpleNode(osmNode, "node")
                     .attrib("id", nodeId.toString())
                     .attrib("visible", "true")

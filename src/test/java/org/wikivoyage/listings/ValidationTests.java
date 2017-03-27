@@ -4,7 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
-import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.entity.Listing;
 import org.wikivoyage.listings.validators.EmailValidator;
 import org.wikivoyage.listings.validators.WebsiteURLValidator;
 import org.wikivoyage.listings.validators.WikidataValidator;
@@ -60,7 +60,7 @@ public class ValidationTests {
  * Helper class to conveniently create POI without the huge constructor.
  */
 @SuppressWarnings("serial")
-class TestWikivoyagePOI extends WikivoyagePOI {
+class TestWikivoyagePOI extends Listing {
     public TestWikivoyagePOI() {
         super ("", "", "", "", "", "", "", "", "", "",
                 "", "", "", "", "","", "", "", "", "",

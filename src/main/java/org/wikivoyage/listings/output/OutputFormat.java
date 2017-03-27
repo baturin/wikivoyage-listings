@@ -1,6 +1,6 @@
 package org.wikivoyage.listings.output;
 
-import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.entity.Listing;
 
 
 public interface OutputFormat {
@@ -11,7 +11,7 @@ public interface OutputFormat {
      * @param dumpDate Date of the dump. Can be embedded in files to provide freshness information to users (example: "Generated from Wikivoyage 2016/07/20 data).
      * @throws WriteOutputException
      */
-    public void write(Iterable<WikivoyagePOI> pois, String outputFilename, String dumpDate) throws WriteOutputException;
+    public void write(Iterable<Listing> pois, String outputFilename, String dumpDate) throws WriteOutputException;
 
     /**
      * Get default extension of this output format.

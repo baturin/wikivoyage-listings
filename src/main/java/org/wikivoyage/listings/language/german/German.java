@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.entity.Listing;
 import org.wikivoyage.listings.input.template.TemplateNode;
 import org.wikivoyage.listings.input.template.TemplateToStringConverter;
 import org.wikivoyage.listings.language.Language;
@@ -78,7 +78,7 @@ public class German implements Language
      * Convert listing template into a WikivoyagePOI object.
      */
     @Override
-    public WikivoyagePOI parseListingTemplate(String article, TemplateNode template) {
+    public Listing parseListingTemplate(String article, TemplateNode template) {
 
         // Type
         String poiType;
@@ -132,7 +132,7 @@ public class German implements Language
     			break;
 		}
 
-    	return new WikivoyagePOI(
+    	return new Listing(
 			article,
 			poiType,
 			template.getArgument("name"),
@@ -153,8 +153,8 @@ public class German implements Language
 			template.getArgument("price"),
 			template.getArgument("lat"),
 			template.getArgument("long"),
-			"", // No Wi-Fi property on English Wikivoyage
-            "", // No accessibility property on English Wikivoyage
+			"", // No Wi-Fi property on German Wikivoyage
+            "", // No accessibility property on German Wikivoyage
 			template.getArgument("lastedit"),
 			template.getArgument("description"),
             getLanguageCode()

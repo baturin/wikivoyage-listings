@@ -1,10 +1,10 @@
 package org.wikivoyage.listings.validators;
 
-import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.entity.Listing;
 
 public class LatitudeValidator implements Validator {
     @Override
-    public String validate(WikivoyagePOI poi) {
+    public String validate(Listing poi) {
         if (poi.getLatitude() != null && !poi.getLatitude().equals("")) {
             try {
                 Float.parseFloat(poi.getLatitude());

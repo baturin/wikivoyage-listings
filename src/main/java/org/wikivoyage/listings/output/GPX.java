@@ -1,12 +1,12 @@
 package org.wikivoyage.listings.output;
 
-import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.entity.Listing;
 import org.wikivoyage.listings.utils.XMLSimpleNode;
 import org.wikivoyage.listings.utils.XMLSimpleNodeException;
 
 public class GPX extends NavigationXMLOutputFormat {
     @Override
-    public XMLSimpleNode createXml(WikivoyagePOI[] pois, String dumpDate) throws XMLSimpleNodeException
+    public XMLSimpleNode createXml(Listing[] pois, String dumpDate) throws XMLSimpleNodeException
     {
         XMLSimpleNode gpxNode = new XMLSimpleNode("gpx", dumpDate)
                 .attrib("version", "1.1")
@@ -18,7 +18,7 @@ public class GPX extends NavigationXMLOutputFormat {
                         "http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
                 );
 
-        for (WikivoyagePOI poi: pois) {
+        for (Listing poi: pois) {
             new XMLSimpleNode(gpxNode, "wpt")
                     .attrib("lat", poi.getLatitude())
                     .attrib("lon", poi.getLongitude())

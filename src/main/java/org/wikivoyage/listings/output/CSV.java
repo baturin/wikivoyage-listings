@@ -1,7 +1,7 @@
 package org.wikivoyage.listings.output;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.entity.Listing;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -21,7 +21,7 @@ public class CSV implements OutputFormat {
 	public final static String SEPARATOR = ",";
 	public final static String NEW_LINE = "\n";
 	
-    public void write(Iterable<WikivoyagePOI> pois, String outputFilename, String dumpDate) throws WriteOutputException
+    public void write(Iterable<Listing> pois, String outputFilename, String dumpDate) throws WriteOutputException
     {
         BufferedWriter writer = null;
         try {
@@ -57,7 +57,7 @@ public class CSV implements OutputFormat {
                 		"description" + NEW_LINE);
                 
                 // Write each POI.
-                for (WikivoyagePOI poi : pois) {
+                for (Listing poi : pois) {
                     writer.write(foolproof(poi.getArticle()) + SEPARATOR);
                     writer.write(foolproof(poi.getType()) + SEPARATOR);
                     writer.write(foolproof(poi.getTitle()) + SEPARATOR);

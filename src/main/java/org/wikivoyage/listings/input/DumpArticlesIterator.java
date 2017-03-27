@@ -1,7 +1,7 @@
 package org.wikivoyage.listings.input;
 
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
-import org.wikivoyage.listings.entity.DumpArticle;
+import org.wikivoyage.listings.entity.Article;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -18,9 +18,9 @@ import java.util.NoSuchElementException;
 /**
  * Iterate over articles in Wikivoyage database dump
  */
-public class DumpArticlesIterator implements Iterator<DumpArticle> {
+public class DumpArticlesIterator implements Iterator<Article> {
     private XMLStreamReader reader;
-    private DumpArticle currentArticle;
+    private Article currentArticle;
     private String languageCode;
 
     public DumpArticlesIterator(String filename) throws DumpReadException
@@ -49,12 +49,12 @@ public class DumpArticlesIterator implements Iterator<DumpArticle> {
     }
 
     @Override
-    public DumpArticle next() {
+    public Article next() {
         if (currentArticle == null) {
             // no more articles in the dump
             throw new NoSuchElementException();
         }
-        DumpArticle result = currentArticle;
+        Article result = currentArticle;
         currentArticle = null;
         getNext();
         return result;
@@ -168,7 +168,7 @@ public class DumpArticlesIterator implements Iterator<DumpArticle> {
                                 pageNs = curCharValue.toString();
                             } else if (reader.getLocalName().equals("page")) {
                                 if (pageNs != null && pageNs.equals("0")) {
-                                    currentArticle = new DumpArticle(pageTitle, pageText);
+                                    currentArticle = new Article(pageTitle, pageText);
                                     return;
                                 }
                             }

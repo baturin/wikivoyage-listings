@@ -1,11 +1,11 @@
 package org.wikivoyage.listings;
 
-import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.entity.Listing;
 
 public class OutputTests {
 
-	public WikivoyagePOI getSample() {
-		return new WikivoyagePOI(
+	public Listing getSample() {
+		return new Listing(
 			"Tokyo/Roppongi",
 			"see",
 			"Mori Art Museum",

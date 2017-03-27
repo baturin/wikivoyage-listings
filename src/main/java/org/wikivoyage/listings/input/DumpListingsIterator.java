@@ -5,8 +5,8 @@ import java.util.NoSuchElementException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wikivoyage.listings.entity.DumpArticle;
-import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.entity.Article;
+import org.wikivoyage.listings.entity.Listing;
 
 import org.wikivoyage.listings.language.Language;
 import org.wikivoyage.listings.language.Languages;
@@ -14,19 +14,19 @@ import org.wikivoyage.listings.language.Languages;
 /**
  * Iterate over listings in Wikivoyage database dump
  */
-public class DumpListingsIterator implements Iterator<WikivoyagePOI>, Iterable<WikivoyagePOI> {
+public class DumpListingsIterator implements Iterator<Listing>, Iterable<Listing> {
     private static final Log log = LogFactory.getLog(DumpListingsIterator.class);
 
-    private PageParser pageParser;
+    private ArticleParser pageParser;
     private DumpArticlesIterator articlesIterator;
-    private Iterator<WikivoyagePOI> currentArticleListingIterator;
-    private WikivoyagePOI currentListing;
+    private Iterator<Listing> currentArticleListingIterator;
+    private Listing currentListing;
 
     public DumpListingsIterator(String filename) {
         articlesIterator = new DumpArticlesIterator(filename);
         log.debug("Detected language code for dump '" + filename + "': " + articlesIterator.getLanguageCode());
         Language language = Languages.create(articlesIterator.getLanguageCode());
-        pageParser = new PageParser(language);
+        pageParser = new ArticleParser(language);
         getNext();
     }
 
@@ -37,7 +37,7 @@ public class DumpListingsIterator implements Iterator<WikivoyagePOI>, Iterable<W
             if (!articlesIterator.hasNext()) {
                 return;
             }
-            DumpArticle article = articlesIterator.next();
+            Article article = articlesIterator.next();
             currentArticleListingIterator = pageParser.parsePage(article.getTitle(), article.getText()).iterator();
         }
         currentListing = currentArticleListingIterator.next();
@@ -49,8 +49,8 @@ public class DumpListingsIterator implements Iterator<WikivoyagePOI>, Iterable<W
     }
 
     @Override
-    public WikivoyagePOI next() {
-        WikivoyagePOI result = currentListing;
+    public Listing next() {
+        Listing result = currentListing;
         if (currentListing == null) {
             throw new NoSuchElementException();
         }
@@ -64,7 +64,7 @@ public class DumpListingsIterator implements Iterator<WikivoyagePOI>, Iterable<W
     }
 
     @Override
-    public Iterator<WikivoyagePOI> iterator() {
+    public Iterator<Listing> iterator() {
         return this;
     }
 }

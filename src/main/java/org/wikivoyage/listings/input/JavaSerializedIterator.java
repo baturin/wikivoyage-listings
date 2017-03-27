@@ -1,6 +1,6 @@
 package org.wikivoyage.listings.input;
 
-import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.entity.Listing;
 
 import java.io.EOFException;
 import java.io.FileInputStream;
@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Iterator;
 
-public class JavaSerializedIterator implements Iterator<WikivoyagePOI>, Iterable<WikivoyagePOI> {
-    private WikivoyagePOI poi;
+public class JavaSerializedIterator implements Iterator<Listing>, Iterable<Listing> {
+    private Listing poi;
     FileInputStream fio;
 
     public JavaSerializedIterator(String filename) throws IOException {
@@ -18,7 +18,7 @@ public class JavaSerializedIterator implements Iterator<WikivoyagePOI>, Iterable
     }
 
     @Override
-    public Iterator<WikivoyagePOI> iterator() {
+    public Iterator<Listing> iterator() {
         return null;
     }
 
@@ -28,8 +28,8 @@ public class JavaSerializedIterator implements Iterator<WikivoyagePOI>, Iterable
     }
 
     @Override
-    public WikivoyagePOI next() {
-        WikivoyagePOI currentPOI = poi;
+    public Listing next() {
+        Listing currentPOI = poi;
         getNext();
         return currentPOI;
     }
@@ -38,7 +38,7 @@ public class JavaSerializedIterator implements Iterator<WikivoyagePOI>, Iterable
     {
         try {
             ObjectInputStream ois = new ObjectInputStream(fio);
-            poi = (WikivoyagePOI) ois.readObject();
+            poi = (Listing) ois.readObject();
         } catch (EOFException e) {
             poi = null;
             closeInputStream();

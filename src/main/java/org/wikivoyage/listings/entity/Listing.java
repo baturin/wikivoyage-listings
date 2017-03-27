@@ -5,8 +5,10 @@ import java.io.Serializable;
 /**
  * Entity representing a Wikivoyage listing.
  */
-public class WikivoyagePOI implements Serializable {
+public class Listing implements Serializable {
 	
+    private static final long serialVersionUID = -1756001427780563695L;
+
     /**
      * Wikivoyage article in which the POI was found, for instance "Tokyo/Roppongi".
      */
@@ -139,7 +141,7 @@ public class WikivoyagePOI implements Serializable {
      */
     protected String language;
 
-    public WikivoyagePOI(
+    public Listing(
         String article, String type, String title, String alt, String wikidata, String wikipedia, String address, String directions,
         String phone, String tollFree, String email, String fax, String url,
         String hours, String checkIn, String checkOut, String image, String price,
