@@ -1,6 +1,5 @@
 package org.wikivoyage.listings.input;
 
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,28 +11,21 @@ import org.sweble.wikitext.parser.nodes.WtNode;
 import org.sweble.wikitext.parser.nodes.WtTemplate;
 import org.sweble.wikitext.parser.utils.SimpleParserConfig;
 import org.sweble.wikitext.parser.utils.StringConversionException;
-import org.wikivoyage.listings.entity.WikivoyagePOI;
-import org.wikivoyage.listings.input.template.*;
-
+import org.wikivoyage.listings.entity.Listing;
+import org.wikivoyage.listings.input.template.TemplateNode;
 import org.wikivoyage.listings.language.Language;
 
 /**
- * Parser of a single Wikivoyage page
+ * Parser of a single Wikivoyage article
  */
-public class PageParser {
-    private static final Log log = LogFactory.getLog(PageParser.class);
+public class ArticleParser {
+    private static final Log log = LogFactory.getLog(ArticleParser.class);
 
     private Language language;
-
-	/**
-     * Set of allowed templates used in Wikivoyage pages for listings
-     */
-    private HashSet<String> listingTemplates;
     
-    public PageParser(Language language)
+    public ArticleParser(Language language)
     {
     	this.language = language;
-        listingTemplates = language.getListingTemplates();
     }
 
     /**
@@ -41,10 +33,10 @@ public class PageParser {
      * @param article Name of Wikivoyage article
      * @param text Wikivoyage page as string
      */
-    public List<WikivoyagePOI> parsePage(String article, String text) {
+    public List<Listing> parsePage(String article, String text) {
         log.debug("Start: parse article '" + article + "'");
 
-        LinkedList<WikivoyagePOI> pois = new LinkedList<>();
+        LinkedList<Listing> pois = new LinkedList<>();
         try {
             ParserConfig config = new SimpleParserConfig();
             WikitextPreprocessor p = new WikitextPreprocessor(config);
@@ -58,7 +50,7 @@ public class PageParser {
         return pois;
     }
 
-    private void processNode(String article, WtNode node, List<WikivoyagePOI> pois) throws StringConversionException
+    private void processNode(String article, WtNode node, List<Listing> pois) throws StringConversionException
     {
         for (WtNode childNode: node) {
             if (childNode instanceof WtTemplate) {
@@ -66,9 +58,9 @@ public class PageParser {
                     language.getLanguageCode(), (WtTemplate) childNode, language.getTemplateConverters()
                 );
 
-                if (listingTemplates.contains(template.getNameLowercase())) {
+                if (language.getListingTemplates().contains(template.getNameLowercase())) {
                     if (template.hasArgument(language.getNameElement())) {
-                        WikivoyagePOI poi = language.parseListingTemplate(article, template);
+                        Listing poi = language.parseListingTemplate(article, template);
                         if(poi != null) {
                         	pois.add(poi);
                         }

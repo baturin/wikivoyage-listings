@@ -1,7 +1,7 @@
 package org.wikivoyage.listings.output;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.entity.Listing;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -22,7 +22,7 @@ public class SQL implements OutputFormat {
     }
 
     @Override
-    public void write(Iterable<WikivoyagePOI> pois, String outputFilename, String dumpDate) throws WriteOutputException {
+    public void write(Iterable<Listing> pois, String outputFilename, String dumpDate) throws WriteOutputException {
         BufferedWriter writer = null;
         try {
             try {
@@ -39,44 +39,89 @@ public class SQL implements OutputFormat {
                 writer.write(
                     "CREATE TABLE wikivoyage_listings (" +
                             "id INTEGER PRIMARY KEY, " +
-                            "title VARCHAR(128), " +
-                            "language VARCHAR(2), " +
                             "article VARCHAR(128), " +
                             "type VARCHAR(64), " +
+                            "title VARCHAR(128), " +
                             "wikidata VARCHAR(64), " +
                             "wikipedia VARCHAR(64), " +
-                            "description VARCHAR(4096), " +
+                            "alt VARCHAR(128), " +
+                            "address VARCHAR(255), " +
+                            "directions VARCHAR(255), " +
+                            "phone VARCHAR(128), " +
+                            "tollfree VARCHAR(128), " +
+                            "email VARCHAR(128), " +
+                            "fax VARCHAR(128), " +
+                            "url VARCHAR(128), " +
+                            "hours VARCHAR(128), " +
+                            "checkin VARCHAR(128), " +
+                            "checkout VARCHAR(128), " +
+                            "image VARCHAR(255)," +
+                            "price VARCHAR(128), " +
                             "latitude DECIMAL(10, 8), " +
                             "longitude DECIMAL(11, 8), " +
-                            "image VARCHAR(255)" +
+                            "wifi VARCHAR(128), " +
+                            "accessibility VARCHAR(128), " +
+                            "lastedit VARCHAR(128), " +
+                            "description VARCHAR(4096), " +
+                            "language VARCHAR(2)" +
                     ");\n"
                 );
 
-                for (WikivoyagePOI poi : pois) {
+                for (Listing poi : pois) {
                     writer.write(
                         "INSERT INTO wikivoyage_listings (" +
-                                "title, " +
-                                "language, " +
                                 "article, " +
                                 "type, " +
+                                "title, " +
                                 "wikidata, " +
                                 "wikipedia, " +
-                                "description, " +
+                                "alt, " +
+                                "address, " +
+                                "directions, " +
+                                "phone, " +
+                                "tollfree, " +
+                                "email, " +
+                                "fax, " +
+                                "url, " +
+                                "hours, " +
+                                "checkin, " +
+                                "checkout, " +
+                                "image, " +
+                                "price, " +
                                 "latitude, " +
                                 "longitude, " +
-                                "image" +
+                                "wifi, " +
+                                "accessibility, " +
+                                "lastedit, " +
+                                "description, " +
+                                "language" +
                         ") " +
                         "VALUES (" +
-                                escape(poi.getTitle()) + ", " +
-                                escape(poi.getLanguage()) + ", " +
                                 escape(poi.getArticle()) + ", " +
                                 escape(poi.getType()) + ", " +
+                                escape(poi.getTitle()) + ", " +
                                 escape(poi.getWikidata()) + ", " +
                                 escape(poi.getWikipedia()) + ", " +
-                                escape(poi.getDescription())+ ", " +
+                                escape(poi.getAlt()) + ", " +
+                                escape(poi.getAddress()) + ", " +
+                                escape(poi.getDirections()) + ", " +
+                                escape(poi.getPhone()) + ", " +
+                                escape(poi.getTollFree()) + ", " +
+                                escape(poi.getEmail()) + ", " +
+                                escape(poi.getFax()) + ", " +
+                                escape(poi.getUrl()) + ", " +
+                                escape(poi.getHours()) + ", " +
+                                escape(poi.getCheckIn()) + ", " +
+                                escape(poi.getCheckOut()) + ", " +
+                                escape(poi.getImage()) + ", " +
+                                escape(poi.getPrice()) + ", " +
                                 getPositionalValue(poi.getLatitude(), 90.0) + ", " +
                                 getPositionalValue(poi.getLongitude(), 180.0) + ", " +
-                                escape(poi.getImage()) +
+                                escape(poi.getWifi()) + ", " +
+                                escape(poi.getAccessibility()) + ", " +
+                                escape(poi.getLastEdit()) + ", " +
+                                escape(poi.getDescription())+ ", " +
+                                escape(poi.getLanguage()) +
                         ");\n");
                 }
             } finally {

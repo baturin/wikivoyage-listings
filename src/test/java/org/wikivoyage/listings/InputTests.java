@@ -6,8 +6,8 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.wikivoyage.listings.entity.WikivoyagePOI;
-import org.wikivoyage.listings.input.PageParser;
+import org.wikivoyage.listings.entity.Listing;
+import org.wikivoyage.listings.input.ArticleParser;
 import org.wikivoyage.listings.language.Language;
 import org.wikivoyage.listings.language.english.English;
 import org.wikivoyage.listings.language.french.French;
@@ -19,13 +19,13 @@ public class InputTests {
     
 	@Test
 	public void processEnglish() throws Exception {
-        List<WikivoyagePOI> pois = parseResourcePOIs("sample-article-en.wikicode", new English(), "Tokyo/Roppongi");
+        List<Listing> pois = parseResourcePOIs("sample-article-en.wikicode", new English(), "Tokyo/Roppongi");
 
 		// Check number of POIs
 		Assert.assertEquals(71, pois.size());
 
 		// Check a particular POI in detail
-		WikivoyagePOI poi = pois.get(68);
+		Listing poi = pois.get(68);
 		Assert.assertEquals("Tokyo/Roppongi", poi.getArticle());
 		Assert.assertEquals("sleep", poi.getType());
 		Assert.assertEquals("Grand Hyatt Tokyo", poi.getTitle());
@@ -55,13 +55,13 @@ public class InputTests {
 	
     @Test
     public void processGerman() throws Exception {
-        List<WikivoyagePOI> pois = parseResourcePOIs("sample-article-de.wikicode", new German(), "Karwendel");
+        List<Listing> pois = parseResourcePOIs("sample-article-de.wikicode", new German(), "Karwendel");
 
         // Check number of POIs
         Assert.assertEquals(69, pois.size());
 
         // Check a particular POI in detail
-        WikivoyagePOI poi = pois.get(60);
+        Listing poi = pois.get(60);
         Assert.assertEquals("Karwendel", poi.getArticle());
         Assert.assertEquals("sleep", poi.getType());
         Assert.assertEquals("Hochlandhütte", poi.getTitle());
@@ -85,13 +85,13 @@ public class InputTests {
 
 	@Test
 	public void processFrench() throws Exception {
-        List<WikivoyagePOI> pois = parseResourcePOIs("sample-article-fr.wikicode", new French(), "Thouars");
+        List<Listing> pois = parseResourcePOIs("sample-article-fr.wikicode", new French(), "Thouars");
 
 		// Check number of POIs
 		Assert.assertEquals(28, pois.size());
 
 		// Check a particular POI in detail
-		WikivoyagePOI poi = pois.get(25);
+		Listing poi = pois.get(25);
 		Assert.assertEquals("Thouars", poi.getArticle());
 		Assert.assertEquals("sleep", poi.getType());
 		Assert.assertEquals("Camping municipal", poi.getTitle());
@@ -119,7 +119,7 @@ public class InputTests {
 
 	@Test
 	public void processFrenchPrixTemplate() throws Exception {
-		WikivoyagePOI poi = parseResourceSinglePOI("prix-template.wikicode", new French());
+		Listing poi = parseResourceSinglePOI("prix-template.wikicode", new French());
 		Assert.assertEquals(
 			poi.getPrice(),
 			"1.50€ à 4€. Entrée gratuite pour les enfants jusqu’à 12 ans, gratuit le premier dimanche du mois"
@@ -128,7 +128,7 @@ public class InputTests {
 
     @Test
     public void processFrenchHoraireTemplate() throws Exception {
-        List<WikivoyagePOI> pois = parseResourcePOIs("horaire-template.wikicode", new French());
+        List<Listing> pois = parseResourcePOIs("horaire-template.wikicode", new French());
         Assert.assertEquals(5, pois.size());
         Assert.assertEquals("lun. - jeu.: 8 h 30 - 22 h", pois.get(0).getHours());
         Assert.assertEquals("8 h 30 - 22 h", pois.get(1).getHours());
@@ -139,7 +139,7 @@ public class InputTests {
 
 	@Test
 	public void processRussianRoadTemplate() throws Exception {
-		WikivoyagePOI poi = parseResourceSinglePOI("russian-road-template.wikicode", new Russian());
+		Listing poi = parseResourceSinglePOI("russian-road-template.wikicode", new Russian());
 		Assert.assertEquals(
 			"На 38 км Ново-Рижского шоссе М9 (19 км от МКАД) " +
 			"свернуть по указателю на пирамиду.",
@@ -149,7 +149,7 @@ public class InputTests {
 
 	@Test
 	public void processUnknownTemplate() throws Exception {
-        WikivoyagePOI poi = parseResourceSinglePOI("unknown-template.wikicode");
+        Listing poi = parseResourceSinglePOI("unknown-template.wikicode");
         Assert.assertEquals(
             "Description with some {{unknown|template}} and another {{unknown|name=template}}",
             poi.getDescription()
@@ -158,7 +158,7 @@ public class InputTests {
 
 	@Test
     public void processHTMLComments() throws Exception {
-        WikivoyagePOI poi = parseResourceSinglePOI("html-comment.wikicode");
+        Listing poi = parseResourceSinglePOI("html-comment.wikicode");
         Assert.assertEquals(
             "AMBER HOUSE - at the centre!",
             poi.getTitle()
@@ -167,7 +167,7 @@ public class InputTests {
 
     @Test
     public void ignoreLinks() throws Exception {
-        WikivoyagePOI poi = parseResourceSinglePOI("links-inside-template.wikicode");
+        Listing poi = parseResourceSinglePOI("links-inside-template.wikicode");
         Assert.assertEquals(
             "Торговые ряды во Владимире очень странные. Их постоянно перестраивали: " +
             "в конце XVIII века начали с типовой одноэтажной арочной конструкции " +
@@ -184,7 +184,7 @@ public class InputTests {
 
     @Test
     public void caseInsensitiveListingNames() throws Exception {
-        WikivoyagePOI poi = parseResourceSinglePOI("case-insensitive-templates.wikicode");
+        Listing poi = parseResourceSinglePOI("case-insensitive-templates.wikicode");
         Assert.assertEquals(
             "Черниговская областная филармония",
             poi.getTitle()
@@ -193,38 +193,38 @@ public class InputTests {
 
     @Test
     public void skipDeadLinks() throws Exception {
-        WikivoyagePOI poi = parseResourceSinglePOI("dead-link.wikicode");
+        Listing poi = parseResourceSinglePOI("dead-link.wikicode");
         Assert.assertEquals(
             "http://www.isbryderen-elbjorn.dk",
             poi.getUrl()
         );
     }
 
-    private WikivoyagePOI parseResourceSinglePOI(String resourceFile) throws Exception
+    private Listing parseResourceSinglePOI(String resourceFile) throws Exception
     {
-        List<WikivoyagePOI> pois = parseResourcePOIs(resourceFile);
+        List<Listing> pois = parseResourcePOIs(resourceFile);
         Assert.assertEquals(1, pois.size());
         return pois.get(0);
     }
 
-    private WikivoyagePOI parseResourceSinglePOI(String resourceFile, Language language) throws Exception
+    private Listing parseResourceSinglePOI(String resourceFile, Language language) throws Exception
     {
-        List<WikivoyagePOI> pois = parseResourcePOIs(resourceFile, language);
+        List<Listing> pois = parseResourcePOIs(resourceFile, language);
         Assert.assertEquals(1, pois.size());
         return pois.get(0);
     }
 
-    private List<WikivoyagePOI> parseResourcePOIs(String resourceFile) throws IOException
+    private List<Listing> parseResourcePOIs(String resourceFile) throws IOException
     {
         return parseResourcePOIs(resourceFile, new English(), "TestArticle");
     }
 
-    private List<WikivoyagePOI> parseResourcePOIs(String resourceFile, Language language) throws IOException
+    private List<Listing> parseResourcePOIs(String resourceFile, Language language) throws IOException
     {
         return parseResourcePOIs(resourceFile, language, "TestArticle");
     }
 
-    private List<WikivoyagePOI> parseResourcePOIs(
+    private List<Listing> parseResourcePOIs(
             String resourceFile, Language language, String articleName
     ) throws IOException
     {
@@ -232,7 +232,7 @@ public class InputTests {
             this.getClass().getResourceAsStream("/" + resourceFile), "UTF-8"
         );
 
-        PageParser pageParser = new PageParser(language);
+        ArticleParser pageParser = new ArticleParser(language);
         return pageParser.parsePage(articleName, wikicode);
     }
 }

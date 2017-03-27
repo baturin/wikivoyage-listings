@@ -1,20 +1,42 @@
 package org.wikivoyage.listings;
 
-import org.wikivoyage.listings.entity.WikivoyagePOI;
-import org.wikivoyage.listings.input.*;
-import org.wikivoyage.listings.language.Languages;
-import org.wikivoyage.listings.output.*;
-import org.wikivoyage.listings.utils.FileUtils;
-import org.wikivoyage.listings.utils.FileUtilsException;
-
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wikivoyage.listings.entity.Listing;
+import org.wikivoyage.listings.input.DumpDownloader;
+import org.wikivoyage.listings.input.DumpReadException;
+import org.wikivoyage.listings.input.JavaSerializedIterable;
+import org.wikivoyage.listings.input.ListingsIterable;
+import org.wikivoyage.listings.language.Languages;
+import org.wikivoyage.listings.output.CSV;
+import org.wikivoyage.listings.output.GPX;
+import org.wikivoyage.listings.output.JavaSerializedObject;
+import org.wikivoyage.listings.output.KML;
+import org.wikivoyage.listings.output.OBF;
+import org.wikivoyage.listings.output.OsmAndGPX;
+import org.wikivoyage.listings.output.OsmXml;
+import org.wikivoyage.listings.output.OutputFormat;
+import org.wikivoyage.listings.output.SQL;
+import org.wikivoyage.listings.output.ValidationReport;
+import org.wikivoyage.listings.output.WriteOutputException;
+import org.wikivoyage.listings.output.Xml;
+import org.wikivoyage.listings.utils.FileUtils;
+import org.wikivoyage.listings.utils.FileUtilsException;
 import org.wikivoyage.listings.utils.UnrecognizeTemplateCounter;
+import org.wikivoyage.listings.validators.EmailValidator;
+import org.wikivoyage.listings.validators.LatitudeValidator;
+import org.wikivoyage.listings.validators.LongitudeValidator;
+import org.wikivoyage.listings.validators.Validator;
+import org.wikivoyage.listings.validators.WebsiteURLValidator;
+import org.wikivoyage.listings.validators.WikidataValidator;
 
 public class Main {
     private static final Log log = LogFactory.getLog(Main.class);
@@ -34,7 +56,6 @@ public class Main {
         formats.put("osmand.gpx", new OsmAndGPX());
         formats.put("kml", new KML());
         formats.put("validation-report", new ValidationReport());
-
 
         CommandLine cl = new CommandLine();
         String [] formatNames = formats.keySet().toArray(new String [formats.keySet().size()]);
@@ -154,37 +175,68 @@ public class Main {
             downloader.downloadDumpFromUrl(dumpUrl, dumpPath);
         }
 
-        Iterable<WikivoyagePOI> listingIterable = new DumpListingsIterable(dumpPath);
-
+        // Prepare to iterate over listings.
+        Iterable<Listing> listings = new ListingsIterable(dumpPath);
+        
+        // Write listings to intermediate file.
         if (useIntermediateFile) {
             log.info("Write intermediate file with parsed listings");
             String javaSerialFile = fileNames.workingDirPath("serialized-pois.bin");
             FileUtils.removeFile(javaSerialFile);
-            new JavaSerializedObject().write(listingIterable, javaSerialFile, dumpDate);
-            listingIterable = new JavaSerializedIterable(javaSerialFile);
+            new JavaSerializedObject().write(listings, javaSerialFile, dumpDate);
+            listings = new JavaSerializedIterable(javaSerialFile);
         }
+        
+        // Create a list containing only valid listings.
+        Validator [] validators = {
+                new LatitudeValidator(),
+                new LongitudeValidator(),
+                new WebsiteURLValidator(),
+                new EmailValidator(),
+                new WikidataValidator()
+        };
+        List<Listing> validListings = new ArrayList<Listing>();
+        for (Listing listing : listings) {
+            boolean valid = true;
+            for (Validator validator : validators) {
+                valid &= (validator.validate(listing) == null); // validator returns null if valid.
+            }
+            if (valid) {
+                validListings.add(listing);
+            }
+        }
+        
+        // Write all listings (including invalid ones) to validation output.
+        writeFormat(listings, language, dumpDate, latestDumpDate, new ValidationReport());
 
-
-        for (OutputFormat format: formats.values()) {
-            log.info(
+        // Write valid listings to the other output formats.
+        HashMap<String, OutputFormat> formatsForValidListings = new HashMap<>(formats);
+        formatsForValidListings.remove("validation-report");
+        for (OutputFormat format: formatsForValidListings.values()) {
+            writeFormat(validListings, language, dumpDate, latestDumpDate, format);
+        }
+    }
+    
+    private static void writeFormat(Iterable<Listing> listings, String language,
+            String dumpDate, String latestDumpDate, OutputFormat format) throws FileUtilsException {
+        log.info(
                 "Write output file for language " + language +
                 ", dump " + dumpDate + ", format " + format.getDefaultExtension().substring(1)
             );
-            String fileName = fileNames.getListingPath(language, dumpDate, format.getDefaultExtension(), false);
-            try {
-                format.write(listingIterable, fileName, dumpDate);
-                if (dumpDate.equals(latestDumpDate)) {
-                    String latestFileName = fileNames.getListingPath(
-                            language, "latest", format.getDefaultExtension(), false
-                    );
-                    FileUtils.removeFile(latestFileName);
-                    FileUtils.copyFile(fileName, latestFileName);
-                }
-                String fileNameArchive = fileNames.getListingPath(language, dumpDate, format.getDefaultExtension(), true);
-                FileUtils.archive(fileName, fileNameArchive);
-            } catch (WriteOutputException e) {
-                System.out.println("Failed to write file: " + e.getMessage());
+        String fileName = fileNames.getListingPath(language, dumpDate, format.getDefaultExtension(), false);
+        try {
+            format.write(listings, fileName, dumpDate);
+            if (dumpDate.equals(latestDumpDate)) {
+                String latestFileName = fileNames.getListingPath(
+                        language, "latest", format.getDefaultExtension(), false
+                );
+                FileUtils.removeFile(latestFileName);
+                FileUtils.copyFile(fileName, latestFileName);
             }
+            String fileNameArchive = fileNames.getListingPath(language, dumpDate, format.getDefaultExtension(), true);
+            FileUtils.archive(fileName, fileNameArchive);
+        } catch (WriteOutputException e) {
+            System.out.println("Failed to write file: " + e.getMessage());
         }
     }
 
@@ -207,7 +259,7 @@ public class Main {
         String inputFilename, String outputFilename, OutputFormat format, String dumpDate
     ) throws WriteOutputException, DumpReadException {
         log.info("Parse dump");
-        Iterable<WikivoyagePOI> listingIterable = new DumpListingsIterable(inputFilename);
+        Iterable<Listing> listingIterable = new ListingsIterable(inputFilename);
         log.info("Save to '" + outputFilename + "'");
         format.write(listingIterable, outputFilename, dumpDate);
     }

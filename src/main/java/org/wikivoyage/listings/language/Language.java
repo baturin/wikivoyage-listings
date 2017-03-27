@@ -3,7 +3,7 @@ package org.wikivoyage.listings.language;
 import java.util.HashSet;
 import java.util.List;
 
-import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.entity.Listing;
 import org.wikivoyage.listings.input.template.TemplateNode;
 import org.wikivoyage.listings.input.template.TemplateToStringConverter;
 
@@ -31,7 +31,7 @@ public interface Language
     /**
      * Convert listing template into a WikivoyagePOI object.
      */
-    WikivoyagePOI parseListingTemplate(String article, TemplateNode template);
+    Listing parseListingTemplate(String article, TemplateNode template);
 
     /**
      * Get template to string converters to be used inside listing template arguments

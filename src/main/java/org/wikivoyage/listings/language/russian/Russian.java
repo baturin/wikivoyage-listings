@@ -1,7 +1,7 @@
 package org.wikivoyage.listings.language.russian;
 
 import org.wikivoyage.listings.language.russian.template.RussianRoadTemplateToStringConverter;
-import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.entity.Listing;
 import org.wikivoyage.listings.input.template.TemplateNode;
 import org.wikivoyage.listings.input.template.TemplateToStringConverter;
 import org.wikivoyage.listings.language.english.English;
@@ -27,7 +27,7 @@ public class Russian extends English {
      * Convert listing template into a WikivoyagePOI object.
      */
     @Override
-    public WikivoyagePOI parseListingTemplate(String article, TemplateNode template) {
+    public Listing parseListingTemplate(String article, TemplateNode template) {
         // Type
         String poiType;
         if (template.getNameLowercase().equals("listing")) {
@@ -48,7 +48,7 @@ public class Russian extends English {
             description = template.getArgument("content");
         }
 
-        return new WikivoyagePOI(
+        return new Listing(
             article,
             poiType,
             template.getArgument("name"),

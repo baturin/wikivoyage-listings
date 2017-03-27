@@ -25,6 +25,7 @@ public class DumpDownloader {
         ReadableByteChannel rbc = Channels.newChannel(website.openStream());
         FileOutputStream fos = new FileOutputStream(dumpFilename);
         fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+        fos.close();
     }
 
     public List<String> listDumps(String language) throws IOException

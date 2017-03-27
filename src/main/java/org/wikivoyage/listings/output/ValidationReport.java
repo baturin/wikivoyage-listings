@@ -2,7 +2,7 @@ package org.wikivoyage.listings.output;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.entity.Listing;
 import org.wikivoyage.listings.validators.*;
 
 import java.io.BufferedWriter;
@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 public class ValidationReport implements OutputFormat {
     @Override
-    public void write(Iterable<WikivoyagePOI> pois, String outputFilename, String dumpDate) throws WriteOutputException {
+    public void write(Iterable<Listing> pois, String outputFilename, String dumpDate) throws WriteOutputException {
         Validator [] validators = {
             new LatitudeValidator(),
             new LongitudeValidator(),
@@ -25,7 +25,7 @@ public class ValidationReport implements OutputFormat {
 
         try {
             StringBuilder rows = new StringBuilder();
-            for (WikivoyagePOI poi: pois) {
+            for (Listing poi: pois) {
                 for (Validator validator: validators) {
                     String errorMessage = validator.validate(poi);
                     if (errorMessage != null) {

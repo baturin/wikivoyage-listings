@@ -1,19 +1,19 @@
 package org.wikivoyage.listings.output;
 
-import org.wikivoyage.listings.entity.WikivoyagePOI;
+import org.wikivoyage.listings.entity.Listing;
 import org.wikivoyage.listings.utils.XMLSimpleNode;
 import org.wikivoyage.listings.utils.XMLSimpleNodeException;
 
 public class Xml extends NavigationXMLOutputFormat {
     private static Integer nodeId = 0;
 
-    public XMLSimpleNode createXml(WikivoyagePOI[] pois, String dumpDate) throws XMLSimpleNodeException
+    public XMLSimpleNode createXml(Listing[] pois, String dumpDate) throws XMLSimpleNodeException
     {
         XMLSimpleNode genericNode = new XMLSimpleNode("wikivoyage", dumpDate)
                 .attrib("version", "0.5")
                 .attrib("generator", "wikivoyage-pois-converter");
 
-        for (WikivoyagePOI poi: pois) {
+        for (Listing poi: pois) {
             XMLSimpleNode poiNode = new XMLSimpleNode(genericNode, "node")
                     .attrib("id", nodeId.toString())
                     .attrib("article", poi.getArticle())
