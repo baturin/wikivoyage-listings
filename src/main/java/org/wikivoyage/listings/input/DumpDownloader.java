@@ -53,8 +53,9 @@ public class DumpDownloader {
         Collections.reverse(availableDumps);
         
         if (availableDumps.size()>0){
-    			String latestDump = availableDumps.get(0);
-        		if (this.isPartialDump(latestDump, language)) {
+        		String dumpStatusURL = indexUrl + availableDumps.get(0) + "/dumpstatus.json"; 
+    			String dumpStatus = this.getDumpStatus(dumpStatusURL);
+        		if (this.isPartialDump(dumpStatus)) {
         			availableDumps.remove(0);
         		}
         	}
@@ -62,25 +63,28 @@ public class DumpDownloader {
         return availableDumps;
     }
 
-    private boolean isPartialDump(String latestDump, String language) throws IOException {
-		String jsonStatusFileURL = BASE_URL + language + "wikivoyage/" + latestDump + "/dumpstatus.json";  
-        InputStream in = new URL(jsonStatusFileURL).openStream();
-        boolean partialDump=true;
+    public String getDumpStatus(String dumpStatusURL) throws IOException {
+    		String dumpStatus="";
+    		InputStream in = new URL(dumpStatusURL).openStream();
         try {
-            String jsonStatusFileJSON = IOUtils.toString(in);
-            JSONObject jsonStatus = new JSONObject(jsonStatusFileJSON);
-            if (jsonStatus
-            		.getJSONObject("jobs")
-            		.getJSONObject("articlesmultistreamdump")
-            		.getString("status")
-            		.equals("done")) {
-            		partialDump=false;
-            }
-            
+        		dumpStatus = IOUtils.toString(in);
         } finally {
             IOUtils.closeQuietly(in);
         }
-		return partialDump;
+        return dumpStatus;
+    }
+
+    public boolean isPartialDump(String dumpStatus) throws IOException {
+        JSONObject dumpStatusJSON = new JSONObject(dumpStatus);
+        boolean partialDump=true;
+        if (dumpStatusJSON
+        		.getJSONObject("jobs")
+        		.getJSONObject("articlesmultistreamdump")
+        		.getString("status")
+        		.equals("done")) {
+        		partialDump=false;
+        }
+        return partialDump;
 	}
 
 	public String dumpUrl(String language, String dumpId)
