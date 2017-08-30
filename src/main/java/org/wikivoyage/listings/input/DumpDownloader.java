@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -14,6 +15,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONObject;
 
 public class DumpDownloader {
     private static final Log log = LogFactory.getLog(DumpDownloader.class);
@@ -47,10 +49,41 @@ public class DumpDownloader {
             IOUtils.closeQuietly(in);
         }
 
+        Collections.sort(availableDumps);
+        Collections.reverse(availableDumps);
+        
+        if (availableDumps.size()>0){
+    			String latestDump = availableDumps.get(0);
+        		if (this.isPartialDump(latestDump, language)) {
+        			availableDumps.remove(0);
+        		}
+        	}
+        
         return availableDumps;
     }
 
-    public String dumpUrl(String language, String dumpId)
+    private boolean isPartialDump(String latestDump, String language) throws IOException {
+		String jsonStatusFileURL = BASE_URL + language + "wikivoyage/" + latestDump + "/dumpstatus.json";  
+        InputStream in = new URL(jsonStatusFileURL).openStream();
+        boolean partialDump=true;
+        try {
+            String jsonStatusFileJSON = IOUtils.toString(in);
+            JSONObject jsonStatus = new JSONObject(jsonStatusFileJSON);
+            if (jsonStatus
+            		.getJSONObject("jobs")
+            		.getJSONObject("articlesmultistreamdump")
+            		.getString("status")
+            		.equals("done")) {
+            		partialDump=false;
+            }
+            
+        } finally {
+            IOUtils.closeQuietly(in);
+        }
+		return partialDump;
+	}
+
+	public String dumpUrl(String language, String dumpId)
     {
         return (
             BASE_URL + language + "wikivoyage/" +
