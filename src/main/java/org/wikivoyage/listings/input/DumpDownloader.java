@@ -74,6 +74,10 @@ public class DumpDownloader {
         return dumpStatus;
     }
 
+    /*
+     * Data dumps/Status format
+	 * https://meta.wikimedia.org/wiki/Data_dumps/Status_format
+     */
     public boolean isPartialDump(String dumpStatus) throws IOException {
         JSONObject dumpStatusJSON = new JSONObject(dumpStatus);
         boolean partialDump=true;
