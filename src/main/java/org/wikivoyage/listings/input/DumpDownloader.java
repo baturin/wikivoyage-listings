@@ -52,6 +52,10 @@ public class DumpDownloader {
         Collections.sort(availableDumps);
         Collections.reverse(availableDumps);
         
+        /*
+         * Check the JSON status file of the last dump, if the dump is "partial" (in-progress)
+         * we discard it in favour of the previous one if exist
+         */
         if (availableDumps.size()>0){
         		String dumpStatusURL = indexUrl + availableDumps.get(0) + "/dumpstatus.json"; 
     			String dumpStatus = this.getDumpStatus(dumpStatusURL);
