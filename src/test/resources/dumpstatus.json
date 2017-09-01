@@ -1,0 +1,415 @@
+{
+	"version": "0.8",
+	"jobs": {
+		"articlesmultistreamdump": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-pages-articles-multistream.xml.bz2": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-pages-articles-multistream.xml.bz2",
+					"size": 86056819
+				},
+				"enwikivoyage-20170801-pages-articles-multistream-index.txt.bz2": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-pages-articles-multistream-index.txt.bz2",
+					"size": 442906
+				}
+			},
+			"updated": "2017-08-02 23:29:10"
+		},
+		"langlinkstable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-langlinks.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-langlinks.sql.gz",
+					"sha1": "0100121a9bade7351aaa0ad744ea9e0d39aeb40b",
+					"md5": "bc6c81e8b6e084c1be359bf1518b3b2d",
+					"size": 516605
+				}
+			},
+			"updated": "2017-08-01 20:44:44"
+		},
+		"pagelinkstable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-pagelinks.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-pagelinks.sql.gz",
+					"sha1": "a2b83ce26da444e642f86409a3a5504c4eb9b779",
+					"md5": "87c693dc09963058347dcb377320e32e",
+					"size": 5876335
+				}
+			},
+			"updated": "2017-08-01 20:45:53"
+		},
+		"imagetable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-image.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-image.sql.gz",
+					"sha1": "6ab2002015d3e2cd16635965e8d881ba5fc0333f",
+					"md5": "2fe62a8ef56e997d93dd1b8042b554da",
+					"size": 234874
+				}
+			},
+			"updated": "2017-08-01 20:44:47"
+		},
+		"iwlinkstable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-iwlinks.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-iwlinks.sql.gz",
+					"sha1": "b46923631837c21b7d046c325c28f4d2ef400637",
+					"md5": "231b9df1cc4de053f743249523bf1543",
+					"size": 392801
+				}
+			},
+			"updated": "2017-08-01 20:45:28"
+		},
+		"usergroupstable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-user_groups.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-user_groups.sql.gz",
+					"sha1": "a57ddd99b0254f67bd4482f5281b78be0737de3e",
+					"md5": "e971c00ceb564ce087ec5958bfc84e4f",
+					"size": 2594
+				}
+			},
+			"updated": "2017-08-01 20:45:13"
+		},
+		"xmlpagelogsdump": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-pages-logging.xml.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-pages-logging.xml.gz",
+					"sha1": "c64c3d1005782cf93a85cdd9a7c2659d90099049",
+					"md5": "c1317faa5a714c41266a3fe04cb788f3",
+					"size": 96226517
+				}
+			},
+			"updated": "2017-08-04 21:19:14"
+		},
+		"changetagstable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-change_tag.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-change_tag.sql.gz",
+					"sha1": "9efe592adab755395c6e4e7e92ebbf7ef5690743",
+					"md5": "49b95e6c9bc4fcb1382f86592d7121bc",
+					"size": 456238
+				}
+			},
+			"updated": "2017-08-01 20:45:38"
+		},
+		"imagelinkstable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-imagelinks.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-imagelinks.sql.gz",
+					"sha1": "870b8a4e9dd5deb86d26fa3635cf8e532e64a80b",
+					"md5": "1a9e5000299f5e82c31222793f362611",
+					"size": 1748638
+				}
+			},
+			"updated": "2017-08-01 20:45:08"
+		},
+		"pagetable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-page.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-page.sql.gz",
+					"sha1": "59fb22930fbd2e2e18617b7807e7c3fe6f149a0c",
+					"md5": "a6f42003085e40689f4f7108c4c2f015",
+					"size": 4025794
+				}
+			},
+			"updated": "2017-08-01 20:44:59"
+		},
+		"xmlflowhistorydump": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-flowhistory.xml.bz2": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-flowhistory.xml.bz2",
+					"sha1": "b9856bc32faf5208db232380fd983ce4d9d0e432",
+					"md5": "2850310e51272f4d2aed6f36251f36a7",
+					"size": 192
+				}
+			},
+			"updated": "2017-08-04 21:19:20"
+		},
+		"metacurrentdump": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-pages-meta-current.xml.bz2": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-pages-meta-current.xml.bz2",
+					"sha1": "3e38dadc304636079391ec8a316381eae0bf671f",
+					"md5": "72dc953a4590e5414123a9c6b4ed8f88",
+					"size": 117608579
+				}
+			},
+			"updated": "2017-08-03 18:35:02"
+		},
+		"pagepropstable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-page_props.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-page_props.sql.gz",
+					"sha1": "9d389899d37d041c2c5e7405b37963f7a03f6c44",
+					"md5": "a57c1039bf713d78c18b6d9ab8b2d3e1",
+					"size": 8874177
+				}
+			},
+			"updated": "2017-08-01 20:45:43"
+		},
+		"metahistory7zdump": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-pages-meta-history.xml.7z": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-pages-meta-history.xml.7z",
+					"sha1": "71dc495f42976aed08cdd78f006efd6aeb83faa1",
+					"md5": "a6f297f72eb47b0f63d9c9038126bf4b",
+					"size": 533971420
+				}
+			},
+			"updated": "2017-08-05 11:00:09"
+		},
+		"sitestatstable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-site_stats.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-site_stats.sql.gz",
+					"sha1": "864ca760b31c156af02f27e23b598d7d37c61690",
+					"md5": "48100aaabd12e107e2edf1609df06afa",
+					"size": 813
+				}
+			},
+			"updated": "2017-08-01 20:45:16"
+		},
+		"articlesdump": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-pages-articles.xml.bz2": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-pages-articles.xml.bz2",
+					"sha1": "7ece9d31eb17b5303bfac31bb55cf94ca9535c23",
+					"md5": "7f2607b3b8708f349b2c1a875ec9b5d5",
+					"size": 83954973
+				}
+			},
+			"updated": "2017-08-02 11:52:30"
+		},
+		"templatelinkstable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-templatelinks.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-templatelinks.sql.gz",
+					"sha1": "003010cf530dd84a6f81b4aa96014676508eabac",
+					"md5": "d4a19d73558da9fb061c789d08df200d",
+					"size": 2121521
+				}
+			},
+			"updated": "2017-08-01 20:45:23"
+		},
+		"geotagstable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-geo_tags.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-geo_tags.sql.gz",
+					"sha1": "670f7c40ad6ae5835901867d864a17cdf5e0ccd0",
+					"md5": "50c142b045ac51cac02f1ac3e0a2b759",
+					"size": 3474722
+				}
+			},
+			"updated": "2017-08-01 20:45:47"
+		},
+		"categorylinkstable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-categorylinks.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-categorylinks.sql.gz",
+					"sha1": "b1007a5350063ebd6adcd2fcb476e49edef750e8",
+					"md5": "1b7125bd2964c9b33e0b80ff929220b4",
+					"size": 2936213
+				}
+			},
+			"updated": "2017-08-01 20:45:36"
+		},
+		"pagerestrictionstable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-page_restrictions.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-page_restrictions.sql.gz",
+					"sha1": "1cc5ba9fe0e61cc931bd15692d54d896c45e3dab",
+					"md5": "e350d5f72207adea53430e47caac7d20",
+					"size": 339898
+				}
+			},
+			"updated": "2017-08-01 20:44:53"
+		},
+		"namespaces": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-siteinfo-namespaces.json": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-siteinfo-namespaces.json",
+					"sha1": "0dccc665869bedfa8d9619151be208420617197e",
+					"md5": "14fbdb0cc99f89e1d9646435319aaaad",
+					"size": 16103
+				}
+			},
+			"updated": "2017-08-04 20:52:30"
+		},
+		"allpagetitlesdump": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-all-titles.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-all-titles.gz",
+					"sha1": "d6ad093615eeaa2ed9415c37b458c4d1263ba969",
+					"md5": "703315ce5b0f9f3d7feda37d32dc9968",
+					"size": 761453
+				}
+			},
+			"updated": "2017-08-04 20:52:34"
+		},
+		"abstractsdump": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-abstract.xml": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-abstract.xml",
+					"sha1": "4a0e274fa372e1dd0e29ada592f9c14495596b50",
+					"md5": "143a0a760f5dcd226e9432d7f48c0d6e",
+					"size": 54804066
+				}
+			},
+			"updated": "2017-08-04 21:10:43"
+		},
+		"pagetitlesdump": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-all-titles-in-ns0.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-all-titles-in-ns0.gz",
+					"sha1": "6eebaee485f572561d4591a721d2e0b89616db39",
+					"md5": "fe6a0a8597311aba6dfc52702e318100",
+					"size": 242387
+				}
+			},
+			"updated": "2017-08-04 20:52:32"
+		},
+		"externallinkstable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-externallinks.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-externallinks.sql.gz",
+					"sha1": "5078badbf76b3525c2ab01a5a646a96ca1b1dd4c",
+					"md5": "11a8e5381fd2bddea632807ea9297864",
+					"size": 10978623
+				}
+			},
+			"updated": "2017-08-01 20:45:32"
+		},
+		"xmlstubsdump": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-stub-articles.xml.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-stub-articles.xml.gz",
+					"sha1": "8aeeeebc7f5e5e75694210e2cde11652c18f6915",
+					"md5": "608c64b57338fbdf3ef2105394411cac",
+					"size": 4974045
+				},
+				"enwikivoyage-20170801-stub-meta-history.xml.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-stub-meta-history.xml.gz",
+					"sha1": "0314305e7ee943e968552b24040ef4571c3eeb55",
+					"md5": "413a48b173ce60d5dbed528343a06b14",
+					"size": 205913062
+				},
+				"enwikivoyage-20170801-stub-meta-current.xml.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-stub-meta-current.xml.gz",
+					"sha1": "7f96bbca3b9f7b1e6d047970e63dedaf02c70b2a",
+					"md5": "2ce7f5407e6049c324b96bffd2b9557f",
+					"size": 9779362
+				}
+			},
+			"updated": "2017-08-01 13:59:24"
+		},
+		"categorytable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-category.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-category.sql.gz",
+					"sha1": "25ae3240cf9304d80a1f854c61b59bbfc95a429c",
+					"md5": "d4c961259c7bae2a12dfb62490f82e6f",
+					"size": 52162
+				}
+			},
+			"updated": "2017-08-01 20:45:04"
+		},
+		"wbcentityusagetable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-wbc_entity_usage.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-wbc_entity_usage.sql.gz",
+					"sha1": "43d9849c8abc0dbbe5a562374c69399aba39a9c2",
+					"md5": "bbc607931441bd819ee9040771a3e4dc",
+					"size": 1078061
+				}
+			},
+			"updated": "2017-08-01 20:44:50"
+		},
+		"metahistorybz2dump": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-pages-meta-history.xml.bz2": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-pages-meta-history.xml.bz2",
+					"sha1": "1fd2a6e4f15f0936f9e21d87bb48e27b09bc1acf",
+					"md5": "9db01b528a0bb5b841b837c027fd92ca",
+					"size": 6665338473
+				}
+			},
+			"updated": "2017-08-05 09:22:02"
+		},
+		"sitestable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-sites.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-sites.sql.gz",
+					"sha1": "355fb35dc3346921aa778ffee30c9de738376690",
+					"md5": "e7ec1c8c7b7dd83172ae0894c5b618bd",
+					"size": 19798
+				}
+			},
+			"updated": "2017-08-01 20:45:11"
+		},
+		"redirecttable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-redirect.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-redirect.sql.gz",
+					"sha1": "a14ad53020fe448677631bb0e834e51eb12bd84f",
+					"md5": "3b5e4a98ec44cb4a39b0d18157fa73a1",
+					"size": 225447
+				}
+			},
+			"updated": "2017-08-01 20:45:19"
+		},
+		"xmlflowdump": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-flow.xml.bz2": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-flow.xml.bz2",
+					"sha1": "b9856bc32faf5208db232380fd983ce4d9d0e432",
+					"md5": "2850310e51272f4d2aed6f36251f36a7",
+					"size": 192
+				}
+			},
+			"updated": "2017-08-04 21:19:18"
+		},
+		"protectedtitlestable": {
+			"status": "done",
+			"files": {
+				"enwikivoyage-20170801-protected_titles.sql.gz": {
+					"url": "/enwikivoyage/20170801/enwikivoyage-20170801-protected_titles.sql.gz",
+					"sha1": "fe77167b0709d00df98c46aeb8ad4af4fa663032",
+					"md5": "9c6b11c482447ba28500a6990b27328f",
+					"size": 1954
+				}
+			},
+			"updated": "2017-08-01 20:45:26"
+		}
+	}
+}

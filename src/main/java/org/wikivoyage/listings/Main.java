@@ -82,8 +82,7 @@ public class Main {
                     } else {
                         createDumpsCacheDir();
                         List<String> dumpDates = downloader.listDumps(cl.inputLatest);
-                        Collections.sort(dumpDates);
-                        Collections.reverse(dumpDates);
+                        
                         dumpDate = dumpDates.get(0);
 
                         inputFilename = fileNames.dumpCacheFilename(cl.inputLatest, dumpDate);
@@ -122,9 +121,6 @@ public class Main {
             if (dumpDates.size() == 0) {
                 continue;
             }
-
-            Collections.sort(dumpDates);
-            Collections.reverse(dumpDates);
 
             String latestDumpDate = dumpDates.get(0);
 
