@@ -27,18 +27,19 @@ public class Russian extends English {
      * Convert listing template into a WikivoyagePOI object.
      */
     @Override
-    public Listing parseListingTemplate(String article, TemplateNode template) {
+    public Listing parseListingTemplate(String article, TemplateNode template, String poiType) {
         // Type
-        String poiType;
-        if (template.getNameLowercase().equals("listing")) {
-            if (template.hasArgument("type")) {
-                poiType = template.getArgument("type");
-            } else {
-                poiType = "other";
-            }
-        } else {
-            poiType = template.getNameLowercase();
-        }
+    		if (poiType=="") {
+	        if (template.getNameLowercase().equals("listing")) {
+	            if (template.hasArgument("type")) {
+	                poiType = template.getArgument("type");
+	            } else {
+	                poiType = "other";
+	            }
+	        } else {
+	            poiType = template.getNameLowercase();
+	        }
+    		}
         
         // Description
         String description = "";

@@ -51,18 +51,19 @@ public class English implements Language
      * Convert listing template into a WikivoyagePOI object.
      */
     @Override
-    public Listing parseListingTemplate(String article, TemplateNode template) {
+    public Listing parseListingTemplate(String article, TemplateNode template, String poiType) {
         // Type
-        String poiType;
-        if (template.getNameLowercase().equals("listing")) {
-            if (template.hasArgument("type")) {
-                poiType = template.getArgument("type");
-            } else {
-                poiType = "other";
-            }
-        } else {
-            poiType = template.getNameLowercase();
-        }
+    		if (poiType=="") {
+	        if (template.getNameLowercase().equals("listing")) {
+	            if (template.hasArgument("type")) {
+	                poiType = template.getArgument("type");
+	            } else {
+	                poiType = "other";
+	            }
+	        } else {
+	            poiType = template.getNameLowercase();
+	        }
+    		}
         
         // Description
         String description = "";
@@ -71,7 +72,7 @@ public class English implements Language
         } else if (template.hasArgument("content")) {
             description = template.getArgument("content");
         }
-
+        
     	return new Listing(
             article,
             poiType,
@@ -107,4 +108,9 @@ public class English implements Language
         converters.add(new DeadLinkTemplateToStringConverter());
         return converters;
     }
+
+	@Override
+	public String getFlagElement() {
+		return "flag";
+	}
 }

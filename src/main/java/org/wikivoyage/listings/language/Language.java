@@ -29,12 +29,19 @@ public interface Language
     String getNameElement();
     
     /**
-     * Convert listing template into a WikivoyagePOI object.
+     * The name of the place, which is the only strictly required element.
      */
-    Listing parseListingTemplate(String article, TemplateNode template);
+    String getFlagElement();
+    
+    /**
+     * Convert listing template into a WikivoyagePOI object.
+     * @param string 
+     */
+    Listing parseListingTemplate(String article, TemplateNode template, String poiType);
 
     /**
      * Get template to string converters to be used inside listing template arguments
      */
     List<TemplateToStringConverter> getTemplateConverters();
+
 }

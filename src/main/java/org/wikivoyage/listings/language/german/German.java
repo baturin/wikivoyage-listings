@@ -74,63 +74,69 @@ public class German implements Language
     		return "name";
     }
     
+    @Override
+	public String getFlagElement() {
+		return "";
+	}
+    
     /**
      * Convert listing template into a WikivoyagePOI object.
      */
     @Override
-    public Listing parseListingTemplate(String article, TemplateNode template) {
+    public Listing parseListingTemplate(String article, TemplateNode template, String poiType) {
 
         // Type
-        String poiType;
-		switch(template.getArgument("type")) {
-		    case "sight":
-    		case "museum":
-    		case "gallery":
-    		case "religious site":
-            case "landmark":
-    			poiType = "see";
-    			break;
-    		case "park":
-    		case "university":
-    		case "school":
-    		case "college":
-    		case "theater":
-    		case "music":
-    		case "club":
-    		case "cinema":
-    		case "amusement park":
-    		case "festival":
-    		case "sport":
-    		case "library":
-    			poiType = "do";
-    			break;
-    		case "shop":
-    		case "book seller":
-    		case "mall":
-    		case "bank":
-    			poiType = "buy";
-    			break;
-    		case "restaurant":
-    			poiType = "eat";
-    			break;
-    		case "bar":
-    			poiType = "drink";
-    			break;
-    		case "hotel":
-    		case "alpine hut":
-    			poiType = "sleep";
-    			break;
-    		case "airport": // Or create new types?
-    		case "terminal":
-    		case "bus":
-    		case "post":
-    		case "office":
-    		case "hospital":
-    		case "pharmacy":
-    		default:
-    			poiType = "listing";
-    			break;
-		}
+        if (poiType=="") {
+			switch(template.getArgument("type")) {
+			    case "sight":
+	    		case "museum":
+	    		case "gallery":
+	    		case "religious site":
+	            case "landmark":
+	    			poiType = "see";
+	    			break;
+	    		case "park":
+	    		case "university":
+	    		case "school":
+	    		case "college":
+	    		case "theater":
+	    		case "music":
+	    		case "club":
+	    		case "cinema":
+	    		case "amusement park":
+	    		case "festival":
+	    		case "sport":
+	    		case "library":
+	    			poiType = "do";
+	    			break;
+	    		case "shop":
+	    		case "book seller":
+	    		case "mall":
+	    		case "bank":
+	    			poiType = "buy";
+	    			break;
+	    		case "restaurant":
+	    			poiType = "eat";
+	    			break;
+	    		case "bar":
+	    			poiType = "drink";
+	    			break;
+	    		case "hotel":
+	    		case "alpine hut":
+	    			poiType = "sleep";
+	    			break;
+	    		case "airport": // Or create new types?
+	    		case "terminal":
+	    		case "bus":
+	    		case "post":
+	    		case "office":
+	    		case "hospital":
+	    		case "pharmacy":
+	    		default:
+	    			poiType = "listing";
+	    			break;
+			}
+        }
 
     	return new Listing(
 			article,
@@ -166,4 +172,6 @@ public class German implements Language
     public List<TemplateToStringConverter> getTemplateConverters() {
         return new LinkedList<>();
     }
+
+	
 }

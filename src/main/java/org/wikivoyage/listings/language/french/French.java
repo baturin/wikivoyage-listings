@@ -54,42 +54,48 @@ public class French implements Language
     		return "nom";
     }
     
+	@Override
+	public String getFlagElement() {
+		return "";
+	}
+    
     /**
      * Convert listing template into a WikivoyagePOI object.
      */
     @Override
-    public Listing parseListingTemplate(String article, TemplateNode template) {
+    public Listing parseListingTemplate(String article, TemplateNode template, String poiType) {
 
         // Type
-        String poiType;
-		switch(template.getNameLowercase()) {
-    		case "voir":
-    			poiType = "see";
-    			break;
-    		case "faire":
-    			poiType = "do";
-    			break;
-    		case "acheter":
-    			poiType = "buy";
-    			break;
-    		case "manger":
-    			poiType = "eat";
-    			break;
-    		case "sortir":
-    			poiType = "drink";
-    			break;
-    		case "se loger":
-    			poiType = "sleep";
-    			break;
-    		case "aller": // Or create new types?
-    		case "ville":
-    		case "destination":
-    		case "représentation diplomatique":
-    		case "autre":
-    		default:
-    			poiType = "listing";
-    			break;
-		}
+    		if (poiType=="") {
+			switch(template.getNameLowercase()) {
+	    		case "voir":
+	    			poiType = "see";
+	    			break;
+	    		case "faire":
+	    			poiType = "do";
+	    			break;
+	    		case "acheter":
+	    			poiType = "buy";
+	    			break;
+	    		case "manger":
+	    			poiType = "eat";
+	    			break;
+	    		case "sortir":
+	    			poiType = "drink";
+	    			break;
+	    		case "se loger":
+	    			poiType = "sleep";
+	    			break;
+	    		case "aller": // Or create new types?
+	    		case "ville":
+	    		case "destination":
+	    		case "représentation diplomatique":
+	    		case "autre":
+	    		default:
+	    			poiType = "listing";
+	    			break;
+			}
+    		}
 
     	return new Listing(
 			article,
@@ -128,4 +134,6 @@ public class French implements Language
         converters.add(new PrixTemplateToStringConverter());
         return converters;
     }
+
+
 }
