@@ -90,6 +90,8 @@ public class French implements Language
 	    		case "ville":
 	    		case "destination":
 	    		case "représentation diplomatique":
+	    			poiType = "diplomatic-representation";
+	    			break;
 	    		case "autre":
 	    		default:
 	    			poiType = "listing";
