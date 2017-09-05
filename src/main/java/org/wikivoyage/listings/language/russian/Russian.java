@@ -29,7 +29,7 @@ public class Russian extends English {
     @Override
     public Listing parseListingTemplate(String article, TemplateNode template, String poiType) {
         // Type
-    		if (poiType=="") {
+    		if (poiType==null) {
 	        if (template.getNameLowercase().equals("listing")) {
 	            if (template.hasArgument("type")) {
 	                poiType = template.getArgument("type");
