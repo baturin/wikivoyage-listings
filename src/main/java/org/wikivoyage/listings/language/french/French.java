@@ -66,7 +66,7 @@ public class French implements Language
     public Listing parseListingTemplate(String article, TemplateNode template, String poiType) {
 
         // Type
-    		if (poiType=="") {
+    		if (poiType==null) {
 			switch(template.getNameLowercase()) {
 	    		case "voir":
 	    			poiType = "see";
