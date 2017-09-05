@@ -86,7 +86,7 @@ public class German implements Language
     public Listing parseListingTemplate(String article, TemplateNode template, String poiType) {
 
         // Type
-        if (poiType=="") {
+        if (poiType==null) {
 			switch(template.getArgument("type")) {
 			    case "sight":
 	    		case "museum":
