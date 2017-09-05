@@ -52,7 +52,7 @@ public class ArticleParser {
 
     private void processNode(String article, WtNode node, List<Listing> pois) throws StringConversionException
     {
-    		String nextPoiType="";
+    		String nextPoiType = null;
         for (WtNode childNode: node) {
             if (childNode instanceof WtTemplate) {
                 TemplateNode template = new TemplateNode(
@@ -62,8 +62,8 @@ public class ArticleParser {
                 if (language.getListingTemplates().contains(template.getNameLowercase())) {
 				    	if (template.hasArgument(language.getNameElement())) {   		
 				    		Listing poi = language.parseListingTemplate(article, template, nextPoiType);
-				    		if (nextPoiType.length()>0) {
-				    			nextPoiType="";
+				    		if (nextPoiType != null) {
+				    			nextPoiType = null;
 				    		}
 				        if(poi != null) {
 				        		pois.add(poi);
@@ -74,7 +74,7 @@ public class ArticleParser {
                  * If I encounter the {flag} element, the next listing is a diplomatic-representation
                  */
                 else if (template.getNameLowercase().equals(language.getFlagElement())) {
-					nextPoiType="diplomatic-representation";
+					nextPoiType = "diplomatic-representation";
 			    }
                 
                 
