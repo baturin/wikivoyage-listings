@@ -35,7 +35,15 @@ public interface Language
     
     /**
      * Convert listing template into a WikivoyagePOI object.
-     * @param string 
+     * @param string can assume following values:
+     * "see"
+     * "do"
+	 * "buy"
+	 * "eat"
+	 * "drink"
+	 * "sleep"
+     * "diplomatic-representation"
+     * "listing"
      */
     Listing parseListingTemplate(String article, TemplateNode template, String poiType);
 
