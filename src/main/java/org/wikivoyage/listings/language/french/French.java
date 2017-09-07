@@ -86,12 +86,12 @@ public class French implements Language
 	    		case "se loger":
 	    			poiType = "sleep";
 	    			break;
-	    		case "aller": // Or create new types?
-	    		case "ville":
-	    		case "destination":
 	    		case "représentation diplomatique":
 	    			poiType = "diplomatic-representation";
 	    			break;
+	    		case "aller": // Or create new types?
+	    		case "ville":
+	    		case "destination":
 	    		case "autre":
 	    		default:
 	    			poiType = "listing";
