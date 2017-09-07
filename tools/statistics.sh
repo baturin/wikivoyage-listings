@@ -2,6 +2,7 @@
 # Please execute from wikivoyage-listings folder
 
 # Generate SQLite database and statistics for each language
+mkdir listings
 for WVLANGUAGE in fr ru en de; do
 
   echo "=== LANGUAGE: $WVLANGUAGE ==="
@@ -38,3 +39,4 @@ EAT=`sqlite3 listings/all.sqlitedb 'SELECT COUNT(*) FROM wikivoyage_listings WHE
 DRINK=`sqlite3 listings/all.sqlitedb 'SELECT COUNT(*) FROM wikivoyage_listings WHERE wikidata != "" AND type == "drink";'`; echo "Drink: $DRINK"
 SLEEP=`sqlite3 listings/all.sqlitedb 'SELECT COUNT(*) FROM wikivoyage_listings WHERE wikidata != "" AND type == "sleep";'`; echo "Sleep: $SLEEP"
 VICINITY=`sqlite3 listings/all.sqlitedb 'SELECT COUNT(*) FROM wikivoyage_listings WHERE wikidata != "" AND type == "vicinity";'`; echo "Vicinity: $VICINITY"
+DIPLO=`sqlite3 listings/all.sqlitedb 'SELECT COUNT(*) FROM wikivoyage_listings WHERE wikidata != "" AND type == "diplomatic-representation";'`; echo "Diplomatic representation: $DIPLO"
