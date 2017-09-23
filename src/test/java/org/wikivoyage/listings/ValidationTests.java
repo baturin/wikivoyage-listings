@@ -22,6 +22,7 @@ public class ValidationTests {
         assertNull(new WebsiteURLValidator().validate(TestWikivoyagePOI.createWithURL("http://www.ville-douai.fr/index.php/Théâtre?idpage=14004")));
         assertNull(new WebsiteURLValidator().validate(TestWikivoyagePOI.createWithURL("http://www.kitaena.co.jp/info/馬籠線.pdf")));
         assertNull(new WebsiteURLValidator().validate(TestWikivoyagePOI.createWithURL("http://www.natuurenbos.be/nl-BE/Domeinen/Vlaams-Brabant/arborétum_Heverleebos.aspx")));
+        assertNull(new WebsiteURLValidator().validate(TestWikivoyagePOI.createWithURL("http://www.some-url.de?q=glück")));
     }
 
     @Test
@@ -31,6 +32,7 @@ public class ValidationTests {
         assertNotNull(new WebsiteURLValidator().validate(TestWikivoyagePOI.createWithURL("http://wikivoyage.org]")));
         assertNotNull(new WebsiteURLValidator().validate(TestWikivoyagePOI.createWithURL("wikivoyage.org")));
         assertNotNull(new WebsiteURLValidator().validate(TestWikivoyagePOI.createWithURL("mary@wikivoyage.org")));
+        assertNotNull(new WebsiteURLValidator().validate(TestWikivoyagePOI.createWithURL("ftp://wikivoyage.org]")));
     }
     
     @Test
