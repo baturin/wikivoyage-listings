@@ -21,6 +21,7 @@ public class ValidationTests {
         assertNull(new WebsiteURLValidator().validate(TestWikivoyagePOI.createWithURL("http://www.kitaena.co.jp/info/馬籠線.pdf")));
         assertNull(new WebsiteURLValidator().validate(TestWikivoyagePOI.createWithURL("http://www.natuurenbos.be/nl-BE/Domeinen/Vlaams-Brabant/arborétum_Heverleebos.aspx")));
         assertNull(new WebsiteURLValidator().validate(TestWikivoyagePOI.createWithURL("http://www.some-url.de?q=glück")));
+        assertNull(new WebsiteURLValidator().validate(TestWikivoyagePOI.createWithURL("http://www.countrylokal-goldgräber.de/")));
     }
 
     @Test

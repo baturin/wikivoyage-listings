@@ -3,10 +3,7 @@ package org.wikivoyage.listings.validators;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.wikivoyage.listings.entity.Listing;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.net.*;
 
 public class WebsiteURLValidator implements Validator {
     @Override
@@ -30,7 +27,7 @@ public class WebsiteURLValidator implements Validator {
             URL url = new URL(urlString);
             URI uri = new URI(url.getProtocol()
                     , url.getUserInfo()
-                    , url.getHost()
+                    , IDN.toASCII(url.getHost())
                     , url.getPort()
                     , url.getPath()
                     , url.getQuery()
