@@ -61,6 +61,7 @@ public class ValidationTests {
 
         assertNull(validator.validate(TestWikivoyagePOI.createWithLatitude("")));
         assertNull(validator.validate(TestWikivoyagePOI.createWithLatitude("57.058889")));
+        assertNull(validator.validate(TestWikivoyagePOI.createWithLatitude("41°55'49.4\"N")));
     }
 
     @Test
@@ -79,6 +80,7 @@ public class ValidationTests {
         assertNull(validator.validate(TestWikivoyagePOI.createWithLongitude("")));
         assertNull(validator.validate(TestWikivoyagePOI.createWithLongitude("-9.920728")));
         assertNull(validator.validate(TestWikivoyagePOI.createWithLongitude("179.920728")));
+        assertNull(validator.validate(TestWikivoyagePOI.createWithLongitude("17°38'15.60\"E")));
     }
 
     @Test
@@ -88,6 +90,7 @@ public class ValidationTests {
         assertNotNull(validator.validate(TestWikivoyagePOI.createWithLongitude("-181.23")));
         assertNotNull(validator.validate(TestWikivoyagePOI.createWithLongitude("-180.00005")));
         assertNotNull(validator.validate(TestWikivoyagePOI.createWithLongitude("not a longitude")));
+        assertNotNull(validator.validate(TestWikivoyagePOI.createWithLongitude("123,345,567")));
     }
 }
 
