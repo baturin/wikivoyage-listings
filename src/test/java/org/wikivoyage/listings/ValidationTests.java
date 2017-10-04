@@ -5,9 +5,7 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 import org.wikivoyage.listings.entity.Listing;
-import org.wikivoyage.listings.validators.EmailValidator;
-import org.wikivoyage.listings.validators.WebsiteURLValidator;
-import org.wikivoyage.listings.validators.WikidataValidator;
+import org.wikivoyage.listings.validators.*;
 
 public class ValidationTests {
     
@@ -23,6 +21,7 @@ public class ValidationTests {
         assertNull(new WebsiteURLValidator().validate(TestWikivoyagePOI.createWithURL("http://www.kitaena.co.jp/info/馬籠線.pdf")));
         assertNull(new WebsiteURLValidator().validate(TestWikivoyagePOI.createWithURL("http://www.natuurenbos.be/nl-BE/Domeinen/Vlaams-Brabant/arborétum_Heverleebos.aspx")));
         assertNull(new WebsiteURLValidator().validate(TestWikivoyagePOI.createWithURL("http://www.some-url.de?q=glück")));
+        assertNull(new WebsiteURLValidator().validate(TestWikivoyagePOI.createWithURL("http://www.countrylokal-goldgräber.de/")));
     }
 
     @Test
@@ -56,6 +55,44 @@ public class ValidationTests {
         assertNotNull(new WikidataValidator().validate(TestWikivoyagePOI.createWithWikidata("QID42")));
         assertNotNull(new WikidataValidator().validate(TestWikivoyagePOI.createWithWikidata("q42")));
     }
+
+    @Test
+    public void validLatitudeTests() {
+        LatitudeValidator validator = new LatitudeValidator();
+
+        assertNull(validator.validate(TestWikivoyagePOI.createWithLatitude("")));
+        assertNull(validator.validate(TestWikivoyagePOI.createWithLatitude("57.058889")));
+        assertNull(validator.validate(TestWikivoyagePOI.createWithLatitude("41°55'49.4\"N")));
+    }
+
+    @Test
+    public void invalidLatitudeTests() {
+        LatitudeValidator validator = new LatitudeValidator();
+
+        assertNotNull(validator.validate(TestWikivoyagePOI.createWithLatitude("-90.1")));
+        assertNotNull(validator.validate(TestWikivoyagePOI.createWithLatitude("not a coordinate")));
+        assertNotNull(validator.validate(TestWikivoyagePOI.createWithLatitude("90.005")));
+    }
+
+    @Test
+    public void validLongitudeTests() {
+        LongitudeValidator validator = new LongitudeValidator();
+
+        assertNull(validator.validate(TestWikivoyagePOI.createWithLongitude("")));
+        assertNull(validator.validate(TestWikivoyagePOI.createWithLongitude("-9.920728")));
+        assertNull(validator.validate(TestWikivoyagePOI.createWithLongitude("179.920728")));
+        assertNull(validator.validate(TestWikivoyagePOI.createWithLongitude("17°38'15.60\"E")));
+    }
+
+    @Test
+    public void invalidLongitudeTests() {
+        LongitudeValidator validator = new LongitudeValidator();
+
+        assertNotNull(validator.validate(TestWikivoyagePOI.createWithLongitude("-181.23")));
+        assertNotNull(validator.validate(TestWikivoyagePOI.createWithLongitude("-180.00005")));
+        assertNotNull(validator.validate(TestWikivoyagePOI.createWithLongitude("not a longitude")));
+        assertNotNull(validator.validate(TestWikivoyagePOI.createWithLongitude("123,345,567")));
+    }
 }
 
 /**
@@ -67,6 +104,18 @@ class TestWikivoyagePOI extends Listing {
         super ("", "", "", "", "", "", "", "", "", "",
                 "", "", "", "", "","", "", "", "", "",
                 "", "", "", "", "");
+    }
+
+    public static TestWikivoyagePOI createWithLongitude(String longitude) {
+        TestWikivoyagePOI poi = new TestWikivoyagePOI();
+        poi.longitude = longitude;
+        return poi;
+    }
+
+    public static TestWikivoyagePOI createWithLatitude(String latitude) {
+        TestWikivoyagePOI poi = new TestWikivoyagePOI();
+        poi.latitude = latitude;
+        return poi;
     }
     
     public static TestWikivoyagePOI createWithEmail(String email) {
