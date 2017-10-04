@@ -143,7 +143,7 @@ public class German implements Language
 			poiType,
 			template.getArgument("name"),
 			template.getArgument("alt"),
-            template.getArgument("d"), // Wikidata
+            template.getArgument("wikidata"), // Wikidata
             "", // No Wikipedia property on German Wikivoyage
 			template.getArgument("address"),
 			template.getArgument("directions"),
