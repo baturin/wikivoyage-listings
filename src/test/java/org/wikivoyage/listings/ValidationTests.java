@@ -3,11 +3,13 @@ package org.wikivoyage.listings;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.util.Map;
+
 import org.junit.Test;
 import org.wikivoyage.listings.entity.Listing;
 import org.wikivoyage.listings.validators.EmailValidator;
 import org.wikivoyage.listings.validators.WebsiteURLValidator;
-import org.wikivoyage.listings.validators.WikidataValidator;
+import org.wikivoyage.listings.validators.WikidataBulkValidator;
 
 public class ValidationTests {
     
@@ -49,12 +51,28 @@ public class ValidationTests {
     @Test
     public void wikidata() {
         // Valid
-        assertNull(new WikidataValidator().validate(TestWikivoyagePOI.createWithWikidata("Q42")));
+        Listing q1 = TestWikivoyagePOI.createWithWikidata("Q42");
         // Invalid
-        assertNotNull(new WikidataValidator().validate(TestWikivoyagePOI.createWithWikidata("Q42\"")));
-        assertNotNull(new WikidataValidator().validate(TestWikivoyagePOI.createWithWikidata("Q4 2")));
-        assertNotNull(new WikidataValidator().validate(TestWikivoyagePOI.createWithWikidata("QID42")));
-        assertNotNull(new WikidataValidator().validate(TestWikivoyagePOI.createWithWikidata("q42")));
+        Listing q2 = TestWikivoyagePOI.createWithWikidata("Q42\"");
+        Listing q3 = TestWikivoyagePOI.createWithWikidata("Q4 2");
+        Listing q4 = TestWikivoyagePOI.createWithWikidata("QID42");
+        Listing q5 = TestWikivoyagePOI.createWithWikidata("q42");
+        
+        // Run bulk validation
+        WikidataBulkValidator validator = new WikidataBulkValidator();
+        validator.add(q1);
+        validator.add(q2);
+        validator.add(q3);
+        validator.add(q4);
+        validator.add(q5);
+        Map<Listing, String> results = validator.validate();
+        
+        // Check results
+        assertNull(results.get(q1));
+        assertNotNull(results.get(q2));
+        assertNotNull(results.get(q3));
+        assertNotNull(results.get(q4));
+        assertNotNull(results.get(q5));
     }
 }
 

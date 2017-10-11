@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,7 +38,8 @@ import org.wikivoyage.listings.validators.LatitudeValidator;
 import org.wikivoyage.listings.validators.LongitudeValidator;
 import org.wikivoyage.listings.validators.Validator;
 import org.wikivoyage.listings.validators.WebsiteURLValidator;
-import org.wikivoyage.listings.validators.WikidataValidator;
+import org.wikivoyage.listings.validators.BulkValidator;
+import org.wikivoyage.listings.validators.WikidataBulkValidator;
 
 public class Main {
     private static final Log log = LogFactory.getLog(Main.class);
@@ -188,9 +191,9 @@ public class Main {
                 new LatitudeValidator(),
                 new LongitudeValidator(),
                 new WebsiteURLValidator(),
-                new EmailValidator(),
-                new WikidataValidator()
+                new EmailValidator()
         };
+        BulkValidator bulkValidator = new WikidataBulkValidator();
         List<Listing> validListings = new ArrayList<Listing>();
         for (Listing listing : listings) {
             boolean valid = true;
@@ -200,6 +203,11 @@ public class Main {
             if (valid) {
                 validListings.add(listing);
             }
+            bulkValidator.add(listing);
+        }
+        // Remove all POIs which are not valid according to WikidataBulkValidator
+        for (Listing invalidPoi : bulkValidator.validate().keySet()) {
+            validListings.remove(invalidPoi);
         }
         
         // Write all listings (including invalid ones) to validation output.

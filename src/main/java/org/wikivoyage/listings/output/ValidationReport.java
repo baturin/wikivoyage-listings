@@ -8,6 +8,8 @@ import org.wikivoyage.listings.validators.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Generate an HTML report showing what syntax errors exist in the Wikivoyage data.
@@ -19,9 +21,9 @@ public class ValidationReport implements OutputFormat {
             new LatitudeValidator(),
             new LongitudeValidator(),
             new WebsiteURLValidator(),
-            new EmailValidator(),
-            new WikidataValidator()
+            new EmailValidator()
         };
+        BulkValidator bulkValidator = new WikidataBulkValidator();
 
         try {
             StringBuilder rows = new StringBuilder();
@@ -29,18 +31,14 @@ public class ValidationReport implements OutputFormat {
                 for (Validator validator: validators) {
                     String errorMessage = validator.validate(poi);
                     if (errorMessage != null) {
-                        String row = (
-                            "{" +
-                                "'language': '"  + StringEscapeUtils.escapeJavaScript(poi.getLanguage())  +  "', " +
-                                "'article': '"  + StringEscapeUtils.escapeJavaScript(poi.getArticle())  +  "', " +
-                                "'listing': '" + StringEscapeUtils.escapeJavaScript(poi.getTitle())+ "', " +
-                                "'issue': '" + StringEscapeUtils.escapeJavaScript(errorMessage) + "', " +
-                                "'issueType': '" + StringEscapeUtils.escapeJavaScript(validator.getIssueType()) + "'" +
-                            "},\n"
-                        );
-                        rows.append(row);
+                        rows.append(createRow(poi, errorMessage, validator.getIssueType()));
                     }
                 }
+                bulkValidator.add(poi);
+            }
+            Map<Listing, String> bulkValidationResults = bulkValidator.validate();
+            for (Entry<Listing, String> entry : bulkValidationResults.entrySet()) {
+                rows.append(createRow(entry.getKey(), entry.getValue(), bulkValidator.getIssueType()));
             }
 
             String template = IOUtils.toString(
@@ -71,5 +69,16 @@ public class ValidationReport implements OutputFormat {
     @Override
     public String getDefaultExtension() {
         return ".validation-report.html";
+    }
+    
+    private String createRow(Listing poi, String issue, String issueType) {
+        return
+            "{" +
+                "'language': '"  + StringEscapeUtils.escapeJavaScript(poi.getLanguage())  +  "', " +
+                "'article': '"  + StringEscapeUtils.escapeJavaScript(poi.getArticle())  +  "', " +
+                "'listing': '" + StringEscapeUtils.escapeJavaScript(poi.getTitle())+ "', " +
+                "'issue': '" + StringEscapeUtils.escapeJavaScript(issue) + "', " +
+                "'issueType': '" + StringEscapeUtils.escapeJavaScript(issueType) + "'" +
+            "},\n";
     }
 }
