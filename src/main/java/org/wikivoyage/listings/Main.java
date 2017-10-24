@@ -3,12 +3,8 @@ package org.wikivoyage.listings;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,8 +34,7 @@ import org.wikivoyage.listings.validators.LatitudeValidator;
 import org.wikivoyage.listings.validators.LongitudeValidator;
 import org.wikivoyage.listings.validators.Validator;
 import org.wikivoyage.listings.validators.WebsiteURLValidator;
-import org.wikivoyage.listings.validators.BulkValidator;
-import org.wikivoyage.listings.validators.WikidataBulkValidator;
+import org.wikivoyage.listings.validators.WikidataValidator;
 
 public class Main {
     private static final Log log = LogFactory.getLog(Main.class);
@@ -185,39 +180,10 @@ public class Main {
             new JavaSerializedObject().write(listings, javaSerialFile, dumpDate);
             listings = new JavaSerializedIterable(javaSerialFile);
         }
-        
-        // Create a list containing only valid listings.
-        Validator [] validators = {
-                new LatitudeValidator(),
-                new LongitudeValidator(),
-                new WebsiteURLValidator(),
-                new EmailValidator()
-        };
-        BulkValidator bulkValidator = new WikidataBulkValidator();
-        List<Listing> validListings = new ArrayList<Listing>();
-        for (Listing listing : listings) {
-            boolean valid = true;
-            for (Validator validator : validators) {
-                valid &= (validator.validate(listing) == null); // validator returns null if valid.
-            }
-            if (valid) {
-                validListings.add(listing);
-            }
-            bulkValidator.add(listing);
-        }
-        // Remove all POIs which are not valid according to WikidataBulkValidator
-        for (Listing invalidPoi : bulkValidator.validate().keySet()) {
-            validListings.remove(invalidPoi);
-        }
-        
-        // Write all listings (including invalid ones) to validation output.
-        writeFormat(listings, language, dumpDate, latestDumpDate, new ValidationReport());
-
-        // Write valid listings to the other output formats.
-        HashMap<String, OutputFormat> formatsForValidListings = new HashMap<>(formats);
-        formatsForValidListings.remove("validation-report");
-        for (OutputFormat format: formatsForValidListings.values()) {
-            writeFormat(validListings, language, dumpDate, latestDumpDate, format);
+        listings = validate(listings);
+        // Write listings to all the output formats.
+        for (OutputFormat format: formats.values()) {
+            writeFormat(listings, language, dumpDate, latestDumpDate, format);
         }
     }
     
@@ -264,7 +230,23 @@ public class Main {
     ) throws WriteOutputException, DumpReadException {
         log.info("Parse dump");
         Iterable<Listing> listingIterable = new ListingsIterable(inputFilename);
+        listingIterable = validate(listingIterable);        
         log.info("Save to '" + outputFilename + "'");
         format.write(listingIterable, outputFilename, dumpDate);
+    }
+    
+    private static Iterable<Listing> validate(Iterable<Listing> listingIterable) {
+        Iterable<Listing> validatedIterable = listingIterable;
+        Validator [] validators = {
+            new LatitudeValidator(),
+            new LongitudeValidator(),
+            new WebsiteURLValidator(),
+            new EmailValidator(),
+            new WikidataValidator()
+        };
+        for (Validator validator : validators) {
+            validatedIterable = validator.validate(validatedIterable);
+        }
+        return validatedIterable;
     }
 }

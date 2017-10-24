@@ -2,21 +2,15 @@ package org.wikivoyage.listings.validators;
 
 import org.wikivoyage.listings.entity.Listing;
 
-public class LatitudeValidator implements Validator {
+public class LatitudeValidator extends SimpleValidator {
     @Override
-    public String validate(Listing poi) {
+    public void validate(Listing poi) {
         if (poi.getLatitude() != null && !poi.getLatitude().equals("")) {
             try {
                 Float.parseFloat(poi.getLatitude());
             } catch (NumberFormatException e) {
-                return "Malformed latitude '" + poi.getLatitude() + "'";
+                poi.add(ValidationIssue.INVALID_LATITUDE);
             }
         }
-        return null;
-    }
-
-    @Override
-    public String getIssueType() {
-        return "Latitude";
     }
 }

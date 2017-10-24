@@ -5,13 +5,11 @@ import org.wikivoyage.listings.entity.Listing;
 public interface Validator {
     
     /**
-     * Validate the POI
-     * @return null if valid, an explanation of the problem if not valid.
+     * Validates an Iterable of POIs. The validation will occur when the returned 
+     * Iteratable is iterated over, so Validator acts as validating filter.
+     *   
+     * @param listingIterable an Iterable of Listings to be validated
+     * @return an Iterable of validated POIs
      */
-    String validate(Listing poi);
-    
-    /**
-     * Returns the type of issue, for instance "E-mail".
-     */
-    String getIssueType();
+    Iterable<Listing> validate(Iterable<Listing> listingIterable);
 }

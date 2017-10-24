@@ -8,20 +8,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-public class WebsiteURLValidator implements Validator {
+public class WebsiteURLValidator extends SimpleValidator {
     @Override
-    public String validate(Listing poi) {
+    public void validate(Listing poi) {
         if (poi.getUrl() != null && !poi.getUrl().equals("")) {
             if (!validWebsiteURL(poi.getUrl())) {
-                return "Invalid URL '" + poi.getUrl() + "'";
+                poi.add(ValidationIssue.INVALID_URL);
             }
         }
-        return null;
-    }
-
-    @Override
-    public String getIssueType() {
-        return "Website URL";
     }
 
     private boolean validWebsiteURL(String urlString) {

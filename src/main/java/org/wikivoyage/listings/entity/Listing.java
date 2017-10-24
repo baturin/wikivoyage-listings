@@ -1,6 +1,10 @@
 package org.wikivoyage.listings.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.wikivoyage.listings.validators.ValidationIssue;
 
 /**
  * Entity representing a Wikivoyage listing.
@@ -140,6 +144,11 @@ public class Listing implements Serializable {
      * 2-character language code
      */
     protected String language;
+    
+    /**
+     * List of ValidationIssues found with this POI during validation
+     */
+    protected List<ValidationIssue> validationIssues = new ArrayList<>();
 
     public Listing(
         String article, String type, String title, String alt, String wikidata, String wikipedia, String address, String directions,
@@ -191,7 +200,25 @@ public class Listing implements Serializable {
 		return alt;
 	}
     
+    /**
+     * Get wikidata.
+     * 
+     * @return wikidata if its valid, otherwise null
+     */
     public String getWikidata() {
+        if (validationIssues.contains(ValidationIssue.INVALID_WIKIDATA_QID) || validationIssues.contains(ValidationIssue.REDIRECT_WIKIDATA_QID)) {
+            return null;
+        } else {
+            return wikidata;
+        }
+    }
+
+    /**
+     * Get raw wikidata for purpose of validation report.
+     * 
+     * @return unvalidated wikidata
+     */
+    public String rawWikidata() {
     	return wikidata;
     }
     
@@ -215,7 +242,25 @@ public class Listing implements Serializable {
 		return tollFree;
 	}
 
+    /**
+     * Get email.
+     * 
+     * @return email if its valid, otherwise null
+     */
 	public String getEmail() {
+        if (validationIssues.contains(ValidationIssue.INVALID_EMAIL)) {
+            return null;
+        } else {
+            return email;
+        }
+    }
+
+    /**
+     * Get raw email for purpose of validation report.
+     * 
+     * @return unvalidated email
+     */
+	public String rawEmail() {
 		return email;
 	}
 
@@ -223,7 +268,25 @@ public class Listing implements Serializable {
 		return fax;
 	}
 
+    /**
+     * Get URL.
+     * 
+     * @return URL if its valid, otherwise null
+     */
 	public String getUrl() {
+        if (validationIssues.contains(ValidationIssue.INVALID_URL)) {
+            return null;
+        } else {
+            return url;
+        }
+    }
+
+    /**
+     * Get raw URL for purpose of validation report.
+     * 
+     * @return unvalidated URL
+     */
+	public String rawUrl() {
 		return url;
 	}
 
@@ -247,11 +310,47 @@ public class Listing implements Serializable {
 		return price;
 	}
 
+    /**
+     * Get latitude.
+     * 
+     * @return latitude if its valid, otherwise null
+     */
 	public String getLatitude() {
+        if (validationIssues.contains(ValidationIssue.INVALID_LATITUDE)) {
+            return null;
+        } else {
+            return latitude;
+        }
+    }
+
+    /**
+     * Get raw latitude for purpose of validation report.
+     * 
+     * @return unvalidated latitude
+     */
+	public String rawLatitude() {
         return latitude;
     }
 
+    /**
+     * Get longitude.
+     * 
+     * @return longitude if its valid, otherwise null
+     */
     public String getLongitude() {
+        if (validationIssues.contains(ValidationIssue.INVALID_LONGITUDE)) {
+            return null;
+            } else {
+            return longitude;
+        }
+    }
+
+    /**
+     * Get raw longitude for purpose of validation report.
+     * 
+     * @return unvalidated longitude
+     */
+    public String rawLongitude() {
         return longitude;
     }
     
@@ -279,5 +378,17 @@ public class Listing implements Serializable {
     {
         return latitude == null || longitude == null ||
         		latitude.equals("") || longitude.equals("");
+    }
+    
+    public void add(ValidationIssue issue) {
+        validationIssues.add(issue);
+    }
+    
+    public List<ValidationIssue> getValidationIssues() {
+        return validationIssues;
+    }
+    
+    public boolean isValid() {
+        return validationIssues.isEmpty();
     }
 }

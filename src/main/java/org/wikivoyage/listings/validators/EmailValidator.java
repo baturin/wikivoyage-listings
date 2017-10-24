@@ -2,19 +2,13 @@ package org.wikivoyage.listings.validators;
 
 import org.wikivoyage.listings.entity.Listing;
 
-public class EmailValidator implements Validator {
+public class EmailValidator extends SimpleValidator {
     @Override
-    public String validate(Listing poi) {
+    public void validate(Listing poi) {
         if (poi.getEmail() != null && !poi.getEmail().equals("")) {
             if (!org.apache.commons.validator.routines.EmailValidator.getInstance().isValid(poi.getEmail())) {
-                return "Invalid e-mail '" + poi.getEmail() + "'";
+                poi.add(ValidationIssue.INVALID_EMAIL);
             }
         }
-        return null;
-    }
-
-    @Override
-    public String getIssueType() {
-        return "E-mail";
     }
 }

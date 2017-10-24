@@ -8,8 +8,6 @@ import org.wikivoyage.listings.validators.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * Generate an HTML report showing what syntax errors exist in the Wikivoyage data.
@@ -17,28 +15,12 @@ import java.util.Map.Entry;
 public class ValidationReport implements OutputFormat {
     @Override
     public void write(Iterable<Listing> pois, String outputFilename, String dumpDate) throws WriteOutputException {
-        Validator [] validators = {
-            new LatitudeValidator(),
-            new LongitudeValidator(),
-            new WebsiteURLValidator(),
-            new EmailValidator()
-        };
-        BulkValidator bulkValidator = new WikidataBulkValidator();
-
         try {
             StringBuilder rows = new StringBuilder();
             for (Listing poi: pois) {
-                for (Validator validator: validators) {
-                    String errorMessage = validator.validate(poi);
-                    if (errorMessage != null) {
-                        rows.append(createRow(poi, errorMessage, validator.getIssueType()));
-                    }
+                for (ValidationIssue issue : poi.getValidationIssues()) {
+                    rows.append(createRow(poi, issue.getDescription(poi), issue.getCategory()));
                 }
-                bulkValidator.add(poi);
-            }
-            Map<Listing, String> bulkValidationResults = bulkValidator.validate();
-            for (Entry<Listing, String> entry : bulkValidationResults.entrySet()) {
-                rows.append(createRow(entry.getKey(), entry.getValue(), bulkValidator.getIssueType()));
             }
 
             String template = IOUtils.toString(
