@@ -4,6 +4,7 @@ import org.wikivoyage.listings.language.english.English;
 import org.wikivoyage.listings.language.german.German;
 import org.wikivoyage.listings.language.russian.Russian;
 import org.wikivoyage.listings.language.french.French;
+import org.wikivoyage.listings.language.espanol.Espanol;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +17,8 @@ public class Languages {
         new English(),
         new Russian(),
         new French(),
-        new German()
+        new German(),
+		new Espanol()
     };
     private static Language defaultLanguage = languages[0];
 
