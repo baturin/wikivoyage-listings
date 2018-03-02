@@ -6,6 +6,11 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,13 +26,29 @@ public class DumpDownloader {
     private static final Log log = LogFactory.getLog(DumpDownloader.class);
     private static final String BASE_URL = "https://dumps.wikimedia.org/";
 
+    private static final String DATETIME_FORMAT = "yyyyMMdd_HHmmss-SSS";
+
+    private String getTempFileName(String fileName) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATETIME_FORMAT);
+        String timestamp = LocalDateTime.now().format(formatter);
+        return fileName + "_" + timestamp;
+    }
+
+    private void renameFile(String oldFileName, String newfileName) throws IOException {
+        Path target = Paths.get(newfileName);
+        Path source = Paths.get(oldFileName);
+        Files.move(source, target);
+    }
+
     public void downloadDumpFromUrl(String dumpUrl, String dumpFilename) throws IOException {
         log.info("Download dump from '" + dumpUrl + "'");
         URL website = new URL(dumpUrl);
         ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-        FileOutputStream fos = new FileOutputStream(dumpFilename);
+        String tempDumpFileName = getTempFileName(dumpFilename);
+        FileOutputStream fos = new FileOutputStream(tempDumpFileName);
         fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
         fos.close();
+        renameFile(tempDumpFileName, dumpFilename);
     }
 
     public List<String> listDumps(String language) throws IOException
