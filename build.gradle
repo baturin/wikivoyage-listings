@@ -38,7 +38,7 @@ task distZip(type: Zip) {
 
 remotes {
     webServer {
-        host = '109.120.189.189'
+        host = '78.47.36.1'
         user = 'alexey'
         identity = file('/home/alexey/.ssh/id_rsa')
         knownHosts = allowAnyHosts
