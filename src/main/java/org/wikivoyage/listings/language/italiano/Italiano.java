@@ -28,21 +28,21 @@ public class Italiano implements Language
     {
     	HashSet<String> listingTemplates = new HashSet<>();
 
-	    listingTemplates.add("cosa vedere");
+      listingTemplates.add("cosa vedere");
       listingTemplates.add("eventi e feste");
       listingTemplates.add("cosa fare");
       listingTemplates.add("acquisti");
       listingTemplates.add("dove mangiare");
-	    listingTemplates.add("bevande");
-	    listingTemplates.add("dove alloggiare");
+      listingTemplates.add("bevande");
+      listingTemplates.add("dove alloggiare");
       listingTemplates.add("sicurezza");
       listingTemplates.add("come arrivare");
       listingTemplates.add("come spostarsi");
       listingTemplates.add("come divertirsi");
       listingTemplates.add("come restare in contatto");
-	    listingTemplates.add("listato");
+      listingTemplates.add("listato");
       
-	    return listingTemplates;
+      return listingTemplates;
     }
     
     /**
@@ -50,7 +50,7 @@ public class Italiano implements Language
      */
     @Override
     public String getNameElement() {
-		return "nombre";
+		return "nome";
     }
     
     /**
@@ -70,12 +70,12 @@ public class Italiano implements Language
 	            poiType = template.getNameLowercase();
 	        }
     		*/
-				switch (template.getNameLowercase ()) {
-					case "cosa vedere":
+	  switch (template.getNameLowercase ()) {
+	  case "cosa vedere":
 						poiType = "see";
 						break;
           case "eventi e feste":
-					case "cosa fare":
+	  case "cosa fare":
 						poiType = "do";
 						break;
           case "acquisti":
@@ -84,10 +84,10 @@ public class Italiano implements Language
           case "dove mangiare":
 						poiType = "eat";
 						break;
-					case "bevande":
+	  case "bevande":
 						poiType = "drink";
 						break;
-					case "dove alloggiare":
+	  case "dove alloggiare":
 						poiType = "sleep";
 						break;
           case "sicurezza":
@@ -95,8 +95,8 @@ public class Italiano implements Language
           case "come spostarsi":
           case "come divertirsi":
           case "come restare in contatto":
-					case "listato":
-					default:
+	  case "listato":
+	  default:
 						poiType = "listing";
 						break;
 				}
