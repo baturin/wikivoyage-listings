@@ -67,8 +67,8 @@ public class Chinese extends English {
             template.getArgument("price"),
             template.getArgument("lat"),
             template.getArgument("long"),
-            "", // No Wi-Fi property on Russian Wikivoyage
-            "", // No accessibility property on Russian Wikivoyage
+            "", // No Wi-Fi property on Chinese Wikivoyage
+            "", // No accessibility property on Chinese Wikivoyage
             template.getArgument("lastedit"),
             description,
             getLanguageCode()
