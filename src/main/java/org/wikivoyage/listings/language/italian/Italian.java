@@ -101,6 +101,6 @@ public class Italian implements Language
 
 	@Override
 	public String getFlagElement() {
-	    return "";
+	    return "bandiera";
 	}
 }
