@@ -21,6 +21,7 @@ public class Languages {
         new German(),
 	new Espanol(),
 	new Italiano()
+
     };
     private static Language defaultLanguage = languages[0];
 
