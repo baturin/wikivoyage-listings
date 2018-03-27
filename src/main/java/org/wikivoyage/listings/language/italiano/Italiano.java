@@ -72,24 +72,24 @@ public class Italiano implements Language
     		*/
 	  switch (template.getNameLowercase ()) {
 	  case "cosa vedere":
-						poiType = "see";
-						break;
+	  	poiType = "see";
+		break;
           case "eventi e feste":
 	  case "cosa fare":
-						poiType = "do";
-						break;
+		poiType = "do";
+		break;
           case "acquisti":
-						poiType = "buy";
-						break;
+		poiType = "buy";
+		break;
           case "dove mangiare":
-						poiType = "eat";
-						break;
+		poiType = "eat";
+		break;
 	  case "bevande":
-						poiType = "drink";
-						break;
+		poiType = "drink";
+		break;
 	  case "dove alloggiare":
-						poiType = "sleep";
-						break;
+		poiType = "sleep";
+		break;
           case "sicurezza":
           case "come arrivare":
           case "come spostarsi":
@@ -97,10 +97,10 @@ public class Italiano implements Language
           case "come restare in contatto":
 	  case "listato":
 	  default:
-						poiType = "listing";
-						break;
-				}
-			}
+		poiType = "listing";
+		break;
+		}
+	}
         
     	return new Listing(
             article,
