@@ -56,7 +56,7 @@ public class French implements Language
     
 	@Override
 	public String getFlagElement() {
-		return "";
+		return "drapeaux";
 	}
     
     /**
