@@ -130,6 +130,6 @@ public class Espanol implements Language
 
 	@Override
 	public String getFlagElement() {
-		return "flag";
+		return "bandera";
 	}
 }
