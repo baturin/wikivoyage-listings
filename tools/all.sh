@@ -5,7 +5,7 @@
 OUT=../wikivoyage.github.io
 
 # Generate for each language
-for WVLANGUAGE in fr ru en de es; do
+for WVLANGUAGE in fr ru en de es it zh; do
   echo "=== LANGUAGE: $WVLANGUAGE ==="
 
   for FORMAT in csv kml gpx osmand.gpx xml validation-report sql; do
