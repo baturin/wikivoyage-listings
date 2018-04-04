@@ -35,11 +35,10 @@ public class Portuguese implements Language
 	    listingTemplates.add("coma");
 	    listingTemplates.add("beba");
 	    listingTemplates.add("durma");
-		  listingTemplates.add("outroitem");
-      
-	    return listingTemplates;
+	    listingTemplates.add("outroitem");
+    return listingTemplates;
     }
-    
+
     /**
      * The name of the place, which is the only strictly required element.
      */
@@ -87,8 +86,8 @@ public class Portuguese implements Language
             poiType,
             template.getArgument("nome"),
             template.getArgument("alt"),
-            template.getArgument("wikidata"),
-            template.getArgument("wikipedia"), 
+            "", // template.getArgument("wikidata"),
+            "", // template.getArgument("wikipedia"), 
             template.getArgument("endereço"),
             template.getArgument("direções"),
             template.getArgument("tel"),
@@ -103,8 +102,8 @@ public class Portuguese implements Language
             template.getArgument("preço"),
             template.getArgument("lat"),
             template.getArgument("long"),
-			      "", // template.getArgument("Wi-Fi"),
-			      "", // template.getArgument("lastedit"),
+	    "", // template.getArgument("Wi-Fi"),
+	    "", // template.getArgument("lastedit"),
             template.getArgument("sobre"),
             getLanguageCode()
         );
