@@ -111,6 +111,13 @@ public class ValidationTests {
     	WebsiteURLValidator websiteURLValidator = new WebsiteURLValidator();
     	asserFalse(websiteURLValidator.urlExists("www.exampleMyUrl.com"));
     }
+    
+  //Check if url has '{{dead link'
+    @Test
+    public void testURLExist(){
+    	WebsiteURLValidator websiteURLValidator = new WebsiteURLValidator();
+    	assertTrue(websiteURLValidator.urlExists("{{dead link"));
+    }
 }
 
 /**

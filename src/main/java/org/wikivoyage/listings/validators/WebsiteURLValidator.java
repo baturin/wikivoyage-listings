@@ -22,6 +22,9 @@ public class WebsiteURLValidator extends SimpleValidator {
 
     public boolean urlExists(String urlString) {
     	URL url;
+    	if (urlString.contains("{{dead link")) {
+    	    return false;
+    	}
 		try {
 			url = new URL(urlString);
 			
