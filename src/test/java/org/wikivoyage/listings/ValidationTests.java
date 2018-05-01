@@ -100,21 +100,21 @@ public class ValidationTests {
     
     //Check if url exist +ve test case
     @Test
-    public void testURLExist(){
+    public void testURLExistPositive(){
     	WebsiteURLValidator websiteURLValidator = new WebsiteURLValidator();
     	assertTrue(websiteURLValidator.urlExists("www.google.com"));
     }
     
   //Check if url exist -ve test case
     @Test
-    public void testURLExist(){
+    public void testURLExistNegativeTest(){
     	WebsiteURLValidator websiteURLValidator = new WebsiteURLValidator();
-    	asserFalse(websiteURLValidator.urlExists("www.exampleMyUrl.com"));
+    	assertFalse(websiteURLValidator.urlExists("www.exampleMyUrl.com"));
     }
     
   //Check if url has '{{dead link'
     @Test
-    public void testURLExist(){
+    public void testURLExistNegativeTest1(){
     	WebsiteURLValidator websiteURLValidator = new WebsiteURLValidator();
     	assertTrue(websiteURLValidator.urlExists("{{dead link"));
     }
