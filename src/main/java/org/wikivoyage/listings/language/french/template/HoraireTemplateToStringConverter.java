@@ -20,12 +20,12 @@ public class HoraireTemplateToStringConverter implements TemplateToStringConvert
 
         String timeGaps;
         String timeGap1 = timeGap(
-            template.getPositionalArg(2, ""), template.getPositionalArg(3, ""),
-            template.getPositionalArg(4, ""), template.getPositionalArg(5, "")
+                template.getPositionalArg(2, ""), template.getPositionalArg(3, ""),
+                template.getPositionalArg(4, ""), template.getPositionalArg(5, "")
         );
         String timeGap2 = timeGap(
-            template.getPositionalArg(6, ""), template.getPositionalArg(7, ""),
-            template.getPositionalArg(8, ""), template.getPositionalArg(9, "")
+                template.getPositionalArg(6, ""), template.getPositionalArg(7, ""),
+                template.getPositionalArg(8, ""), template.getPositionalArg(9, "")
         );
         if (timeGap2.equals("")) {
             timeGaps = timeGap1;
@@ -49,8 +49,7 @@ public class HoraireTemplateToStringConverter implements TemplateToStringConvert
         return "horaire";
     }
 
-    private String timeGap(String hours1, String minutes1, String hours2, String minutes2)
-    {
+    private String timeGap(String hours1, String minutes1, String hours2, String minutes2) {
         String timeItem1 = timeItem(hours1, minutes1);
         String timeItem2 = timeItem(hours2, minutes2);
         if (timeItem2.equals("")) {
@@ -60,8 +59,7 @@ public class HoraireTemplateToStringConverter implements TemplateToStringConvert
         }
     }
 
-    private String timeItem(String hours, String minutes)
-    {
+    private String timeItem(String hours, String minutes) {
         if (hours.equals("")) {
             return "";
         } else {
@@ -73,19 +71,18 @@ public class HoraireTemplateToStringConverter implements TemplateToStringConvert
         }
     }
 
-    private String convertDay(String day)
-    {
+    private String convertDay(String day) {
         String[][] days = new String[][]{
-            {"lun.", "1", "l", "lu", "lun", "lundi"},
-            {"mar.", "2", "ma", "mar", "mardi"},
-            {"mer.", "3", "me", "mer", "mercredi"},
-            {"jeu.", "4", "j", "je", "jeu", "jeudi"},
-            {"ven.", "5", "v", "ve", "ven", "vendredi"},
-            {"sam.", "6", "s", "sa", "sam", "samedi"},
-            {"dim.", "7", "d", "di", "dim", "dimanche"},
+                {"lun.", "1", "l", "lu", "lun", "lundi"},
+                {"mar.", "2", "ma", "mar", "mardi"},
+                {"mer.", "3", "me", "mer", "mercredi"},
+                {"jeu.", "4", "j", "je", "jeu", "jeudi"},
+                {"ven.", "5", "v", "ve", "ven", "vendredi"},
+                {"sam.", "6", "s", "sa", "sam", "samedi"},
+                {"dim.", "7", "d", "di", "dim", "dimanche"},
         };
-        for (String [] dayRow: days) {
-            for (String dayValue: dayRow) {
+        for (String[] dayRow : days) {
+            for (String dayValue : dayRow) {
                 if (StringUtils.equalsCaseInsensitive(dayValue, day)) {
                     return dayRow[0];
                 }

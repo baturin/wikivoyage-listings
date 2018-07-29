@@ -1,15 +1,13 @@
 package org.wikivoyage.listings.input;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wikivoyage.listings.entity.Article;
 import org.wikivoyage.listings.entity.Listing;
-
 import org.wikivoyage.listings.language.Language;
-import org.wikivoyage.listings.language.Languages;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Iterate over listings in Wikivoyage database dump
@@ -25,13 +23,12 @@ public class DumpListingsIterator implements Iterator<Listing>, Iterable<Listing
     public DumpListingsIterator(String filename) {
         articlesIterator = new DumpArticlesIterator(filename);
         log.debug("Detected language code for dump '" + filename + "': " + articlesIterator.getLanguageCode());
-        Language language = Languages.create(articlesIterator.getLanguageCode());
+        Language language = Language.create(articlesIterator.getLanguageCode());
         pageParser = new ArticleParser(language);
         getNext();
     }
 
-    private void getNext()
-    {
+    private void getNext() {
         currentListing = null;
         while (currentArticleListingIterator == null || !currentArticleListingIterator.hasNext()) {
             if (!articlesIterator.hasNext()) {
@@ -60,7 +57,7 @@ public class DumpListingsIterator implements Iterator<Listing>, Iterable<Listing
 
     @Override
     public void remove() {
-        throw  new UnsupportedOperationException();
+        throw new UnsupportedOperationException();
     }
 
     @Override

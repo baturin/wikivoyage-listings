@@ -9,14 +9,15 @@ public class JavaSerializedObject implements OutputFormat {
     @Override
     public void write(Iterable<Listing> pois, String outputFilename, String dumpDate) throws WriteOutputException {
         try {
-            for (Listing poi: pois) {
+            for (Listing poi : pois) {
                 FileOutputStream fos = new FileOutputStream(outputFilename, true);
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
                 oos.writeUnshared(poi);
                 oos.close();
                 fos.close();
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             System.out.println(e.getMessage());
             throw new WriteOutputException();
         }

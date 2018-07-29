@@ -3,6 +3,7 @@ package org.wikivoyage.listings.output;
 import net.osmand.IProgress;
 import net.osmand.data.preparation.IndexCreator;
 import org.wikivoyage.listings.entity.Listing;
+import org.wikivoyage.listings.output.navigationalOutputs.OsmXml;
 import org.xml.sax.SAXException;
 
 import java.io.File;
@@ -29,7 +30,8 @@ public class OBF implements OutputFormat {
             osmXml.write(pois, tempXmlFilename, dumpDate);
             createObf(tempXmlFilename, workingDir, "pois.obf");
             Files.move(Paths.get(workingDir + "/pois.obf"), Paths.get(outputFilename));
-        } catch (IOException | SAXException | SQLException | InterruptedException e) {
+        }
+        catch (IOException | SAXException | SQLException | InterruptedException e) {
             throw new WriteOutputException();
         }
     }
@@ -41,8 +43,7 @@ public class OBF implements OutputFormat {
         creator.generateIndexes(new File(outputFilename), IProgress.EMPTY_PROGRESS, null, null, null, null);
     }
 
-    public String getDefaultExtension()
-    {
+    public String getDefaultExtension() {
         if (userDefined) {
             return ".user-defined.obf";
         } else {

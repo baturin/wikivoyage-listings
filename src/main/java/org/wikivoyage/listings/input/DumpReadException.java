@@ -6,9 +6,8 @@ package org.wikivoyage.listings.input;
  */
 @SuppressWarnings("serial")
 public class DumpReadException extends RuntimeException {
-    
-    /* package */ DumpReadException(String message, Exception cause)
-    {
+
+    /* package */ DumpReadException(String message, Exception cause) {
         super(message, cause);
     }
 }

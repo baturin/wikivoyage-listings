@@ -8,7 +8,8 @@ public class LongitudeValidator extends SimpleValidator {
         if (poi.getLongitude() != null && !poi.getLongitude().equals("")) {
             try {
                 Float.parseFloat(poi.getLongitude());
-            } catch (NumberFormatException e) {
+            }
+            catch (NumberFormatException e) {
                 poi.add(ValidationIssue.INVALID_LONGITUDE);
             }
         }

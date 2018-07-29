@@ -5,9 +5,8 @@ package org.wikivoyage.listings.input;
  */
 @SuppressWarnings("serial")
 public class JavaSerializedReadException extends RuntimeException {
-    
-    /* package */ JavaSerializedReadException(String message, Exception cause)
-    {
+
+    /* package */ JavaSerializedReadException(String message, Exception cause) {
         super(message, cause);
     }
 }

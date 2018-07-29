@@ -10,6 +10,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Various utilities to work with files
@@ -21,8 +24,7 @@ public class FileUtils {
      * @param filename name of a file to check
      * @return whether the provided file exists
      */
-    public static boolean fileExists(String filename)
-    {
+    public static boolean fileExists(String filename) {
         File f = new File(filename);
         return f.exists() && !f.isDirectory();
     }
@@ -33,8 +35,7 @@ public class FileUtils {
      * @param filename name of a file to remove
      * @throws FileUtilsException
      */
-    public static void removeFile(String filename) throws FileUtilsException
-    {
+    public static void removeFile(String filename) throws FileUtilsException {
         removeFile(filename, false);
     }
 
@@ -42,11 +43,10 @@ public class FileUtils {
      * Remove file from filesystem
      *
      * @param filename name of a file to remove
-     * @param check whether to check if file was actually removed
+     * @param check    whether to check if file was actually removed
      * @throws FileUtilsException
      */
-    public static void removeFile(String filename, boolean check) throws FileUtilsException
-    {
+    public static void removeFile(String filename, boolean check) throws FileUtilsException {
         boolean result = new File(filename).delete();
         if (check && !result) {
             throw new FileUtilsException("Failed to remove file '" + filename + "'");
@@ -58,13 +58,12 @@ public class FileUtils {
      *
      * @param directoryName name of a directory to create
      */
-    public static void createDirectory(String directoryName) throws FileUtilsException
-    {
-        File file = new File(directoryName);
+    public static void createDirectory(Path directoryName) throws FileUtilsException {
+        File file = directoryName.toFile();
         if (file.isDirectory()) {
             return;
         }
-        boolean result = new File(directoryName).mkdirs();
+        boolean result = directoryName.toFile().mkdirs();
         if (!result) {
             throw new FileUtilsException("Failed to create directory '" + directoryName + "'");
         }
@@ -74,23 +73,23 @@ public class FileUtils {
      * Copy file to another location
      *
      * @param fromFilename source file path
-     * @param toFilename destination file path
+     * @param toFilename   destination file path
      * @throws FileUtilsException
      */
-    public static void copyFile(String fromFilename, String toFilename) throws FileUtilsException
-    {
+    public static void copyFile(String fromFilename, String toFilename) throws FileUtilsException {
         try {
 
             try (
-                OutputStream out = new FileOutputStream(toFilename);
-                InputStream in = new FileInputStream(fromFilename)
+                    OutputStream out = new FileOutputStream(toFilename);
+                    InputStream in = new FileInputStream(fromFilename)
             ) {
                 IOUtils.copy(in, out);
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new FileUtilsException(
-                "Failed to copy file from '" + fromFilename + "' to '" + toFilename + "': " + e.getMessage(),
-                e
+                    "Failed to copy file from '" + fromFilename + "' to '" + toFilename + "': " + e.getMessage(),
+                    e
             );
         }
     }
@@ -98,28 +97,35 @@ public class FileUtils {
     /**
      * Create BZIP archive out of a file
      *
-     * @param inputFilename name of a file to pack
+     * @param inputFilename  name of a file to pack
      * @param outputFilename name of output archive
      * @throws FileUtilsException
      */
-    public static void archive(String inputFilename, String outputFilename) throws FileUtilsException
-    {
+    public static void archive(String inputFilename, String outputFilename) throws FileUtilsException {
         try {
             OutputStream out = new FileOutputStream(outputFilename);
             try (
-                BZip2CompressorOutputStream os = new BZip2CompressorOutputStream(out);
-                InputStream in = new FileInputStream(inputFilename)
+                    BZip2CompressorOutputStream os = new BZip2CompressorOutputStream(out);
+                    InputStream in = new FileInputStream(inputFilename)
             ) {
                 IOUtils.copy(in, os);
-            } finally {
+            }
+            finally {
                 out.close();
             }
             removeFile(inputFilename);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new FileUtilsException(
-                "Failed to create file archive for file '" + inputFilename + "': " + e.getMessage(),
-                e
+                    "Failed to create file archive for file '" + inputFilename + "': " + e.getMessage(),
+                    e
             );
         }
+    }
+
+    public static void renameFile(String oldFileName, String newfileName) throws IOException {
+        Path target = Paths.get(newfileName);
+        Path source = Paths.get(oldFileName);
+        Files.move(source, target);
     }
 }

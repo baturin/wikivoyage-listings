@@ -20,7 +20,7 @@ public class WebsiteURLValidator extends SimpleValidator {
 
     private boolean validWebsiteURL(String urlString) {
         try {
-            UrlValidator validator = new UrlValidator(new String[] {"https", "http"});
+            UrlValidator validator = new UrlValidator(new String[]{"https", "http"});
             URL url = new URL(urlString);
             URI uri = new URI(url.getProtocol()
                     , url.getUserInfo()
@@ -33,7 +33,8 @@ public class WebsiteURLValidator extends SimpleValidator {
 
             return validator.isValid(uri.toASCIIString());
 
-        } catch (MalformedURLException | URISyntaxException e) {
+        }
+        catch (MalformedURLException | URISyntaxException e) {
             return false;
         }
     }
