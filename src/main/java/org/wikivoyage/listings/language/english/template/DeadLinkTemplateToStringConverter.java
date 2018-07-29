@@ -6,13 +6,11 @@ import org.wikivoyage.listings.input.template.TemplateToStringConverter;
 
 public class DeadLinkTemplateToStringConverter implements TemplateToStringConverter {
     @Override
-    public String convertToString(TemplateNode template)
-    {
+    public String convertToString(TemplateNode template) {
         return "";
     }
 
-    public String getTemplateName()
-    {
+    public String getTemplateName() {
         return "dead link";
     }
 }

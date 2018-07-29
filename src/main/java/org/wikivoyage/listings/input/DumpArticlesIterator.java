@@ -7,11 +7,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.File;
+import java.io.*;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -23,19 +19,20 @@ public class DumpArticlesIterator implements Iterator<Article> {
     private Article currentArticle;
     private String languageCode;
 
-    public DumpArticlesIterator(String filename) throws DumpReadException
-    {
+    public DumpArticlesIterator(String filename) throws DumpReadException {
         XMLInputFactory factory = XMLInputFactory.newInstance();
         InputStream stream;
         try {
             stream = getFileInputStream(filename);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new DumpReadException("Failed to read Wikivoyage dump file", e);
         }
         try {
             reader = factory.createXMLStreamReader(stream);
-        } catch (XMLStreamException e) {
-            throw  new DumpReadException("Failed to create XML stream for Wikivoyage dump", e);
+        }
+        catch (XMLStreamException e) {
+            throw new DumpReadException("Failed to create XML stream for Wikivoyage dump", e);
         }
         // first, read language code
         readLanguageCode();
@@ -68,14 +65,13 @@ public class DumpArticlesIterator implements Iterator<Article> {
     /**
      * Get language code of the dump. If language code was not detected, return empty string.
      */
-    public String getLanguageCode()
-    {
+    public String getLanguageCode() {
         return languageCode;
     }
 
     /**
      * Read language code from the dump, put it to languageCode variable.
-     *
+     * <p>
      * Important: this function must be called before any of "getNext" function calls,
      * because data about language always precedes articles .
      */
@@ -124,9 +120,10 @@ public class DumpArticlesIterator implements Iterator<Article> {
 
                 event = reader.next();
             }
-        } catch (XMLStreamException e) {
+        }
+        catch (XMLStreamException e) {
             throw new DumpReadException(
-                "Failed to read language code from Wikivoyage dump: error when reading XML", e
+                    "Failed to read language code from Wikivoyage dump: error when reading XML", e
             );
         }
     }
@@ -134,8 +131,7 @@ public class DumpArticlesIterator implements Iterator<Article> {
     /**
      * Read the next article from the dump, put it to reader variable.
      */
-    private void getNext() throws DumpReadException
-    {
+    private void getNext() throws DumpReadException {
         String pageTitle = "";
         String pageText = "";
         String pageNs = "";
@@ -160,17 +156,22 @@ public class DumpArticlesIterator implements Iterator<Article> {
                             curCharValue.append(reader.getText());
                             break;
                         case XMLStreamConstants.END_ELEMENT:
-                            if (reader.getLocalName().equals("title")) {
-                                pageTitle = curCharValue.toString();
-                            } else if (reader.getLocalName().equals("text")) {
-                                pageText = curCharValue.toString();
-                            } else if (reader.getLocalName().equals("ns")) {
-                                pageNs = curCharValue.toString();
-                            } else if (reader.getLocalName().equals("page")) {
-                                if (pageNs != null && pageNs.equals("0")) {
-                                    currentArticle = new Article(pageTitle, pageText);
-                                    return;
-                                }
+                            switch (reader.getLocalName()) {
+                                case "title":
+                                    pageTitle = curCharValue.toString();
+                                    break;
+                                case "text":
+                                    pageText = curCharValue.toString();
+                                    break;
+                                case "ns":
+                                    pageNs = curCharValue.toString();
+                                    break;
+                                case "page":
+                                    if (pageNs != null && pageNs.equals("0")) {
+                                        currentArticle = new Article(pageTitle, pageText);
+                                        return;
+                                    }
+                                    break;
                             }
                             break;
                         case XMLStreamConstants.END_DOCUMENT:
@@ -182,12 +183,14 @@ public class DumpArticlesIterator implements Iterator<Article> {
 
                     event = reader.next();
                 }
-            } finally {
+            }
+            finally {
                 reader.close();
             }
-        } catch (XMLStreamException e) {
+        }
+        catch (XMLStreamException e) {
             throw new DumpReadException(
-                "Failed to get article in Wikivoyage dump: error when reading XML", e
+                    "Failed to get article in Wikivoyage dump: error when reading XML", e
             );
         }
     }
@@ -199,12 +202,12 @@ public class DumpArticlesIterator implements Iterator<Article> {
     private InputStream getFileInputStream(String filename) throws IOException {
         if (filename.endsWith(".bz2")) {
             return new BufferedInputStream(
-                new BZip2CompressorInputStream(
-                    new BufferedInputStream(
-                            new FileInputStream(filename)
-                    ),
-                    true // support for multistream bzip2
-                )
+                    new BZip2CompressorInputStream(
+                            new BufferedInputStream(
+                                    new FileInputStream(filename)
+                            ),
+                            true // support for multistream bzip2
+                    )
             );
         } else {
             return new FileInputStream(new File(filename));

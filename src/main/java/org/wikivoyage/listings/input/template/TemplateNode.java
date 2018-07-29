@@ -29,8 +29,7 @@ public class TemplateNode {
 
     private final List<TemplateToStringConverter> templateConverters;
 
-    public TemplateNode(String languageCode, WtTemplate node, List<TemplateToStringConverter> templateConverters)
-    {
+    public TemplateNode(String languageCode, WtTemplate node, List<TemplateToStringConverter> templateConverters) {
         this.node = node;
         this.templateConverters = templateConverters;
         this.languageCode = languageCode;
@@ -38,34 +37,28 @@ public class TemplateNode {
         initNamedArgumentsLowercase();
     }
 
-    public String getName()
-    {
+    public String getName() {
         return convertToStringSimple(node.getName()).trim();
     }
 
-    public String getNameLowercase()
-    {
+    public String getNameLowercase() {
         return getName().toLowerCase();
     }
 
-    public String getArgument(String name)
-    {
-    	String value = namedArgumentsLowercase.get(name.toLowerCase());
+    public String getArgument(String name) {
+        String value = namedArgumentsLowercase.get(name.toLowerCase());
         return value != null ? value : "";
     }
 
-    public boolean hasArgument(String name)
-    {
+    public boolean hasArgument(String name) {
         return namedArgumentsLowercase.containsKey(name.toLowerCase());
     }
 
-    public List<String> getPositionalArguments()
-    {
+    public List<String> getPositionalArguments() {
         return positionalArguments;
     }
 
-    public String getPositionalArg(int index, String defaultValue)
-    {
+    public String getPositionalArg(int index, String defaultValue) {
         if (positionalArguments.size() <= index) {
             return defaultValue;
         } else {
@@ -73,13 +66,11 @@ public class TemplateNode {
         }
     }
 
-    public String getPositionalArg(int index)
-    {
+    public String getPositionalArg(int index) {
         return positionalArguments.get(index);
     }
 
-    public boolean isAbsentOrEmptyPositionalArg(int index)
-    {
+    public boolean isAbsentOrEmptyPositionalArg(int index) {
         return positionalArguments.size() <= index || positionalArguments.get(index).equals("");
     }
 
@@ -90,7 +81,7 @@ public class TemplateNode {
         namedArguments = new LinkedHashMap<>();
         positionalArguments = new LinkedList<>();
 
-        for (WtNode templateArgumentsChildNode: node.getArgs()) {
+        for (WtNode templateArgumentsChildNode : node.getArgs()) {
             if (templateArgumentsChildNode instanceof WtTemplateArgument) {
                 WtTemplateArgument templateArgument = (WtTemplateArgument) templateArgumentsChildNode;
 
@@ -111,7 +102,7 @@ public class TemplateNode {
     private void initNamedArgumentsLowercase() {
         namedArgumentsLowercase = new LinkedHashMap<>();
 
-        for (String key: namedArguments.keySet()) {
+        for (String key : namedArguments.keySet()) {
             namedArgumentsLowercase.put(key.toLowerCase(), namedArguments.get(key));
         }
     }
@@ -119,12 +110,11 @@ public class TemplateNode {
     /**
      * Text conversion of WtNode object to string.
      */
-    private String convertWtNodeToString(WtNode node)
-    {
+    private String convertWtNodeToString(WtNode node) {
         if (node instanceof WtTemplate) {
             TemplateNode templateNode = new TemplateNode(languageCode, (WtTemplate) node, templateConverters);
 
-            for (TemplateToStringConverter parser: templateConverters) {
+            for (TemplateToStringConverter parser : templateConverters) {
                 if (templateNode.getNameLowercase().equals(parser.getTemplateName())) {
                     return parser.convertToString(templateNode);
                 }
@@ -138,32 +128,31 @@ public class TemplateNode {
             // HTML comments inside listings are ignored
             return "";
         } else if (node instanceof AstStringNode) {
-            return ((AstStringNode) node).getContent().replaceAll("\\[\\[([^|\\]]*?\\||)([^|\\]]*?)\\]\\]", "$2");
+            return ((AstStringNode) node).getContent().replaceAll("\\[\\[([^|\\]]*?\\||)([^|\\]]*?)]]", "$2");
         } else {
-            String s = "";
-            for (WtNode childNode: node) {
-                s += convertWtNodeToString(childNode);
+            StringBuilder s = new StringBuilder();
+            for (WtNode childNode : node) {
+                s.append(convertWtNodeToString(childNode));
             }
-            return s;
+            return s.toString();
         }
     }
 
     /**
      * Convert simple wiki text node to string
      */
-    private static String convertToStringSimple(WtNode node)
-    {
+    private static String convertToStringSimple(WtNode node) {
         if (node instanceof AstStringNode) {
             // Handle simple string node - just get its contents
             AstStringNode stringNode = (AstStringNode) node;
             return stringNode.getContent();
         } else {
             // Handle compound node, that consists of several others
-            String textResult = "";
-            for (WtNode childNode: node) {
-                textResult += convertToStringSimple(childNode);
+            StringBuilder textResult = new StringBuilder();
+            for (WtNode childNode : node) {
+                textResult.append(convertToStringSimple(childNode));
             }
-            return textResult;
+            return textResult.toString();
         }
     }
 }

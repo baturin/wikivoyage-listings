@@ -22,7 +22,7 @@ public class CsvOutputTests extends OutputTests {
 	@Test
 	public void Generate() throws Exception {
 
-		List<Listing> pois = new ArrayList<Listing>();
+		List<Listing> pois = new ArrayList<>();
 		pois.add(getSample());
 		String output = File.createTempFile("wikivoyage-listings-unit-tests", ".tmp").getAbsolutePath();
 		

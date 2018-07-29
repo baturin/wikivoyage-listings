@@ -1,7 +1,9 @@
-package org.wikivoyage.listings.output;
+package org.wikivoyage.listings.output.navigationalOutputs;
 
-import org.wikivoyage.listings.utils.XMLSimpleNode;
 import org.wikivoyage.listings.entity.Listing;
+import org.wikivoyage.listings.output.OutputFormat;
+import org.wikivoyage.listings.output.WriteOutputException;
+import org.wikivoyage.listings.utils.XMLSimpleNode;
 import org.wikivoyage.listings.utils.XMLSimpleNodeException;
 
 import java.util.LinkedList;
@@ -10,22 +12,24 @@ import java.util.LinkedList;
  * Base class for XML-based output formats, that should be used for navigation purposes
  */
 abstract public class NavigationXMLOutputFormat implements OutputFormat {
+
     @Override
     public void write(Iterable<Listing> pois, String outputFilename, String dumpDate) throws WriteOutputException {
         try {
             LinkedList<Listing> filteredPois = new LinkedList<>();
-            for (Listing poi: pois) {
+            for (Listing poi : pois) {
                 if (!poi.isPositionalDataEmpty()) {
                     // POIs with no positional data are useless for navigation - do not add them
                     // to reduce size of output file
                     filteredPois.add(poi);
                 }
             }
-            Listing [] filteredPoisArr = filteredPois.toArray(new Listing[filteredPois.size()]);
+            Listing[] filteredPoisArr = filteredPois.toArray(new Listing[filteredPois.size()]);
             XMLSimpleNode rootNode = createXml(filteredPoisArr, dumpDate);
 
             rootNode.writeToFile(outputFilename);
-        } catch (XMLSimpleNodeException e) {
+        }
+        catch (XMLSimpleNodeException e) {
             throw new WriteOutputException();
         }
     }

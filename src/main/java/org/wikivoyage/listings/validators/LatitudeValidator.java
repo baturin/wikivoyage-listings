@@ -8,7 +8,8 @@ public class LatitudeValidator extends SimpleValidator {
         if (poi.getLatitude() != null && !poi.getLatitude().equals("")) {
             try {
                 Float.parseFloat(poi.getLatitude());
-            } catch (NumberFormatException e) {
+            }
+            catch (NumberFormatException e) {
                 poi.add(ValidationIssue.INVALID_LATITUDE);
             }
         }

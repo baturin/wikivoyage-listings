@@ -11,6 +11,7 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'lib', include: ['*.jar'])
+    compile "org.projectlombok:lombok:1.16.20"
     testCompile 'junit:junit:4.12'
 }
 

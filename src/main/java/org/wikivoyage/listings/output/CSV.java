@@ -14,15 +14,14 @@ import java.io.IOException;
  */
 public class CSV implements OutputFormat {
 
-	/**
-	 * Hard-coded CSV keywords.
-	 * If needed these may be replaced with tabs, semicolons, Windows new lines, etc.
-	 */
-	public final static String SEPARATOR = ",";
-	public final static String NEW_LINE = "\n";
-	
-    public void write(Iterable<Listing> pois, String outputFilename, String dumpDate) throws WriteOutputException
-    {
+    /**
+     * Hard-coded CSV keywords.
+     * If needed these may be replaced with tabs, semicolons, Windows new lines, etc.
+     */
+    public final static String SEPARATOR = ",";
+    public final static String NEW_LINE = "\n";
+
+    public void write(Iterable<Listing> pois, String outputFilename, String dumpDate) throws WriteOutputException {
         BufferedWriter writer = null;
         try {
             try {
@@ -31,31 +30,31 @@ public class CSV implements OutputFormat {
 
                 // Write the CSV header.
                 writer.write(
-                		"article"+ SEPARATOR +
-                		"type" + SEPARATOR +
-                		"title" + SEPARATOR +
-                		"alt" + SEPARATOR +
-                		"wikidata" + SEPARATOR +
-                		"wikipedia" + SEPARATOR +
-                		"address" + SEPARATOR +
-                		"directions" + SEPARATOR +
-                		"phone" + SEPARATOR +
-                		"tollFree" + SEPARATOR +
-                		"email" + SEPARATOR +
-                		"fax" + SEPARATOR +
-                		"url" + SEPARATOR +
-                		"hours" + SEPARATOR +
-                		"checkIn" + SEPARATOR +
-                		"checkOut" + SEPARATOR +
-                		"image" + SEPARATOR +
-                		"price" + SEPARATOR +
-                		"latitude" + SEPARATOR +
-                		"longitude" + SEPARATOR +
-                		"wifi" + SEPARATOR +
-                		"accessibility" + SEPARATOR +
-                		"lastEdit" + SEPARATOR +
-                		"description" + NEW_LINE);
-                
+                        "article" + SEPARATOR +
+                                "type" + SEPARATOR +
+                                "title" + SEPARATOR +
+                                "alt" + SEPARATOR +
+                                "wikidata" + SEPARATOR +
+                                "wikipedia" + SEPARATOR +
+                                "address" + SEPARATOR +
+                                "directions" + SEPARATOR +
+                                "phone" + SEPARATOR +
+                                "tollFree" + SEPARATOR +
+                                "email" + SEPARATOR +
+                                "fax" + SEPARATOR +
+                                "url" + SEPARATOR +
+                                "hours" + SEPARATOR +
+                                "checkIn" + SEPARATOR +
+                                "checkOut" + SEPARATOR +
+                                "image" + SEPARATOR +
+                                "price" + SEPARATOR +
+                                "latitude" + SEPARATOR +
+                                "longitude" + SEPARATOR +
+                                "wifi" + SEPARATOR +
+                                "accessibility" + SEPARATOR +
+                                "lastEdit" + SEPARATOR +
+                                "description" + NEW_LINE);
+
                 // Write each POI.
                 for (Listing poi : pois) {
                     writer.write(foolproof(poi.getArticle()) + SEPARATOR);
@@ -83,12 +82,14 @@ public class CSV implements OutputFormat {
                     writer.write(foolproof(poi.getLastEdit()) + SEPARATOR);
                     writer.write(foolproof(poi.getDescription()) + NEW_LINE);
                 }
-            } finally {
+            }
+            finally {
                 if (writer != null) {
                     writer.close();
                 }
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new WriteOutputException();
         }
     }
@@ -97,17 +98,15 @@ public class CSV implements OutputFormat {
      * Make any string usable as a CSV value.
      */
     private String foolproof(String str) {
-    	if (str == null) {
-    		return ""; // Values non present in Wikivoyage are replaced with empty strings.
-    	}
-    	else {
-    		return StringEscapeUtils.escapeCsv( // Escape CSV-problematic characters.
-    				str.replace('\n', ' ')); // Escape line ends.
-    	}
+        if (str == null) {
+            return ""; // Values non present in Wikivoyage are replaced with empty strings.
+        } else {
+            return StringEscapeUtils.escapeCsv( // Escape CSV-problematic characters.
+                    str.replace('\n', ' ')); // Escape line ends.
+        }
     }
-    
-    public String getDefaultExtension()
-    {
+
+    public String getDefaultExtension() {
         return ".csv";
     }
 }

@@ -1,4 +1,4 @@
-package org.wikivoyage.listings.output;
+package org.wikivoyage.listings.output.navigationalOutputs;
 
 import org.wikivoyage.listings.entity.Listing;
 import org.wikivoyage.listings.utils.XMLSimpleNode;
@@ -7,14 +7,13 @@ import org.wikivoyage.listings.utils.XMLSimpleNodeException;
 public class Xml extends NavigationXMLOutputFormat {
     private static Integer nodeId = 0;
 
-    public XMLSimpleNode createXml(Listing[] pois, String dumpDate) throws XMLSimpleNodeException
-    {
+    public XMLSimpleNode createXml(Listing[] pois, String dumpDate) throws XMLSimpleNodeException {
         XMLSimpleNode genericNode = new XMLSimpleNode("wikivoyage", dumpDate)
                 .attrib("version", "0.5")
                 .attrib("generator", "wikivoyage-pois-converter");
 
-        for (Listing poi: pois) {
-            XMLSimpleNode poiNode = new XMLSimpleNode(genericNode, "node")
+        for (Listing poi : pois) {
+            new XMLSimpleNode(genericNode, "node")
                     .attrib("id", nodeId.toString())
                     .attrib("article", poi.getArticle())
                     .attrib("type", poi.getType())
@@ -27,7 +26,7 @@ public class Xml extends NavigationXMLOutputFormat {
                     .attrib("phone", poi.getPhone())
                     .attrib("tollFree", poi.getTollFree())
                     .attrib("email", poi.getEmail())
-                    .attrib("fax", poi.getFax())                    
+                    .attrib("fax", poi.getFax())
                     .attrib("url", poi.getUrl())
                     .attrib("lat", poi.getLatitude())
                     .attrib("lon", poi.getLongitude())
@@ -46,13 +45,7 @@ public class Xml extends NavigationXMLOutputFormat {
         return genericNode;
     }
 
-    private static void addTagNode(XMLSimpleNode node, String name, String value)
-    {
-        new XMLSimpleNode(node, "tag").attrib("k", name).attrib("v", value);
-    }
-
-    public String getDefaultExtension()
-    {
+    public String getDefaultExtension() {
         return ".generic.xml";
     }
 }

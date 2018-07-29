@@ -8,18 +8,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Iterator;
 
-public class JavaSerializedIterator implements Iterator<Listing>, Iterable<Listing> {
+public class JavaSerializedIterator implements Iterator<Listing> {
     private Listing poi;
     FileInputStream fio;
 
     public JavaSerializedIterator(String filename) throws IOException {
         fio = new FileInputStream(filename);
         getNext();
-    }
-
-    @Override
-    public Iterator<Listing> iterator() {
-        return null;
     }
 
     @Override
@@ -34,31 +29,32 @@ public class JavaSerializedIterator implements Iterator<Listing>, Iterable<Listi
         return currentPOI;
     }
 
-    private void getNext()
-    {
+    private void getNext() {
         try {
             ObjectInputStream ois = new ObjectInputStream(fio);
             poi = (Listing) ois.readObject();
-        } catch (EOFException e) {
+        }
+        catch (EOFException e) {
             poi = null;
             closeInputStream();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             closeInputStream();
             throw new JavaSerializedReadException("Failed to read next Wikivoyage POI from Java serialized file", e);
         }
     }
 
-    private void closeInputStream()
-    {
+    private void closeInputStream() {
         try {
             fio.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new JavaSerializedReadException("Failed to close Java serialized file", e);
         }
     }
 
     @Override
     public void remove() {
-        throw  new UnsupportedOperationException();
+        throw new UnsupportedOperationException();
     }
 }

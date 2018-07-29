@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--suppress ALL -->
 <html ng-app="validationReportApp">
     <head>
         <meta charset="utf-8">
@@ -80,12 +81,12 @@
                             'https://' + issue.language + '.wikivoyage.org/wiki/' +
                             encodeURIComponent(issue.article.replace(/ /g,"_"))
                         );
-                    }
+                    };
 
-                    self = this
+                    self = this;
                     this.filterType = function(issue) {
                         return self.issueTypeFilter[issue.issueType];
-                    }
+                    };
 
                     this.shuffleIssues();
                 })
