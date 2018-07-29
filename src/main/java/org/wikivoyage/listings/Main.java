@@ -19,10 +19,6 @@ public class Main {
         ProjectFolders folders = new ProjectFolders(cli.listingsDir, cli.dumpsCacheDir, cli.workingDir);
         folders.createProjectFolders();
 
-        System.out.println();
-        System.out.println("CHRIS CONNOLLY RUNNING THIS");
-        System.out.println();
-
         // Execute
         ExecutionModeStrategy executionMode = cli.mode;
         executionMode.setCli(cli);
