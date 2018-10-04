@@ -26,10 +26,11 @@ public class ValidationTests {
         Listing p8 = TestWikivoyagePOI.createWithURL("http://www.kitaena.co.jp/info/馬籠線.pdf");
         Listing p9 = TestWikivoyagePOI.createWithURL("http://www.natuurenbos.be/nl-BE/Domeinen/Vlaams-Brabant/arborétum_Heverleebos.aspx");
         Listing p10 = TestWikivoyagePOI.createWithURL("http://www.some-url.de?q=glück");
+        Listing p11 = TestWikivoyagePOI.createWithURL("https://www.emirates.store/");
         
         // Prepare validation iterable
-        Iterable<Listing> pois = new WebsiteURLValidator().validate(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10));
-        
+        Iterable<Listing> pois = new WebsiteURLValidator().validate(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11));
+
         // Check results
         for (Listing poi : pois) {
             assertTrue(poi.isValid());

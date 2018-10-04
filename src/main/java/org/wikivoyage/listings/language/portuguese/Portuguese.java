@@ -87,7 +87,7 @@ public class Portuguese implements Language
             template.getArgument("nome"),
             template.getArgument("alt"),
             "", // template.getArgument("wikidata"),
-            "", // template.getArgument("wikipedia"), 
+            "", // template.getArgument("wikipedia"),
             template.getArgument("endereço"),
             template.getArgument("direções"),
             template.getArgument("tel"),
@@ -105,6 +105,7 @@ public class Portuguese implements Language
 	    "", // template.getArgument("Wi-Fi"),
 	    "", // template.getArgument("lastedit"),
             template.getArgument("sobre"),
+            "",
             getLanguageCode()
         );
     }
