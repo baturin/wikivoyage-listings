@@ -98,6 +98,27 @@ public class ValidationTests {
         assertFalse(validationIterator.next().isValid());
         assertFalse(validationIterator.next().isValid());
     }
+    
+    //Check if url exist +ve test case
+    @Test
+    public void testURLExistPositive(){
+    	WebsiteURLValidator websiteURLValidator = new WebsiteURLValidator();
+    	assertTrue(websiteURLValidator.urlExists("www.google.com"));
+    }
+    
+  //Check if url exist -ve test case
+    @Test
+    public void testURLExistNegativeTest(){
+    	WebsiteURLValidator websiteURLValidator = new WebsiteURLValidator();
+    	assertFalse(websiteURLValidator.urlExists("www.exampleMyUrl.com"));
+    }
+    
+  //Check if url has '{{dead link'
+    @Test
+    public void testURLExistNegativeTest1(){
+    	WebsiteURLValidator websiteURLValidator = new WebsiteURLValidator();
+    	assertTrue(websiteURLValidator.urlExists("{{dead link"));
+    }
 }
 
 /**
