@@ -6,7 +6,7 @@ public class LongitudeValidator extends SimpleValidator {
     @Override
     public void validate(Listing poi) {
         String longitude = poi.getLongitude();
-        if (longitude!= null && !(longitude.equals(""))) {
+        if (longitude!= null && !longitude.equals("")) {
             try {
                 Float.parseFloat(longitude);
             } catch (NumberFormatException e) {
