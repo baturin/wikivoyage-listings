@@ -6,7 +6,7 @@ public class LatitudeValidator extends SimpleValidator {
     @Override
     public void validate(Listing poi) {
         String latitude = poi.getLatitude();
-        if (latitude!= null && !(latitude.equals(""))) {
+        if (latitude!= null && !latitude.equals("")) {
             try {
                 Float.parseFloat(latitude);
             } catch (NumberFormatException e) {
