@@ -11,8 +11,9 @@ import java.net.URL;
 public class WebsiteURLValidator extends SimpleValidator {
     @Override
     public void validate(Listing poi) {
-        if (poi.getUrl() != null && !poi.getUrl().equals("")) {
-            if (!validWebsiteURL(poi.getUrl())) {
+        String url = poi.getUrl();
+        if (url!= null && !url.equals("")) {
+            if (!validWebsiteURL(url)) {
                 poi.add(ValidationIssue.INVALID_URL);
             }
         }
