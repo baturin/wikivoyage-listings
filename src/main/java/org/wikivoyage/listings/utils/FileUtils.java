@@ -45,7 +45,7 @@ public class FileUtils {
      * @param check whether to check if file was actually removed
      * @throws FileUtilsException
      */
-    public static void removeFile(String filename, boolean check) throws FileUtilsException
+    private static void removeFile(String filename, boolean check) throws FileUtilsException
     {
         boolean result = new File(filename).delete();
         if (check && !result) {
@@ -79,18 +79,15 @@ public class FileUtils {
      */
     public static void copyFile(String fromFilename, String toFilename) throws FileUtilsException
     {
-        try {
-
-            try (
+        try (
                 OutputStream out = new FileOutputStream(toFilename);
                 InputStream in = new FileInputStream(fromFilename)
-            ) {
-                IOUtils.copy(in, out);
-            }
+        ) {
+            IOUtils.copy(in, out);
         } catch (IOException e) {
             throw new FileUtilsException(
-                "Failed to copy file from '" + fromFilename + "' to '" + toFilename + "': " + e.getMessage(),
-                e
+                    "Failed to copy file from '" + fromFilename + "' to '" + toFilename + "': " + e.getMessage(),
+                    e
             );
         }
     }
@@ -104,21 +101,18 @@ public class FileUtils {
      */
     public static void archive(String inputFilename, String outputFilename) throws FileUtilsException
     {
-        try {
-            OutputStream out = new FileOutputStream(outputFilename);
-            try (
+        try (
+                OutputStream out = new FileOutputStream(outputFilename);
                 BZip2CompressorOutputStream os = new BZip2CompressorOutputStream(out);
                 InputStream in = new FileInputStream(inputFilename)
-            ) {
-                IOUtils.copy(in, os);
-            } finally {
-                out.close();
-            }
+        ) {
+            IOUtils.copy(in, os);
             removeFile(inputFilename);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new FileUtilsException(
-                "Failed to create file archive for file '" + inputFilename + "': " + e.getMessage(),
-                e
+                    "Failed to create file archive for file '" + inputFilename + "': " + e.getMessage(),
+                    e
             );
         }
     }

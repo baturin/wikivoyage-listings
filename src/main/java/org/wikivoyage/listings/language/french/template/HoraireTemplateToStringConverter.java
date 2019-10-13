@@ -2,7 +2,8 @@ package org.wikivoyage.listings.language.french.template;
 
 import org.wikivoyage.listings.input.template.TemplateNode;
 import org.wikivoyage.listings.input.template.TemplateToStringConverter;
-import org.wikivoyage.listings.utils.StringUtils;
+
+import static org.apache.commons.lang.StringUtils.equalsIgnoreCase;
 
 /**
  * Parse French "Horaire" template (working hours), per https://fr.wikivoyage.org/wiki/Mod%C3%A8le:Horaire
@@ -86,7 +87,7 @@ public class HoraireTemplateToStringConverter implements TemplateToStringConvert
         };
         for (String [] dayRow: days) {
             for (String dayValue: dayRow) {
-                if (StringUtils.equalsCaseInsensitive(dayValue, day)) {
+                if (equalsIgnoreCase(dayValue, day)) {
                     return dayRow[0];
                 }
             }
