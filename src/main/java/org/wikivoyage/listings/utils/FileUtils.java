@@ -45,7 +45,7 @@ public class FileUtils {
      * @param check whether to check if file was actually removed
      * @throws FileUtilsException
      */
-    public static void removeFile(String filename, boolean check) throws FileUtilsException
+    private static void removeFile(String filename, boolean check) throws FileUtilsException
     {
         boolean result = new File(filename).delete();
         if (check && !result) {
@@ -101,18 +101,15 @@ public class FileUtils {
      */
     public static void archive(String inputFilename, String outputFilename) throws FileUtilsException
     {
-        try {
-            OutputStream out = new FileOutputStream(outputFilename);
-            try (
-                    BZip2CompressorOutputStream os = new BZip2CompressorOutputStream(out);
-                    InputStream in = new FileInputStream(inputFilename)
-            ) {
-                IOUtils.copy(in, os);
-            } finally {
-                out.close();
-            }
+        try (
+                OutputStream out = new FileOutputStream(outputFilename);
+                BZip2CompressorOutputStream os = new BZip2CompressorOutputStream(out);
+                InputStream in = new FileInputStream(inputFilename)
+        ) {
+            IOUtils.copy(in, os);
             removeFile(inputFilename);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new FileUtilsException(
                     "Failed to create file archive for file '" + inputFilename + "': " + e.getMessage(),
                     e
