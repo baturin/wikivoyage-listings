@@ -79,18 +79,15 @@ public class FileUtils {
      */
     public static void copyFile(String fromFilename, String toFilename) throws FileUtilsException
     {
-        try {
-
-            try (
+        try (
                 OutputStream out = new FileOutputStream(toFilename);
                 InputStream in = new FileInputStream(fromFilename)
-            ) {
-                IOUtils.copy(in, out);
-            }
+        ) {
+            IOUtils.copy(in, out);
         } catch (IOException e) {
             throw new FileUtilsException(
-                "Failed to copy file from '" + fromFilename + "' to '" + toFilename + "': " + e.getMessage(),
-                e
+                    "Failed to copy file from '" + fromFilename + "' to '" + toFilename + "': " + e.getMessage(),
+                    e
             );
         }
     }
@@ -107,8 +104,8 @@ public class FileUtils {
         try {
             OutputStream out = new FileOutputStream(outputFilename);
             try (
-                BZip2CompressorOutputStream os = new BZip2CompressorOutputStream(out);
-                InputStream in = new FileInputStream(inputFilename)
+                    BZip2CompressorOutputStream os = new BZip2CompressorOutputStream(out);
+                    InputStream in = new FileInputStream(inputFilename)
             ) {
                 IOUtils.copy(in, os);
             } finally {
@@ -117,8 +114,8 @@ public class FileUtils {
             removeFile(inputFilename);
         } catch (IOException e) {
             throw new FileUtilsException(
-                "Failed to create file archive for file '" + inputFilename + "': " + e.getMessage(),
-                e
+                    "Failed to create file archive for file '" + inputFilename + "': " + e.getMessage(),
+                    e
             );
         }
     }
