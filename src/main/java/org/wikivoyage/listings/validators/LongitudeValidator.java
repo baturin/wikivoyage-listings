@@ -26,9 +26,9 @@ public class LongitudeValidator extends SimpleValidator {
           else {
           	//Otherwise try to parse this as a valid longitude.
               try {
-                  float latitudeF = Float.parseFloat(longitude);
+                  float longitudeF = Float.parseFloat(longitude);
                   //There are fixed values for longitude. Outside these, it's invalid.
-                  if (latitudeF < MIN_LONGITUDE || latitudeF > MAX_LONGITUDE) {
+                  if (longitudeF < MIN_LONGITUDE || longitudeF > MAX_LONGITUDE) {
                   	poi.add(ValidationIssue.INVALID_LONGITUDE);
                   }
               } catch (NumberFormatException e) {
