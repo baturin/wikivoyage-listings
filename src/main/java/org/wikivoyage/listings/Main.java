@@ -62,7 +62,7 @@ public class Main {
 
         try {
             if (cl.help) {
-                cl.printHelp((String[])formats.keySet().toArray());
+                cl.printHelp(formatNames);
             } else if (cl.dailyUpdate) {
                 dailyUpdate(cl, formats);
             } else {
