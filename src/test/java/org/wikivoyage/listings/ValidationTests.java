@@ -9,6 +9,8 @@ import java.util.Iterator;
 import org.junit.Test;
 import org.wikivoyage.listings.entity.Listing;
 import org.wikivoyage.listings.validators.EmailValidator;
+import org.wikivoyage.listings.validators.LatitudeValidator;
+import org.wikivoyage.listings.validators.LongitudeValidator;
 import org.wikivoyage.listings.validators.WebsiteURLValidator;
 import org.wikivoyage.listings.validators.WikidataValidator;
 
@@ -98,6 +100,71 @@ public class ValidationTests {
         assertFalse(validationIterator.next().isValid());
         assertFalse(validationIterator.next().isValid());
     }
+    
+    /**
+     * A valid latitude is a decimal value between -90 and 90
+     */
+    @Test
+    public void testLatitude() {
+    	
+    	//Valid cases
+    	Listing p1 = TestWikivoyagePOI.createWithLatitude(null);
+    	Listing p2 = TestWikivoyagePOI.createWithLatitude("");
+    	Listing p3 = TestWikivoyagePOI.createWithLatitude("90.00000");
+    	Listing p4 = TestWikivoyagePOI.createWithLatitude("-90.00000");
+    	
+    	//Invalid cases
+    	//Five decimal places is the maximum reasonable degree of accuracy in this context, so using that for edge case testing
+    	// Source: https://gis.stackexchange.com/a/8674
+    	Listing p5 = TestWikivoyagePOI.createWithLatitude("-90.00001");
+    	Listing p6 = TestWikivoyagePOI.createWithLatitude("90.00001");
+    	Listing p7 = TestWikivoyagePOI.createWithLatitude("66'34 N");
+    	
+    	
+    	Iterator<Listing> validationIterator = 
+                new LatitudeValidator().validate(Arrays.asList(p1, p2, p3, p4, p5, p6, p7)).iterator();
+    	
+    	assertTrue(validationIterator.next().isValid()); //Null is fine
+    	assertTrue(validationIterator.next().isValid()); //Empty string is fine
+    	assertTrue(validationIterator.next().isValid()); //Edge case, upper bound
+    	assertTrue(validationIterator.next().isValid()); //Edge case, lower bound
+    	
+        assertFalse(validationIterator.next().isValid()); //Edge case, over upper bound
+        assertFalse(validationIterator.next().isValid()); //Edge case, under lower bound
+        assertFalse(validationIterator.next().isValid()); //Non-decimal latitude
+    }
+    
+    /**
+     * A valid longitude is a decimal value between -180 and 180
+     */
+    @Test
+    public void testLongitude() {
+    	
+    	//Valid cases
+    	Listing p1 = TestWikivoyagePOI.createWithLongitude(null);
+    	Listing p2 = TestWikivoyagePOI.createWithLongitude("");
+    	Listing p3 = TestWikivoyagePOI.createWithLongitude("180.00000");
+    	Listing p4 = TestWikivoyagePOI.createWithLongitude("-180.00000");
+    	
+    	//Invalid cases
+    	//Five decimal places is the maximum reasonable degree of accuracy in this context, so using that for edge case testing
+    	// Source: https://gis.stackexchange.com/a/8674
+    	Listing p5 = TestWikivoyagePOI.createWithLongitude("-180.00001");
+    	Listing p6 = TestWikivoyagePOI.createWithLongitude("180.00001");
+    	Listing p7 = TestWikivoyagePOI.createWithLongitude("66'34 E");    	
+    	
+    	Iterator<Listing> validationIterator = 
+                new LongitudeValidator().validate(Arrays.asList(p1, p2, p3, p4, p5, p6, p7)).iterator();
+    	
+    	assertTrue(validationIterator.next().isValid()); //Null is fine
+    	assertTrue(validationIterator.next().isValid()); //Empty string is fine
+    	assertTrue(validationIterator.next().isValid()); //Edge case, upper bound
+    	assertTrue(validationIterator.next().isValid()); //Edge case, lower bound
+    	
+        assertFalse(validationIterator.next().isValid()); //Edge case, over upper bound
+        assertFalse(validationIterator.next().isValid()); //Edge case, under lower bound
+        assertFalse(validationIterator.next().isValid()); //Non-decimal longitude
+    }
 }
 
 /**
@@ -126,6 +193,18 @@ class TestWikivoyagePOI extends Listing {
     public static TestWikivoyagePOI createWithURL(String url) {
         TestWikivoyagePOI poi = new TestWikivoyagePOI();
         poi.url = url;
+        return poi;
+    }
+    
+    public static TestWikivoyagePOI createWithLatitude(String latitude) {
+        TestWikivoyagePOI poi = new TestWikivoyagePOI();
+        poi.latitude = latitude;
+        return poi;
+    }
+    
+    public static TestWikivoyagePOI createWithLongitude(String longitude) {
+        TestWikivoyagePOI poi = new TestWikivoyagePOI();
+        poi.longitude = longitude;
         return poi;
     }
 }
