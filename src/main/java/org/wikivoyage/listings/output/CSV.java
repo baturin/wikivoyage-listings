@@ -54,7 +54,9 @@ public class CSV implements OutputFormat {
                 		"wifi" + SEPARATOR +
                 		"accessibility" + SEPARATOR +
                 		"lastEdit" + SEPARATOR +
-                		"description" + NEW_LINE);
+                        "description" + SEPARATOR +
+                        "language" + SEPARATOR +
+                		"operator" + NEW_LINE);
                 
                 // Write each POI.
                 for (Listing poi : pois) {
@@ -81,7 +83,9 @@ public class CSV implements OutputFormat {
                     writer.write(foolproof(poi.getWifi()) + SEPARATOR);
                     writer.write(foolproof(poi.getAccessibility()) + SEPARATOR);
                     writer.write(foolproof(poi.getLastEdit()) + SEPARATOR);
-                    writer.write(foolproof(poi.getDescription()) + NEW_LINE);
+                    writer.write(foolproof(poi.getDescription()) + SEPARATOR);
+                    writer.write(foolproof(poi.getLanguage()) + SEPARATOR);
+                    writer.write(foolproof(poi.getOperator()) + NEW_LINE);
                 }
             } finally {
                 if (writer != null) {

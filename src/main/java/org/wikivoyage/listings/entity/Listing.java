@@ -144,6 +144,11 @@ public class Listing implements Serializable {
      * 2-character language code
      */
     protected String language;
+
+    /**
+     * Operator name
+     */
+    protected String operator;
     
     /**
      * List of ValidationIssues found with this POI during validation
@@ -154,7 +159,7 @@ public class Listing implements Serializable {
         String article, String type, String title, String alt, String wikidata, String wikipedia, String address, String directions,
         String phone, String tollFree, String email, String fax, String url,
         String hours, String checkIn, String checkOut, String image, String price,
-        String latitude, String longitude, String wifi, String accessibility, String lastEdit, String description, String language
+        String latitude, String longitude, String wifi, String accessibility, String lastEdit, String description, String language, String operator
     ) {
         this.article = article;
         this.type = type;
@@ -181,6 +186,7 @@ public class Listing implements Serializable {
         this.lastEdit = lastEdit;
         this.description = description;
         this.language = language;
+        this.operator = operator;
     }
 
     public String getArticle()
@@ -372,6 +378,10 @@ public class Listing implements Serializable {
 
     public String getLanguage() {
         return language;
+    }
+
+    public String getOperator() {
+        return operator;
     }
 
     public boolean isPositionalDataEmpty()
